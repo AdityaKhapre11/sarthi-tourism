@@ -27,14 +27,7 @@ export const metadata: Metadata = {
     description: "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
     url: "https://sarthitourism.com", // Adjust to the actual production URL
     siteName: "Sarthi Tourism",
-    images: [
-      {
-        url: "/images/hero.png",
-        width: 1200,
-        height: 630,
-        alt: "Sarthi Tourism - Explore The World",
-      },
-    ],
+
     locale: "en_US",
     type: "website",
   },
@@ -42,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sarthi Tourism | Premium Travel",
     description: "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
-    images: ["/images/hero.png"],
+
   },
 };
 

@@ -18,8 +18,12 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "https://sarthitourism.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sarthitourism.com"),
+  metadataBase: new URL(baseUrl),
   title: "Sarthi Tourism | Premium Travel & Tour Packages",
   description:
     "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",

@@ -9,13 +9,21 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    // Read local logo image
-    const logoData = await readFile(join(process.cwd(), 'public/images/logo11.png'));
-    const logoBase64 = `data:image/png;base64,${logoData.toString('base64')}`;
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'http://localhost:3000';
 
-    // Read hero background image
-    const heroData = await readFile(join(process.cwd(), 'public/images/uttarakhand_3.png'));
-    const heroBase64 = `data:image/jpeg;base64,${heroData.toString('base64')}`;
+    // Fetch local logo image via HTTP
+    const logoRes = await fetch(new URL('/images/logo11.png', baseUrl));
+    if (!logoRes.ok) throw new Error('Failed to fetch logo');
+    const logoBuffer = await logoRes.arrayBuffer();
+    const logoBase64 = `data:image/png;base64,${Buffer.from(logoBuffer).toString('base64')}`;
+
+    // Fetch hero background image via HTTP
+    const heroRes = await fetch(new URL('/images/uttarakhand_3.png', baseUrl));
+    if (!heroRes.ok) throw new Error('Failed to fetch hero image');
+    const heroBuffer = await heroRes.arrayBuffer();
+    const heroBase64 = `data:image/jpeg;base64,${Buffer.from(heroBuffer).toString('base64')}`;
 
     return new ImageResponse(
       (

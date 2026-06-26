@@ -19,6 +19,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sarthitourism.com"),
   title: "Sarthi Tourism | Premium Travel & Tour Packages",
   description:
     "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",

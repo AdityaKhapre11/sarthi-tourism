@@ -13,6 +13,10 @@ export default async function Image() {
     const logoData = await readFile(join(process.cwd(), 'public/images/logo11.png'));
     const logoBase64 = `data:image/png;base64,${logoData.toString('base64')}`;
 
+    // Read hero background image
+    const heroData = await readFile(join(process.cwd(), 'public/images/uttarakhand_3.png'));
+    const heroBase64 = `data:image/jpeg;base64,${heroData.toString('base64')}`;
+
     return new ImageResponse(
       (
         <div
@@ -23,87 +27,100 @@ export default async function Image() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#ffffff',
-            backgroundImage: 'radial-gradient(circle at 50% 50%, #f0f9ff 0%, #ffffff 100%)',
             position: 'relative',
           }}
         >
-          {/* Subtle Decorative Elements */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '-20%',
-              right: '-10%',
-              width: '600px',
-              height: '600px',
-              backgroundColor: 'rgba(59, 130, 246, 0.05)',
-              borderRadius: '50%',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '-20%',
-              left: '-10%',
-              width: '500px',
-              height: '500px',
-              backgroundColor: 'rgba(99, 102, 241, 0.05)',
-              borderRadius: '50%',
-            }}
-          />
-
-          {/* Logo */}
+          {/* Background Image */}
           <img
-            src={logoBase64}
-            alt="Sarthi Tourism"
+            src={heroBase64}
             style={{
-              width: '600px',
-              objectFit: 'contain',
-              marginBottom: '40px',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '1200px',
+              height: '630px',
+              objectFit: 'cover',
             }}
           />
 
-          {/* Tagline */}
+          {/* Light Overlay for better contrast with dark logo and text */}
           <div
             style={{
-              display: 'flex',
-              fontSize: '46px',
-              fontWeight: 800,
-              color: '#0f172a',
-              letterSpacing: '-0.02em',
-              textAlign: 'center',
-            }}
-          >
-            Premium Travel & Tour Packages
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              fontSize: '28px',
-              fontWeight: 500,
-              color: '#64748b',
-              marginTop: '20px',
-              textAlign: 'center',
-              maxWidth: '800px',
-            }}
-          >
-            Discover breathtaking destinations and unforgettable experiences with our expert-crafted itineraries.
-          </div>
-          
-          <div
-            style={{
-              display: 'flex',
               position: 'absolute',
-              bottom: '40px',
-              fontSize: '24px',
-              fontWeight: 700,
-              color: '#3b82f6',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
+              top: 0,
+              left: 0,
+              width: '1200px',
+              height: '630px',
+              backgroundColor: 'rgba(255, 255, 255, 0.40)',
+            }}
+          />
+
+          {/* Content Card */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'transparent',
+              padding: '60px 80px',
+              position: 'relative',
+              maxWidth: '900px',
             }}
           >
-            sarthitourism.com
+            {/* Logo */}
+            <img
+              src={logoBase64}
+              alt="Sarthi Tourism"
+              style={{
+                width: '500px',
+                objectFit: 'contain',
+                marginBottom: '40px',
+              }}
+            />
+
+            {/* Tagline */}
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '52px',
+                font: Bold,
+                fontWeight: 800,
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                textAlign: 'center',
+              }}
+            >
+              Premium Travel & Tour Packages
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '28px',
+                fontWeight: 600,
+                color: '#334155',
+                marginTop: '24px',
+                textAlign: 'center',
+                lineHeight: 1.4,
+              }}
+            >
+              Discover breathtaking destinations and unforgettable experiences with our expert-crafted itineraries.
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                fontSize: '24px',
+                fontWeight: 700,
+                color: '#2563eb',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                marginTop: '40px',
+              }}
+            >
+              sarthitourism.com
+            </div>
           </div>
         </div>
       ),

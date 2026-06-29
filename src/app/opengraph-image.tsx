@@ -10,21 +10,15 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000';
+    // Read local logo image directly from filesystem
+    const logoPath = join(process.cwd(), 'public', 'images', 'logo1.png');
+    const logoBuffer = await readFile(logoPath);
+    const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
 
-    // Fetch local logo image via HTTP
-    const logoRes = await fetch(new URL('/images/logo1.png', baseUrl));
-    if (!logoRes.ok) throw new Error('Failed to fetch logo');
-    const logoBuffer = await logoRes.arrayBuffer();
-    const logoBase64 = `data:image/png;base64,${Buffer.from(logoBuffer).toString('base64')}`;
-
-    // Fetch hero background image via HTTP
-    const heroRes = await fetch(new URL('/images/uttarakhand_3.png', baseUrl));
-    if (!heroRes.ok) throw new Error('Failed to fetch hero image');
-    const heroBuffer = await heroRes.arrayBuffer();
-    const heroBase64 = `data:image/jpeg;base64,${Buffer.from(heroBuffer).toString('base64')}`;
+    // Read local hero image directly from filesystem
+    const heroPath = join(process.cwd(), 'public', 'images', 'uttarakhand_3.png');
+    const heroBuffer = await readFile(heroPath);
+    const heroBase64 = `data:image/jpeg;base64,${heroBuffer.toString('base64')}`;
 
     return new ImageResponse(
       (

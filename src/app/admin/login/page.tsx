@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,20 +13,37 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    // Client-side check to prevent seeing the login page via browser back button after logging in
+    if (document.cookie.includes("admin_auth=true")) {
+      window.location.replace("/admin/dashboard");
+    }
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    setTimeout(() => {
-      if (email === "admin@sarthitourism.com" && password === "admin123") {
-        // Redirect to admin dashboard on successful dummy login
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
         router.push("/admin/dashboard");
       } else {
-        setError("Invalid email or password");
+        setError(data.message || "Invalid email or password");
         setLoading(false);
       }
-    }, 1000);
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (

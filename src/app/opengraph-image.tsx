@@ -1,6 +1,8 @@
 import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const alt = 'Sarthi Tourism | Premium Travel';
 export const size = { width: 1200, height: 630 };
@@ -8,15 +10,16 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    // In the Edge runtime, we use import.meta.url to ensure Next.js perfectly bundles 
-    // the files without any process.cwd() or Vercel Auth network issues.
-    const logoData = await fetch(
-      new URL('../../public/images/logo1.png', import.meta.url)
-    ).then((res) => res.arrayBuffer());
+    // We use Node.js runtime (50MB limit) to avoid Vercel's strict 1MB Edge function limit.
+    // Read local logo image directly from the filesystem to bypass Vercel network/auth blocks.
+    const logoPath = join(process.cwd(), 'public', 'images', 'logo1.png');
+    const logoBuffer = await readFile(logoPath);
+    const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
 
-    const heroData = await fetch(
-      new URL('../../public/images/uttarakhand_3.png', import.meta.url)
-    ).then((res) => res.arrayBuffer());
+    // Read local hero background directly from filesystem
+    const heroPath = join(process.cwd(), 'public', 'images', 'uttarakhand_3.png');
+    const heroBuffer = await readFile(heroPath);
+    const heroBase64 = `data:image/jpeg;base64,${heroBuffer.toString('base64')}`;
 
     return new ImageResponse(
       (
@@ -33,7 +36,7 @@ export default async function Image() {
         >
           {/* Background Image */}
           <img
-            src={heroData as any}
+            src={heroBase64}
             style={{
               position: 'absolute',
               top: 0,
@@ -71,7 +74,7 @@ export default async function Image() {
           >
             {/* Logo */}
             <img
-              src={logoData as any}
+              src={logoBase64}
               style={{
                 height: '180px', // Restrict height instead of width so tall logos don't break layout
                 objectFit: 'contain',

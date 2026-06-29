@@ -62,14 +62,14 @@ export default function AdminLogin() {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#030712]" />
         </div>
 
-        <div className="relative z-10 w-full max-w-2xl flex justify-center items-center">
+        <div className="relative z-10 w-full max-w-sm flex justify-center items-center">
           {/* Desktop Logo */}
           <Image
-            src="/images/logo11.png"
+            src="/images/logo1.png"
             alt="Sarthi Tourism"
             width={1000}
             height={600}
-            className="object-contain invert grayscale brightness-200 mix-blend-screen opacity-90 w-full h-auto scale-110"
+            className="object-contain mix-blend-screen opacity-90 w-full h-auto"
             priority
           />
         </div>
@@ -84,11 +84,11 @@ export default function AdminLogin() {
           <div className="mb-10">
             {/* Mobile Logo */}
             <Image
-              src="/images/logo11.png"
+              src="/images/logo1.png"
               alt="Sarthi Tourism"
-              width={260}
-              height={54}
-              className="object-contain invert grayscale brightness-200 mix-blend-screen opacity-90 mb-10 lg:hidden"
+              width={220}
+              height={46}
+              className="object-contain mix-blend-screen opacity-90 mb-10 lg:hidden"
             />
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">Welcome Back</h2>
             <p className="text-gray-400 text-lg">Please sign in to your admin account.</p>

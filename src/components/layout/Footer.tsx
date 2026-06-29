@@ -24,13 +24,13 @@ export function Footer() {
       <div className="container relative z-10 mx-auto px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
           {/* Company Info */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 flex flex-col items-center justify-center">
             <Link
-              href="#home"
+              href="/"
               onClick={handleScrollTo("#home")}
               className="inline-block"
             >
-              <Image src="/images/logo11.png" alt="Sarthi Tourism Logo" width={220} height={42} className="object-contain brightness-0 invert mix-blend-screen opacity-90 hover:opacity-100 transition-opacity" />
+              <Image src="/images/logo1.png" alt="Sarthi Tourism Logo" width={120} height={42} className="object-contain opacity-90 hover:opacity-100 transition-opacity" />
             </Link>
             <p className="text-sm leading-relaxed mb-6 font-light">
               Crafting extraordinary journeys with premium itineraries. Discover the world's most breathtaking destinations in unparalleled comfort.

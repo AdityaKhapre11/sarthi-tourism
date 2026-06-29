@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import {  Menu, X, Search  } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { useLenis } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 
@@ -56,12 +56,12 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
             className="flex items-center gap-2 font-heading text-2xl font-bold z-50"
           >
             <Image
-              src="/images/logo11.png"
+              src="/images/logo1.png"
               alt="Sarthi Tourism Logo"
-              width={170}
-              height={60}
-              style={{ width: 'auto' }}
-              className="object-contain brightness-0 invert mix-blend-screen transition-all"
+              width={200}
+              height={64}
+              className="object-contain h-20 sm:h-25 w-auto transition-all"
+              priority
             />
           </Link>
 
@@ -152,8 +152,8 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
       >
         <div className="flex flex-col gap-6 sm:gap-8 text-center w-full px-6">
           {["Home", "Packages", "About Us", "Contact Us"].map((item, index) => {
-              const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/#contact";
-              const hashId = target.startsWith("/#") ? target.substring(1) : "";
+            const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/#contact";
+            const hashId = target.startsWith("/#") ? target.substring(1) : "";
             return (
               <Link
                 key={item}
@@ -165,14 +165,14 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
                   transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1 + 0.1}s`,
                 }}
                 onClick={(e) => {
-                    if (pathname === "/" && hashId) {
-                      e.preventDefault();
-                      lenis?.scrollTo(hashId, { offset: -80 });
-                    } else if (pathname === "/" && item === "Home") {
-                      e.preventDefault();
-                      lenis?.scrollTo(0, { offset: 0 });
-                    }
-                    setIsMobileMenuOpen(false);
+                  if (pathname === "/" && hashId) {
+                    e.preventDefault();
+                    lenis?.scrollTo(hashId, { offset: -80 });
+                  } else if (pathname === "/" && item === "Home") {
+                    e.preventDefault();
+                    lenis?.scrollTo(0, { offset: 0 });
+                  }
+                  setIsMobileMenuOpen(false);
                 }}
               >
                 {item}

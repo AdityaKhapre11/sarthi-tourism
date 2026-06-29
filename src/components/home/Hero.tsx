@@ -92,7 +92,7 @@ export function Hero() {
       </div>
 
       {/* Content */}
-      <div className="container relative z-20 mx-auto px-4 text-center" ref={textRef}>
+      <div className="container relative z-20 mx-auto px-4 mt-30 lg:mt-35 text-center" ref={textRef}>
         <span className="hero-text block text-blue-400 font-semibold tracking-wider uppercase mb-4 text-sm md:text-base">
           Discover the Unseen
         </span>

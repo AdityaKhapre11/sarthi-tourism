@@ -47,7 +47,7 @@ export default function ConfirmDeleteModal({
 
   const modalContent = (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-[#0f172a] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in zoom-in-95 duration-200">
+      <div className="bg-card border border-white/10 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative animate-in zoom-in-95 duration-200">
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
@@ -86,6 +86,7 @@ export default function ConfirmDeleteModal({
                 onClose();
               }}
               disabled={isDeleting}
+              variant="destructive"
               size="lg"
             >
               {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Confirm Delete"}

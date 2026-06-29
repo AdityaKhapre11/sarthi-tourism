@@ -51,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("dark", inter.variable, outfit.variable, "font-sans", geist.variable)}>
-      <body className="font-sans antialiased text-gray-100 bg-[#0a0a0a] min-h-screen flex flex-col selection:bg-blue-500/30 selection:text-white">
+      <body className="font-sans antialiased text-foreground bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-white">
         <SmoothScroll>
           <PublicLayout>{children}</PublicLayout>
         </SmoothScroll>

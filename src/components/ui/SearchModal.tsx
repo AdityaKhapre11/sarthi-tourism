@@ -169,7 +169,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.95, y: -20, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative w-full max-w-3xl bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[80vh]"
+            className="relative w-full max-w-3xl bg-card/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[80vh]"
           >
             {/* Header / Search Input */}
             <div className="relative flex items-center p-6 border-b border-white/10 shrink-0">

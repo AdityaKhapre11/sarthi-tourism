@@ -45,7 +45,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
     <>
       <header
         className={`fixed z-50 transition-all duration-500 ease-out left-1/2 -translate-x-1/2 ${hasScrolled
-          ? "top-1 w-[95%] sm:w-[90%] max-w-8xl rounded-[32px] bg-[#050505]/60 backdrop-blur-xl shadow-2xl"
+          ? "top-1 w-[95%] sm:w-[90%] max-w-8xl rounded-[32px] bg-background/80 backdrop-blur-xl shadow-2xl"
           : "top-0 w-full rounded-none bg-transparent py-6"
           }`}
       >

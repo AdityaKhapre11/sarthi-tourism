@@ -60,7 +60,7 @@ export function WhyChooseUs() {
             </div>
 
             {/* Premium Floating Badge */}
-            <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-[#0a0a0a]/90 backdrop-blur-xl p-5 sm:p-6 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] flex items-center gap-4 sm:gap-5 border border-white/10 animate-[bounce_4s_ease-in-out_infinite] min-w-[240px]">
+            <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-card/90 backdrop-blur-xl p-5 sm:p-6 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] flex items-center gap-4 sm:gap-5 border border-white/10 animate-[bounce_4s_ease-in-out_infinite] min-w-[240px]">
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-600/20 flex items-center justify-center text-blue-400 shadow-lg shrink-0 border border-blue-500/30">
                 <ThumbsUp className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>

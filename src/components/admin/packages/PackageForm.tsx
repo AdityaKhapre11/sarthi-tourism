@@ -232,7 +232,7 @@ export function PackageForm({
             className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-6 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-3 font-bold text-lg w-full sm:w-auto transform hover:-translate-y-1"
           >
             <Save className="w-6 h-6" />
-            {loading ? "Saving Changes..." : "Save Package"}
+            {loading ? "Saving Changes..." : (initialData?.id ? "Update Package" : "Add Package")}
           </Button>
         </div>
       </form>

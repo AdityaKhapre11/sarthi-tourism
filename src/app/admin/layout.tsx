@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen bg-[#030712] text-gray-200 font-sans overflow-hidden selection:bg-blue-500 selection:text-white">
+    <div className="flex h-screen bg-background text-foreground font-sans overflow-hidden selection:bg-primary/30 selection:text-white">
       <Sidebar />
 
       {/* Main Content */}

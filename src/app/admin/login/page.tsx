@@ -47,7 +47,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="h-[100vh] overflow-hidden flex w-full bg-[#030712] text-gray-200 font-sans selection:bg-blue-500 selection:text-white">
+    <div className="h-[100vh] overflow-hidden flex w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
 
       {/* Left Side - Image/Branding */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-r border-white/5 p-12">
@@ -58,8 +58,8 @@ export default function AdminLogin() {
             fill
             className="object-cover opacity-40 mix-blend-luminosity scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/10 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#030712]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background" />
         </div>
 
         <div className="relative z-10 w-full max-w-sm flex justify-center items-center">

@@ -21,7 +21,7 @@ export function ContactCTA() {
           className="object-cover object-center scale-105"
         />
         {/* Sleek Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030712]/95 via-[#030712]/80 to-blue-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-primary/20" />
       </div>
 
       <div className="container mx-auto px-5 relative z-10">

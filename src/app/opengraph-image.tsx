@@ -10,12 +10,12 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
       : 'http://localhost:3000';
 
     // Fetch local logo image via HTTP
-    const logoRes = await fetch(new URL('/images/logo11.png', baseUrl));
+    const logoRes = await fetch(new URL('/images/logo1.png', baseUrl));
     if (!logoRes.ok) throw new Error('Failed to fetch logo');
     const logoBuffer = await logoRes.arrayBuffer();
     const logoBase64 = `data:image/png;base64,${Buffer.from(logoBuffer).toString('base64')}`;
@@ -52,7 +52,7 @@ export default async function Image() {
             }}
           />
 
-          {/* Light Overlay for better contrast with dark logo and text */}
+          {/* Left-to-Right Light Gradient Overlay */}
           <div
             style={{
               position: 'absolute',
@@ -60,21 +60,21 @@ export default async function Image() {
               left: 0,
               width: '1200px',
               height: '630px',
-              backgroundColor: 'rgba(255, 255, 255, 0.40)',
+              backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 45%, rgba(255, 255, 255, 0) 100%)',
             }}
           />
 
-          {/* Content Card */}
+          {/* Content Container (Left Aligned) */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'center',
-              backgroundColor: 'transparent',
               padding: '60px 80px',
+              height: '100%',
+              width: '750px',
               position: 'relative',
-              maxWidth: '900px',
             }}
           >
             {/* Logo */}
@@ -82,9 +82,9 @@ export default async function Image() {
               src={logoBase64}
               alt="Sarthi Tourism"
               style={{
-                width: '500px',
+                height: '180px', // Restrict height instead of width so tall logos don't break layout
                 objectFit: 'contain',
-                marginBottom: '40px',
+                marginBottom: '24px',
               }}
             />
 
@@ -92,43 +92,31 @@ export default async function Image() {
             <div
               style={{
                 display: 'flex',
-                fontSize: '52px',
+                fontSize: '60px',
                 fontWeight: 800,
                 color: '#0f172a',
-                letterSpacing: '-0.02em',
-                textAlign: 'center',
+                letterSpacing: '-0.03em',
+                lineHeight: '1.2',
+                marginBottom: '16px',
               }}
             >
               Premium Travel & Tour Packages
             </div>
 
+            {/* Subtext */}
             <div
               style={{
                 display: 'flex',
-                fontSize: '28px',
-                fontWeight: 600,
-                color: '#334155',
-                marginTop: '24px',
-                textAlign: 'center',
-                lineHeight: 1.4,
+                fontSize: '26px',
+                fontWeight: 500,
+                color: '#475569',
+                lineHeight: '1.5',
+                maxWidth: '600px',
               }}
             >
               Discover breathtaking destinations and unforgettable experiences with our expert-crafted itineraries.
             </div>
 
-            <div
-              style={{
-                display: 'flex',
-                fontSize: '24px',
-                fontWeight: 700,
-                color: '#2563eb',
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                marginTop: '40px',
-              }}
-            >
-              sarthitourism.com
-            </div>
           </div>
         </div>
       ),

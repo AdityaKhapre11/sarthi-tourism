@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
   openGraph: {
     title: "Sarthi Tourism | Premium Travel",
-    description: "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
+    description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
     url: "https://sarthitourism.com", // Adjust to the actual production URL
     siteName: "Sarthi Tourism",
 
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Sarthi Tourism | Premium Travel",
-    description: "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
+    description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
 
   },
 };

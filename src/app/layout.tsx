@@ -18,9 +18,9 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const baseUrl = process.env.VERCEL_URL
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "https://sarthitourism.com";
+  : "https://sarthitourism.com");
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

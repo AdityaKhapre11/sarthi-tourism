@@ -12,9 +12,9 @@ export default async function Image() {
   try {
     // We use Node.js runtime (50MB limit) to avoid Vercel's strict 1MB Edge function limit.
     // Fetch local images securely via Vercel's network to bypass Node File Trace issues.
-    const baseUrl = process.env.VERCEL_URL
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000';
+      : 'http://localhost:3000');
 
     // Route the image through Next.js built-in optimizer to heavily compress it on the fly!
     // This reduces the 1.26MB image to ~240KB instantly, completely preventing bot timeouts.

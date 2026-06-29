@@ -10,16 +10,23 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    // Read local logo image directly from the filesystem
-    // We use process.cwd() as Next.js automatically bundles the public directory.
-    const logoPath = join(process.cwd(), 'public', 'images', 'logo1.png');
-    const logoBuffer = await readFile(logoPath);
-    const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    // We use Node.js runtime (50MB limit) to avoid Vercel's strict 1MB Edge function limit.
+    // Fetch local images securely via Vercel's network to bypass Node File Trace issues.
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000';
 
-    // The optimized 237 KB JPEG ensures Satori parses it instantly without timing out.
-    const heroPath = join(process.cwd(), 'public', 'images', 'uttarakhand_3_opt.jpg');
-    const heroBuffer = await readFile(heroPath);
-    const heroBase64 = `data:image/jpeg;base64,${heroBuffer.toString('base64')}`;
+    // Route the image through Next.js built-in optimizer to heavily compress it on the fly!
+    // This reduces the 1.26MB image to ~240KB instantly, completely preventing bot timeouts.
+    const heroRes = await fetch(new URL('/_next/image?url=%2Fimages%2Futtarakhand_3.png&w=1200&q=75', baseUrl));
+    if (!heroRes.ok) throw new Error('Failed to fetch optimized hero image');
+    const heroBuffer = await heroRes.arrayBuffer();
+    const heroBase64 = `data:image/jpeg;base64,${Buffer.from(heroBuffer).toString('base64')}`;
+
+    const logoRes = await fetch(new URL('/images/logo1.png', baseUrl));
+    if (!logoRes.ok) throw new Error('Failed to fetch logo');
+    const logoBuffer = await logoRes.arrayBuffer();
+    const logoBase64 = `data:image/png;base64,${Buffer.from(logoBuffer).toString('base64')}`;
 
     return new ImageResponse(
       (

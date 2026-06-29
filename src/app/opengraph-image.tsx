@@ -16,17 +16,20 @@ export default async function Image() {
       ? `https://${process.env.VERCEL_URL}`
       : 'http://localhost:3000');
 
-    // Route the image through Next.js built-in optimizer to heavily compress it on the fly!
-    // This reduces the 1.26MB image to ~240KB instantly, completely preventing bot timeouts.
-    const heroRes = await fetch(new URL('/_next/image?url=%2Fimages%2Futtarakhand_3.png&w=1200&q=75', baseUrl));
-    if (!heroRes.ok) throw new Error('Failed to fetch optimized hero image');
-    const heroBuffer = await heroRes.arrayBuffer();
-    const heroBase64 = `data:image/jpeg;base64,${Buffer.from(heroBuffer).toString('base64')}`;
+
+    // Fetch a tiny, highly-compressed version to stretch and simulate a backdrop blur!
+    // Next.js restricts the 'q' parameter, so we use 75 to avoid 400 Bad Request errors.
+    const blurRes = await fetch(new URL('/_next/image?url=%2Fimages%2Futtarakhand_3.png&w=48&q=75', baseUrl));
+    if (!blurRes.ok) throw new Error(`Failed to fetch blur image: ${await blurRes.text()}`);
+    const blurContentType = blurRes.headers.get('content-type') || 'image/jpeg';
+    const blurBuffer = await blurRes.arrayBuffer();
+    const blurBase64 = `data:${blurContentType};base64,${Buffer.from(blurBuffer).toString('base64')}`;
 
     const logoRes = await fetch(new URL('/images/logo1.png', baseUrl));
-    if (!logoRes.ok) throw new Error('Failed to fetch logo');
+    if (!logoRes.ok) throw new Error(`Failed to fetch logo: ${await logoRes.text()}`);
+    const logoContentType = logoRes.headers.get('content-type') || 'image/png';
     const logoBuffer = await logoRes.arrayBuffer();
-    const logoBase64 = `data:image/png;base64,${Buffer.from(logoBuffer).toString('base64')}`;
+    const logoBase64 = `data:${logoContentType};base64,${Buffer.from(logoBuffer).toString('base64')}`;
 
     return new ImageResponse(
       (
@@ -35,89 +38,120 @@ export default async function Image() {
             width: '100%',
             height: '100%',
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
             position: 'relative',
           }}
         >
-          {/* Background Image */}
+          {/* Layer 1: The blurred, stretched background filling the entire canvas */}
           <img
-            src={heroBase64}
+            src={blurBase64}
             style={{
               position: 'absolute',
-              top: 0,
               left: 0,
+              top: 0,
               width: '1200px',
               height: '630px',
               objectFit: 'cover',
             }}
           />
 
-          {/* Left-to-Right Light Gradient Overlay */}
+          {/* Layer 2: Semi-transparent black glassmorphism overlay on the left */}
           <div
             style={{
               position: 'absolute',
-              top: 0,
               left: 0,
+              top: 0,
               width: '1200px',
               height: '630px',
-              backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 45%, rgba(255, 255, 255, 0) 100%)',
+              backgroundColor: 'rgba(10, 10, 10, 0.75)',
             }}
           />
 
-          {/* Content Container (Left Aligned) */}
+
+
+
+          {/* Content Box */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              padding: '60px 80px',
+              width: '100%',
               height: '100%',
-              width: '750px',
+              padding: '80px 100px',
               position: 'relative',
+              justifyContent: 'center',
             }}
           >
-            {/* Logo */}
-            <img
-              src={logoBase64}
-              style={{
-                height: '180px', // Restrict height instead of width so tall logos don't break layout
-                objectFit: 'contain',
-                marginBottom: '24px',
-              }}
-            />
-
-            {/* Tagline */}
-            <div
-              style={{
-                display: 'flex',
-                fontSize: '60px',
-                fontWeight: 800,
-                color: '#0f172a',
-                letterSpacing: '-0.03em',
-                lineHeight: '1.2',
-                marginBottom: '16px',
-              }}
-            >
-              Premium Travel & Tour Packages
+            {/* Logo - Anchored to the left side */}
+            <div style={{ position: 'absolute', top: '165px', left: '100px', display: 'flex' }}>
+              <img
+                src={logoBase64}
+                style={{
+                  height: '300px',
+                  objectFit: 'contain',
+                }}
+              />
             </div>
 
-            {/* Subtext */}
-            <div
-              style={{
-                display: 'flex',
-                fontSize: '26px',
-                fontWeight: 500,
-                color: '#475569',
-                lineHeight: '1.5',
-                maxWidth: '600px',
-              }}
-            >
-              Discover breathtaking destinations and unforgettable experiences with our expert-crafted itineraries.
-            </div>
+            {/* Main Text Content - Pushed to the right side */}
+            <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 'auto', maxWidth: '600px' }}>
+              {/* Refined Gold Line */}
+              <div
+                style={{
+                  width: '60px',
+                  height: '3px',
+                  backgroundColor: '#d4af37',
+                  marginBottom: '28px',
+                  borderRadius: '2px',
+                  boxShadow: '0 2px 12px rgba(212, 175, 55, 0.4)',
+                }}
+              />
 
+              {/* Subtitle */}
+              <div
+                style={{
+                  color: '#d4af37',
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  letterSpacing: '5px',
+                  marginBottom: '20px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                The New Decadence
+              </div>
+
+              {/* Title */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  color: '#ffffff',
+                  fontSize: '76px',
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  marginBottom: '32px',
+                  fontFamily: 'serif',
+                  letterSpacing: '-1.5px',
+                }}
+              >
+                <span style={{ display: 'flex', paddingBottom: '4px' }}>Sarthi Tourism |</span>
+                <span style={{ display: 'flex', color: '#f3f4f6' }}>Premium Travel</span>
+              </div>
+
+              {/* Description */}
+              <div
+                style={{
+                  color: '#e5e7eb',
+                  fontSize: '26px',
+                  lineHeight: 1.6,
+                  fontWeight: 400,
+                  maxWidth: '750px',
+                  letterSpacing: '0.5px',
+                }}
+              >
+                Discover premium tour packages, breathtaking destinations, and unforgettable experiences.
+              </div>
+            </div>
           </div>
         </div>
       ),

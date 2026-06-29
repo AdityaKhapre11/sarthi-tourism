@@ -10,12 +10,13 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    // We use Node.js runtime (50MB limit) to avoid Vercel's strict 1MB Edge function limit.
-    // The images are highly optimized so Satori parses them fast enough to avoid bot timeouts.
+    // Read local logo image directly from the filesystem
+    // We use process.cwd() as Next.js automatically bundles the public directory.
     const logoPath = join(process.cwd(), 'public', 'images', 'logo1.png');
     const logoBuffer = await readFile(logoPath);
     const logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
 
+    // The optimized 237 KB JPEG ensures Satori parses it instantly without timing out.
     const heroPath = join(process.cwd(), 'public', 'images', 'uttarakhand_3_opt.jpg');
     const heroBuffer = await readFile(heroPath);
     const heroBase64 = `data:image/jpeg;base64,${heroBuffer.toString('base64')}`;

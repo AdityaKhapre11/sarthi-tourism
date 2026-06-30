@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   title: "Sarthi Tourism | Premium Travel & Tour Packages",
   description:
     "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
+  icons: {
+    icon: "/images/logo1.png",
+  },
   openGraph: {
     title: "Sarthi Tourism | Premium Travel",
     description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",

@@ -80,7 +80,7 @@ export function Hero() {
           >
             <Image
               src={heroImages[currentIndex]}
-              alt="Beautiful travel destination"
+              alt={`Sarthi Tourism Premium Travel Destination - Breathtaking views ${currentIndex + 1}`}
               fill
               className="object-cover"
               priority={currentIndex === 0}

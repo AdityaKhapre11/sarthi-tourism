@@ -1,11 +1,18 @@
-"use client";
-
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Read the Privacy Policy of Sarthi Tourism. Learn how we collect, use, and protect your data.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
+};
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-transparent pt-32 pb-20 relative text-gray-300">
+    <main className="min-h-screen bg-transparent pt-40 pb-20 relative text-gray-300">
       <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-4 max-w-4xl">

@@ -24,26 +24,46 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
-  title: "Sarthi Tourism | Premium Travel & Tour Packages",
+  title: {
+    default: "Sarthi Tourism | Premium Travel & Tour Packages",
+    template: "%s | Sarthi Tourism",
+  },
   description:
     "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
+  keywords: ["travel", "tourism", "tour packages", "vacation", "holiday", "Sarthi Tourism", "travel agency", "premium travel"],
+  authors: [{ name: "Sarthi Tourism" }],
+  creator: "Sarthi Tourism",
+  publisher: "Sarthi Tourism",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/images/logo1.png",
+    apple: "/images/logo1.png",
   },
   openGraph: {
-    title: "Sarthi Tourism | Premium Travel",
+    title: {
+      default: "Sarthi Tourism | Premium Travel",
+      template: "%s | Sarthi Tourism",
+    },
     description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
-    url: "https://sarthitourism.com", // Adjust to the actual production URL
+    url: baseUrl,
     siteName: "Sarthi Tourism",
-
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sarthi Tourism | Premium Travel",
+    title: {
+      default: "Sarthi Tourism | Premium Travel",
+      template: "%s | Sarthi Tourism",
+    },
     description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
-
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 

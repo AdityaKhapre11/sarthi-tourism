@@ -119,7 +119,7 @@ export function FeaturedPackages() {
                   src={pkg.image}
                   alt={pkg.name}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />

@@ -1,14 +1,13 @@
-import {
-  Hero,
-  PopularDestinations,
-  WhyChooseUs,
-  FeaturedPackages,
-  Statistics,
-  Testimonials,
-  GalleryPreview,
-  ContactCTA,
-} from "@/components/home";
+import dynamic from "next/dynamic";
+import { Hero } from "@/components/home/Hero";
 import { Metadata } from "next";
+
+const PopularDestinations = dynamic(() => import("@/components/home").then(mod => mod.PopularDestinations), { ssr: true });
+const WhyChooseUs = dynamic(() => import("@/components/home").then(mod => mod.WhyChooseUs), { ssr: true });
+const FeaturedPackages = dynamic(() => import("@/components/home").then(mod => mod.FeaturedPackages), { ssr: true });
+const Testimonials = dynamic(() => import("@/components/home").then(mod => mod.Testimonials), { ssr: true });
+const GalleryPreview = dynamic(() => import("@/components/home").then(mod => mod.GalleryPreview), { ssr: true });
+const ContactCTA = dynamic(() => import("@/components/home").then(mod => mod.ContactCTA), { ssr: true });
 
 export const metadata: Metadata = {
   title: "Sarthi Tourism | Premium Travel & Tour Packages",
@@ -48,7 +47,6 @@ export default function Home() {
       <PopularDestinations />
       <WhyChooseUs />
       <FeaturedPackages />
-      {/* <Statistics /> */}
       <Testimonials />
       <GalleryPreview />
       <ContactCTA />

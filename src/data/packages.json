@@ -565,5 +565,72 @@
       "Personal expenses",
       "Additional water sports"
     ]
+  },
+  {
+    "id": 10,
+    "name": "Bhutan Cultural Tour (Phuentsholing, Thimphu, Paro)",
+    "image": "/images/bhutan.png",
+    "gallery": [
+      "/images/bhutan_2.png",
+      "/images/bhutan_3.png"
+    ],
+    "duration": "6 Nights / 7 Days",
+    "price": "Rs. 32,500",
+    "highlights": [
+      "Tiger's Nest Monastery",
+      "Punakha Dzong",
+      "Buddha Dordenma"
+    ],
+    "description": "Experience the magic of Bhutan, the Land of the Thunder Dragon. Explore the stunning landscapes, majestic dzongs, and rich cultural heritage of Phuentsholing, Thimphu, and Paro. A perfect getaway for nature lovers and spiritual seekers.",
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Phuentsholing",
+        "description": "Arrive in Phuentsholing and complete the immigration process. Check into your hotel and relax. Evening free to explore the local market."
+      },
+      {
+        "day": 2,
+        "title": "Phuentsholing to Thimphu",
+        "description": "After breakfast, start your scenic drive to Thimphu. Enroute visit the Kharbandi Gompa. Arrive in Thimphu and check into your hotel."
+      },
+      {
+        "day": 3,
+        "title": "Thimphu Sightseeing",
+        "description": "Full day sightseeing in Thimphu. Visit the majestic Buddha Dordenma, National Memorial Chorten, and the Tashichho Dzong."
+      },
+      {
+        "day": 4,
+        "title": "Thimphu to Paro via Punakha",
+        "description": "Drive to Paro via the beautiful Dochula Pass, enjoying panoramic views of the Himalayas. Visit the stunning Punakha Dzong before continuing to Paro."
+      },
+      {
+        "day": 5,
+        "title": "Paro - Tiger's Nest Hike",
+        "description": "Embark on an exhilarating hike to the iconic Taktsang Monastery (Tiger's Nest), perched on a cliff face. A challenging but rewarding experience."
+      },
+      {
+        "day": 6,
+        "title": "Paro Sightseeing",
+        "description": "Visit the Ta Dzong (National Museum), Rinpung Dzong, and the historic Kyichu Lhakhang, one of Bhutan's oldest temples."
+      },
+      {
+        "day": 7,
+        "title": "Departure",
+        "description": "After breakfast, check out of your hotel and proceed for your onward journey with wonderful memories of Bhutan."
+      }
+    ],
+    "included": [
+      "Deluxe Hotel Accommodation",
+      "Breakfast & Dinner",
+      "Professional Bhutan Guide",
+      "Sightseeing & Transfers",
+      "Permit Assistance"
+    ],
+    "excluded": [
+      "Flights/Train Tickets",
+      "Lunches",
+      "Monument Entry Fees",
+      "Personal expenses"
+    ]
   }
 ]

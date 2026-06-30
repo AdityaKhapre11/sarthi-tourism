@@ -33,7 +33,7 @@ export default function AdminPackages() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {packages.map((pkg) => (
+              {[...packages].sort((a, b) => b.id - a.id).map((pkg) => (
                 <tr key={pkg.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-4">

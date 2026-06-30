@@ -15,6 +15,7 @@ interface HeaderProps {
 export function Header({ onOpenSearch }: HeaderProps = {}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const lenis = useLenis();
   const pathname = usePathname();
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
@@ -40,6 +41,38 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      if (pathname.startsWith("/packages")) {
+        setActiveSection("packages");
+      } else {
+        setActiveSection("");
+      }
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-30% 0px -50% 0px" }
+    );
+
+    const sections = ["home", "packages", "about", "contact"];
+    sections.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    if (window.scrollY < 100) setActiveSection("home");
+
+    return () => observer.disconnect();
+  }, [pathname]);
 
   return (
     <>
@@ -67,9 +100,21 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-8 lg:flex">
-            {["Home", "Packages", "About Us", "Contact Us"].map((item) => {
+            {["Home", "About Us", "Packages", "Contact Us"].map((item) => {
               const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/#contact";
               const hashId = target.startsWith("/#") ? target.substring(1) : "";
+
+              let isActive = false;
+              if (item === "Home") {
+                isActive = pathname === "/" && (activeSection === "home" || activeSection === "");
+              } else if (item === "Packages") {
+                isActive = pathname.startsWith("/packages") || (pathname === "/" && activeSection === "packages");
+              } else if (item === "About Us") {
+                isActive = pathname === "/" && activeSection === "about";
+              } else if (item === "Contact Us") {
+                isActive = pathname === "/" && activeSection === "contact";
+              }
+
               return (
                 <Link
                   key={item}
@@ -84,15 +129,15 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
                     }
                     setIsMobileMenuOpen(false);
                   }}
-                  className="group relative px-2 py-1 overflow-hidden font-medium text-gray-300 flex items-center justify-center"
+                  className={`group relative px-2 py-1 overflow-hidden font-medium flex items-center justify-center ${isActive ? "text-white" : "text-gray-300"}`}
                 >
-                  <div className="flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2 absolute top-0 left-0 w-full h-[200%]">
+                  <div className={`flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${isActive ? "-translate-y-1/2" : "group-hover:-translate-y-1/2"} absolute top-0 left-0 w-full h-[200%]`}>
                     <span className="h-1/2 flex items-center justify-center text-gray-300">{item}</span>
                     <span className="h-1/2 flex items-center justify-center text-white">{item}</span>
                   </div>
                   {/* Invisible spacer to maintain width */}
                   <span className="opacity-0">{item}</span>
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-blue-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                  <div className={`absolute bottom-0 left-0 w-full h-[2px] bg-blue-500 transition-transform origin-left duration-300 ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}></div>
                 </Link>
               );
             })}

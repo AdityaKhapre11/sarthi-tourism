@@ -27,12 +27,12 @@ export default function DeletePackageButton({ id, packageName, onSuccess }: { id
     <>
       <Button
         variant="ghost"
-        size="icon"
         onClick={() => setIsOpen(true)}
-        className="text-gray-400 hover:text-red-400 hover:bg-red-400/10 transition-colors"
+        className="flex items-center gap-2 text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 transition-colors border border-red-500/20 rounded-xl px-4 py-2 font-medium"
         title="Delete Package"
       >
         <Trash2 className="w-4 h-4" />
+        <span className="hidden sm:inline">Delete</span>
       </Button>
 
       <ConfirmDeleteModal

@@ -69,14 +69,14 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="p-5 border-t border-white/5">
+      <div className="p-2 border-t border-white/5">
         <Button
           variant="ghost"
           onClick={handleLogout}
-          className="flex items-center justify-start space-x-3 px-4 w-full rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
+          className="flex items-center justify-start space-x-3 px-4 py-6 w-full rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
         >
           <LogOut className="w-5 h-5" />
-          <span className="text-base">Sign Out</span>
+          <span className="text-lg">Sign Out</span>
         </Button>
       </div>
     </aside>

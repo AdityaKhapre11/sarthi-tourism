@@ -78,7 +78,7 @@ export function WhyChooseUs() {
                 Why Choose Us
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mt-3 mb-6 tracking-tight leading-tight">
-                Why Choose Sarthi Tourism?
+                Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Sarthi Tourism?</span>
               </h2>
             </div>
             <p className="text-gray-400 text-lg md:text-xl font-light leading-relaxed mb-10">

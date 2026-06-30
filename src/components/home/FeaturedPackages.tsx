@@ -125,7 +125,7 @@ export function FeaturedPackages() {
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
               </div>
 
-              <div className="p-8 pt-4 flex flex-col flex-grow">
+              <div className="p-8 pt-4 flex flex-col flex-grow text-left">
                 <div className="flex items-center text-blue-300 text-sm font-medium mb-4 uppercase tracking-wider">
                   <Clock className="mr-2" />
                   {pkg.duration}

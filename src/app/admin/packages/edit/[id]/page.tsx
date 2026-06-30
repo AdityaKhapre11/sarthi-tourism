@@ -21,7 +21,7 @@ export default function EditPackage() {
         const res = await fetch("/api/packages");
         if (res.ok) {
           const packages = await res.json();
-          const pkg = packages.find((p: any) => p.id.toString() === id);
+          const pkg = packages.find((p: { id: number | string }) => p.id.toString() === id);
           if (pkg) {
             setInitialData(pkg);
           }
@@ -38,7 +38,7 @@ export default function EditPackage() {
     }
   }, [id]);
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: PackageFormData) => {
     await updatePackage(id, data);
     router.push("/admin/packages");
   };
@@ -70,7 +70,6 @@ export default function EditPackage() {
       subtitle="Update the details of this package."
       initialData={initialData}
       onSubmit={handleSubmit}
-      showDelete={true}
       onDelete={handleDelete}
     />
   );

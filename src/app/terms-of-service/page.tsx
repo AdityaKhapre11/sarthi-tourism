@@ -54,7 +54,7 @@ export default function TermsOfServicePage() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">4. Travel Documents</h2>
             <p className="leading-relaxed">
-              It is the traveler's responsibility to ensure they have valid passports, visas, and any other necessary travel documents prior to departure.
+              It is the traveler&apos;s responsibility to ensure they have valid passports, visas, and any other necessary travel documents prior to departure.
             </p>
           </section>
 

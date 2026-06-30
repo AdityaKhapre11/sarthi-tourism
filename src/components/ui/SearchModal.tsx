@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, MapPin, ArrowRight, History, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { packages } from "@/data/packages";
 import { Button } from "@/components/ui/button";
 
@@ -46,7 +47,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     const saved = localStorage.getItem("sarthiRecentSearches");
     if (saved) {
       try {
-        setRecentSearches(JSON.parse(saved));
+        setTimeout(() => setRecentSearches(JSON.parse(saved)), 0);
       } catch (e) {}
     }
   }, []);
@@ -58,8 +59,10 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
-      setQuery("");
-      setSelectedIndex(0);
+      setTimeout(() => {
+        setQuery("");
+        setSelectedIndex(0);
+      }, 0);
     }
     return () => {
       document.body.style.overflow = "unset";
@@ -95,7 +98,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
 
   // Reset selection when query changes
   useEffect(() => {
-    setSelectedIndex(0);
+    setTimeout(() => setSelectedIndex(0), 0);
   }, [query]);
 
   // Handle keyboard navigation within the modal
@@ -184,20 +187,23 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                 className="w-full bg-transparent text-xl text-white placeholder-gray-500 focus:outline-none focus:ring-0"
               />
               {query && (
-                <Button
-                  variant="ghost"
-                  size="icon"
+                <button
                   onClick={() => setQuery("")}
-                  className="mr-2 text-gray-400 hover:bg-white/10"
+                  className="mr-3 p-1 rounded-full bg-white/10 hover:bg-white/20 text-gray-400 hover:text-white transition-colors flex items-center justify-center shrink-0"
+                  title="Clear search"
                 >
-                  <X className="w-5 h-5" />
-                </Button>
+                  <X className="w-4 h-4" />
+                </button>
               )}
+              
+              <div className="w-[1px] h-8 bg-white/10 mx-2 shrink-0"></div>
+
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={onClose}
-                className="text-gray-400 hover:text-white hover:bg-white/10"
+                className="text-gray-400 hover:text-white hover:bg-red-500/20 hover:text-red-400 shrink-0 ml-1"
+                title="Close (Esc)"
               >
                 <X className="w-6 h-6" />
               </Button>
@@ -208,8 +214,8 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               {query && filteredPackages.length === 0 ? (
                 <div className="text-center py-16 text-gray-400">
                   <Search className="w-16 h-16 mx-auto mb-6 opacity-20" />
-                  <p className="text-xl text-gray-300">No results found for "{query}"</p>
-                  <p className="text-sm mt-3 opacity-60">Try searching for "Bali", "Andaman", or "Beaches"</p>
+                  <p className="text-xl text-gray-300">No results found for &quot;{query}&quot;</p>
+                  <p className="text-sm mt-3 opacity-60">Try searching for &quot;Bali&quot;, &quot;Andaman&quot;, or &quot;Beaches&quot;</p>
                 </div>
               ) : query ? (
                 // --- Search Results List ---
@@ -233,7 +239,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                         }`}
                       >
                         <div className="w-16 h-16 rounded-xl overflow-hidden relative shrink-0">
-                          <img src={pkg.image} alt={pkg.name} className="w-full h-full object-cover" />
+                          <Image src={pkg.image} alt={pkg.name} fill sizes="64px" className="object-cover" />
                         </div>
                         <div className="ml-4 flex-1">
                           <h4 className="text-white font-bold text-lg">

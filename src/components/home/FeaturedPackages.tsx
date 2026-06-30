@@ -8,46 +8,33 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, Star, ArrowRight } from "lucide-react";
 import { useLenis } from "@/components/layout";
 
-interface Package {
-  id: number;
-  name: string;
-  image: string;
-  duration: string;
-  price: string;
-  rating: number;
-  highlights?: string[];
-}
+import { Package } from "@/data/packages";
 
-export function FeaturedPackages() {
+export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: Package[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    lenis?.scrollTo(target, { offset: -80 });
-  };
+  const [packages, setPackages] = useState<Package[]>(initialPackages);
 
   useEffect(() => {
-    async function fetchPackages() {
-      try {
-        const res = await fetch("/api/packages");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setPackages(data);
-      } catch (error) {
-        console.error("Error fetching packages:", error);
-      } finally {
-        setIsLoading(false);
+    // If not passed via props, fetch (fallback)
+    if (initialPackages.length === 0) {
+      async function fetchPackages() {
+        try {
+          const res = await fetch("/api/packages");
+          if (!res.ok) throw new Error("Failed to fetch");
+          const data = await res.json();
+          setPackages(data);
+        } catch (error) {
+          console.error("Error fetching packages:", error);
+        }
       }
+      fetchPackages();
     }
-    fetchPackages();
-  }, []);
+  }, [initialPackages]);
 
   useEffect(() => {
-    if (isLoading || packages.length === 0) return;
+    if (packages.length === 0) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(".package-card",
@@ -72,7 +59,7 @@ export function FeaturedPackages() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [isLoading, packages]);
+  }, [packages]);
 
   return (
     <section id="packages" ref={sectionRef} className="py-20 md:py-32 bg-transparent relative border-t border-white/5">
@@ -107,7 +94,7 @@ export function FeaturedPackages() {
         </div>
 
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
-          {isLoading ? (
+          {packages.length === 0 ? (
             // Loading Skeletons
             [...Array(6)].map((_, i) => (
               <div key={i} className="bg-white/5 animate-pulse rounded-[2rem] h-[550px] w-full border border-white/10"></div>

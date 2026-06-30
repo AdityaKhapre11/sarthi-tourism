@@ -42,6 +42,7 @@ export default async function Image() {
           }}
         >
           {/* Layer 1: The blurred, stretched background filling the entire canvas */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={blurBase64}
             style={{
@@ -83,6 +84,7 @@ export default async function Image() {
           >
             {/* Logo - Anchored to the left side */}
             <div style={{ position: 'absolute', top: '165px', left: '100px', display: 'flex' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={logoBase64}
                 style={{

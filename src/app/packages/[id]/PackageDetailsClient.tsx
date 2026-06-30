@@ -340,7 +340,7 @@ const AnimatedTimeline = ({ itinerary }: { itinerary: Package['itinerary'] }) =>
   );
 };
 
-const TimelineNode = ({ day }: { day: any }) => {
+const TimelineNode = ({ day }: { day: import("@/data/packages").ItineraryItem }) => {
   return (
     <motion.div
       initial="hidden"

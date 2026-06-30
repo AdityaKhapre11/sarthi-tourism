@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
   if (fs.existsSync(inquiriesPath)) {
     inquiries = JSON.parse(fs.readFileSync(inquiriesPath, 'utf8'));
     // Sort inquiries newest first
-    inquiries = inquiries.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    inquiries = inquiries.sort((a: { createdAt: string }, b: { createdAt: string }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     inquiriesCount = inquiries.length;
   }
 

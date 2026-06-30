@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -30,8 +30,7 @@ interface PackageFormProps {
   initialData?: Partial<PackageFormData>;
   title: string;
   subtitle: string;
-  onSubmit: (data: any) => Promise<void>;
-  showDelete?: boolean;
+  onSubmit: (data: PackageFormData) => Promise<void>;
   onDelete?: () => void;
 }
 
@@ -53,10 +52,8 @@ export function PackageForm({
   title,
   subtitle,
   onSubmit,
-  showDelete,
   onDelete
 }: PackageFormProps) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   // Form State

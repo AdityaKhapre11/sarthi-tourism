@@ -33,7 +33,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       touchMultiplier: 2,
     });
 
-    setLenis(lenisInstance);
+    setTimeout(() => setLenis(lenisInstance), 0);
 
     lenisInstance.on("scroll", ScrollTrigger.update);
 

@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Star } from "lucide-react";
@@ -90,7 +90,7 @@ export function Testimonials() {
             What Our Travelers Say
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto font-light md:text-lg">
-            Don't just take our word for it. Read the experiences of thousands of satisfied travelers who chose Sarthi Tourism for their journeys.
+            Don&apos;t just take our word for it. Read the experiences of thousands of satisfied travelers who chose Sarthi Tourism for their journeys.
           </p>
         </div>
 

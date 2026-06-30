@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/home/Hero";
+import { packages } from "@/data/packages";
 import { Metadata } from "next";
 
 const PopularDestinations = dynamic(() => import("@/components/home").then(mod => mod.PopularDestinations), { ssr: true });
@@ -46,7 +47,7 @@ export default function Home() {
       <Hero />
       <PopularDestinations />
       <WhyChooseUs />
-      <FeaturedPackages />
+      <FeaturedPackages initialPackages={packages} />
       <Testimonials />
       <GalleryPreview />
       <ContactCTA />

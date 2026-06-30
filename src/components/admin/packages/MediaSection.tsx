@@ -1,6 +1,7 @@
 "use client";
 
 import { Upload, X, Image as ImageIcon } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 interface MediaSectionProps {
@@ -36,7 +37,7 @@ export function MediaSection({
           >
             {mainImage ? (
               <>
-                <img src={mainImage} alt="Main Image" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                <Image src={mainImage} alt="Main Image" fill unoptimized className="object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity duration-300">
                    <Upload className="w-8 h-8 text-white mb-2" />
                    <span className="text-white font-medium text-sm">Change Image</span>
@@ -62,7 +63,7 @@ export function MediaSection({
               <div key={index} className="relative aspect-square rounded-xl border border-white/10 overflow-hidden group bg-white/5">
                 {img ? (
                   <>
-                    <img src={img} alt={`Gallery ${index + 1}`} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                    <Image src={img} alt={`Gallery ${index + 1}`} fill unoptimized className="object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity gap-2">
                       <Button type="button" variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); onGalleryImageClick(index); }} className="text-white hover:bg-white/20">
                         <Upload className="w-4 h-4" />

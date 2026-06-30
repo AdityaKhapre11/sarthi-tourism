@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { useLenis } from "@/components/layout";
 
@@ -33,7 +33,7 @@ export function Footer() {
               <Image src="/images/logo1.png" alt="Sarthi Tourism Logo" width={120} height={42} className="object-contain opacity-90 hover:opacity-100 transition-opacity" />
             </Link>
             <p className="text-sm leading-relaxed mb-6 font-light">
-              Crafting extraordinary journeys with premium itineraries. Discover the world's most breathtaking destinations in unparalleled comfort.
+              Crafting extraordinary journeys with premium itineraries. Discover the world&apos;s most breathtaking destinations in unparalleled comfort.
             </p>
           </div>
 

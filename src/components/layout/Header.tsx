@@ -44,11 +44,6 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
 
   useEffect(() => {
     if (pathname !== "/") {
-      if (pathname.startsWith("/packages")) {
-        setActiveSection("packages");
-      } else {
-        setActiveSection("");
-      }
       return;
     }
 
@@ -69,7 +64,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
       if (element) observer.observe(element);
     });
 
-    if (window.scrollY < 100) setActiveSection("home");
+    if (window.scrollY < 100) setTimeout(() => setActiveSection("home"), 0);
 
     return () => observer.disconnect();
   }, [pathname]);

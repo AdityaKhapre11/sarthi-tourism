@@ -106,7 +106,7 @@ export default function AdminPackages() {
           <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/5 rounded-2xl">
             <Map className="w-16 h-16 text-gray-600 mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">No Packages Found</h3>
-            <p className="text-gray-400 mb-6 max-w-sm text-center">You haven't added any tour packages yet. Create your first package to get started.</p>
+            <p className="text-gray-400 mb-6 max-w-sm text-center">You haven&apos;t added any tour packages yet. Create your first package to get started.</p>
             <Link
               href="/admin/packages/new"
               className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-all"

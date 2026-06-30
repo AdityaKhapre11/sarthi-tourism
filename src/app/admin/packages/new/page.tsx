@@ -7,7 +7,7 @@ import { createPackage } from "../actions";
 export default function NewPackage() {
   const router = useRouter();
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: import("@/components/admin/packages").PackageFormData) => {
     await createPackage(data);
     router.push("/admin/packages");
   };

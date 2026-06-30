@@ -44,6 +44,7 @@ export function WhyChooseUs() {
                 src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&q=80&w=1000"
                 alt="Travel experiences"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
@@ -55,6 +56,7 @@ export function WhyChooseUs() {
                 src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&q=80&w=1000"
                 alt="Beautiful destinations"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover opacity-90"
               />
             </div>

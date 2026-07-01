@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Clock, Star, ArrowRight } from "lucide-react";
+import { Clock, Star, ArrowRight, Sparkles } from "lucide-react";
 import { useLenis } from "@/components/layout";
 
 import { Package } from "@/data/packages";
@@ -14,7 +14,7 @@ export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: P
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
-  const [packages, setPackages] = useState<Package[]>(initialPackages);
+  const [packages, setPackages] = useState<Package[]>(() => [...initialPackages].sort((a, b) => b.id - a.id));
 
   useEffect(() => {
     // If not passed via props, fetch (fallback)
@@ -24,7 +24,7 @@ export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: P
           const res = await fetch("/api/packages");
           if (!res.ok) throw new Error("Failed to fetch");
           const data = await res.json();
-          setPackages(data);
+          setPackages(data.sort((a: Package, b: Package) => b.id - a.id));
         } catch (error) {
           console.error("Error fetching packages:", error);
         }
@@ -99,7 +99,7 @@ export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: P
             [...Array(6)].map((_, i) => (
               <div key={i} className="bg-white/5 animate-pulse rounded-[2rem] h-[550px] w-full border border-white/10"></div>
             ))
-          ) : packages.slice(0, 6).map((pkg) => (
+          ) : packages.slice(0, 6).map((pkg, index) => (
             <Link href={`/packages/${pkg.id}`} key={pkg.id} className="package-card group relative bg-white/5 backdrop-blur-sm rounded-[2.5rem] border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden flex flex-col shadow-2xl hover:-translate-y-2">
               <div className="relative h-72 overflow-hidden shrink-0 m-2 rounded-[2rem]">
                 <Image
@@ -110,6 +110,19 @@ export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: P
                   className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+
+                {/* New Badge */}
+                {index < 3 && (
+                  <div className="absolute top-4 right-4 z-20 group">
+                    {/* Subtle outer glow */}
+                    <div className="absolute inset-0 bg-[#ff7900] rounded-full blur-md opacity-50 animate-pulse"></div>
+                    {/* Badge Content */}
+                    <div className="relative bg-gradient-to-r from-[#ff7900] to-[#ff5e00] text-white text-[10px] sm:text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border border-white/25 shadow-xl backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+                      <Sparkles size={14} className="text-white/90 animate-pulse" />
+                      <span className="tracking-widest uppercase drop-shadow-sm">New</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="p-8 pt-4 flex flex-col flex-grow text-left">

@@ -1,23 +1,36 @@
 import Link from "next/link";
 import { Plus, Edit, Map } from "lucide-react";
 import Image from "next/image";
-import { DeletePackageButton } from "@/components/ui";
+import { DeletePackageButton, PaginationControls } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPackages() {
+export default async function AdminPackages({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const resolvedParams = await searchParams;
+  const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
+  const limit = typeof resolvedParams.limit === "string" ? parseInt(resolvedParams.limit, 10) : 10;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
   const supabase = await createClient();
-  const { data: packages, error } = await supabase
+  const { data: packages, count, error } = await supabase
     .from('packages')
-    .select('*')
-    .order('created_at', { ascending: false });
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(from, to);
 
   if (error) {
     console.error('Error fetching packages:', error);
   }
 
   const packageList = packages || [];
+  const totalItems = count || 0;
+  const totalPages = Math.ceil(totalItems / limit);
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
@@ -131,6 +144,16 @@ export default async function AdminPackages() {
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {packageList.length > 0 && (
+        <PaginationControls
+          currentPage={page}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          limit={limit}
+        />
+      )}
 
     </div>
   );

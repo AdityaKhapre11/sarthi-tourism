@@ -72,31 +72,31 @@ export default function PackagesPage() {
 
   return (
     <>
-    {isLoading && <Loader fullScreen solidBackground />}
-    <main className="min-h-screen bg-transparent pt-32 pb-20 relative">
-      {/* Decorative Background */}
-      <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
+      {isLoading && <Loader fullScreen solidBackground />}
+      <main className="min-h-screen bg-transparent pt-32 pb-20 relative">
+        {/* Decorative Background */}
+        <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
 
-      <section ref={sectionRef} className="container relative z-10 mx-auto px-4">
-        <div className="text-center mb-16">
-          <span className="text-blue-400 font-semibold tracking-wider uppercase text-xs md:text-sm">
-            Explore The World
-          </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mt-3 tracking-tight">
-            All Tour Packages
-          </h1>
-          <p className="text-gray-400 mt-6 max-w-2xl mx-auto text-lg">
-            Discover our complete collection of carefully curated travel experiences, designed to create unforgettable memories.
-          </p>
-        </div>
+        <section ref={sectionRef} className="container relative z-10 mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-blue-400 font-semibold tracking-wider uppercase text-xs md:text-sm">
+              Explore The World
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mt-3 tracking-tight">
+              All Tour Packages
+            </h1>
+            <p className="text-gray-400 mt-6 max-w-2xl mx-auto text-lg">
+              Discover our complete collection of carefully curated travel experiences, designed to create unforgettable memories.
+            </p>
+          </div>
 
-        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
-          {packages.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg as any} />
-          ))}
-        </div>
-      </section>
-    </main>
+          <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
+            {packages.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg as any} />
+            ))}
+          </div>
+        </section>
+      </main>
     </>
   );
 }

@@ -6,3 +6,4 @@ export * from "./ImageWithSkeleton";
 export * from "./Loader";
 export * from "./SearchModal";
 export * from "./button";
+export * from "./PaginationControls";

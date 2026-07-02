@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, Star, ArrowRight, Sparkles } from "lucide-react";
 import { useLenis } from "@/components/layout";
+import { ImageWithSkeleton } from "@/components/ui/ImageWithSkeleton";
 
 import { Package } from "@/data/packages";
 
@@ -102,7 +103,7 @@ export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: P
           ) : packages.slice(0, 6).map((pkg, index) => (
             <Link href={`/packages/${pkg.id}`} key={pkg.id} className="package-card group relative bg-white/5 backdrop-blur-sm rounded-[2.5rem] border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden flex flex-col shadow-2xl hover:-translate-y-2">
               <div className="relative h-72 overflow-hidden shrink-0 m-2 rounded-[2rem]">
-                <Image
+                <ImageWithSkeleton
                   src={pkg.image}
                   alt={pkg.name}
                   fill

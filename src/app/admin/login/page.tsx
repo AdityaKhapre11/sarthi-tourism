@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { Loader } from "@/components/ui/Loader";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -58,6 +59,7 @@ export default function AdminLogin() {
 
   return (
     <div className="h-[100vh] overflow-hidden flex w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
+      {loading && <Loader fullScreen solidBackground />}
 
       {/* Left Side - Image/Branding */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-r border-white/5 p-12">

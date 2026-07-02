@@ -6,6 +6,8 @@ import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, ArrowRight } from "lucide-react";
+import { Loader } from "@/components/ui/Loader";
+import { ImageWithSkeleton } from "@/components/ui/ImageWithSkeleton";
 
 interface Package {
   id: number;
@@ -70,6 +72,8 @@ export default function PackagesPage() {
   }, [isLoading, packages]);
 
   return (
+    <>
+    {isLoading && <Loader fullScreen solidBackground />}
     <main className="min-h-screen bg-transparent pt-32 pb-20 relative">
       {/* Decorative Background */}
       <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
@@ -88,14 +92,10 @@ export default function PackagesPage() {
         </div>
 
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
-          {isLoading ? (
-            [...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white/5 animate-pulse rounded-[2rem] h-[550px] w-full border border-white/10"></div>
-            ))
-          ) : packages.map((pkg) => (
+          {packages.map((pkg) => (
             <Link href={`/packages/${pkg.id}`} key={pkg.id} className="package-card group relative bg-white/5 backdrop-blur-sm rounded-[2.5rem] border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden flex flex-col shadow-2xl hover:-translate-y-2">
               <div className="relative h-72 overflow-hidden shrink-0 m-2 rounded-[2rem]">
-                <Image
+                <ImageWithSkeleton
                   src={pkg.image}
                   alt={pkg.name}
                   fill
@@ -142,5 +142,6 @@ export default function PackagesPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }

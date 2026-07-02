@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { ImageWithSkeleton } from "@/components/ui/ImageWithSkeleton";
 
 interface ImageGalleryProps {
   images: string[];
@@ -42,7 +42,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
           className="absolute inset-0 w-full h-full"
         >
           {images[currentIndex] && (
-            <Image
+            <ImageWithSkeleton
               src={images[currentIndex]}
               alt={`${alt} - Image ${currentIndex + 1}`}
               fill

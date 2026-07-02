@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ImageUploadModal from "@/components/ui/ImageUploadModal";
 import ConfirmDeleteModal from "@/components/ui/ConfirmDeleteModal";
+import { Loader } from "@/components/ui/Loader";
 
 import { DynamicListInput } from "./DynamicListInput";
 import { ItineraryInput, ItineraryDay } from "./ItineraryInput";
@@ -94,20 +95,21 @@ export function PackageForm({
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex items-center space-x-4">
-          <Link href="/admin/packages" className="p-2 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl text-gray-400 hover:text-white transition-colors border border-white/5">
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">{title}</h1>
-            <p className="text-gray-400 mt-1">{subtitle}</p>
+    <>
+      {loading && <Loader fullScreen />}
+      <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center space-x-4">
+            <Link href="/admin/packages" className="p-2 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl text-gray-400 hover:text-white transition-colors border border-white/5">
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-white tracking-tight">{title}</h1>
+              <p className="text-gray-400 mt-1">{subtitle}</p>
+            </div>
           </div>
+          <div></div>
         </div>
-
-        <div></div>
-      </div>
 
       <form id="package-form" className="space-y-8" onSubmit={handleSubmit}>
         {/* Basic Information */}
@@ -264,5 +266,6 @@ export function PackageForm({
         message={`Are you sure you want to delete '${formData.name}'? This action cannot be undone.`}
       />
     </div>
+    </>
   );
 }

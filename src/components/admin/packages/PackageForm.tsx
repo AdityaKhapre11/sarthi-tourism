@@ -4,10 +4,10 @@ import { useState } from "react";
 
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import ImageUploadModal from "@/components/ui/ImageUploadModal";
-import ConfirmDeleteModal from "@/components/ui/ConfirmDeleteModal";
-import { Loader } from "@/components/ui/Loader";
+import { Button } from "@/components/ui";
+import { ImageUploadModal } from "@/components/ui";
+import { ConfirmDeleteModal } from "@/components/ui";
+import { Loader } from "@/components/ui";
 
 import { DynamicListInput } from "./DynamicListInput";
 import { ItineraryInput, ItineraryDay } from "./ItineraryInput";

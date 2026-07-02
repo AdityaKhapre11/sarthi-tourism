@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { deletePackage } from "@/app/admin/packages/actions";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
-import { Button } from "@/components/ui/button";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
+import { Button } from "@/components/ui";
 
-export default function DeletePackageButton({ id, packageName, onSuccess }: { id: string | number; packageName?: string; onSuccess?: () => void }) {
+export function DeletePackageButton({ id, packageName, onSuccess }: { id: string | number; packageName?: string; onSuccess?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 

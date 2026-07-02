@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Upload, X, Image as ImageIcon, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 interface ImageUploadModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface ImageUploadModalProps {
   folder?: string;
 }
 
-export default function ImageUploadModal({ isOpen, onClose, onUpload, folder = "packages" }: ImageUploadModalProps) {
+export function ImageUploadModal({ isOpen, onClose, onUpload, folder = "packages" }: ImageUploadModalProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus, Edit, Map } from "lucide-react";
 import Image from "next/image";
-import DeletePackageButton from "@/components/ui/DeletePackageButton";
+import { DeletePackageButton } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = 'force-dynamic';

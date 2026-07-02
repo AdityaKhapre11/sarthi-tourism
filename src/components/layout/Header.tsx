@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu, X, Search } from "lucide-react";
 import { useLenis } from "@/components/layout";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 interface HeaderProps {
   onOpenSearch?: () => void;

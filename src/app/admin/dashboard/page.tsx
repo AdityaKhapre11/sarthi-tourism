@@ -3,20 +3,22 @@ import fs from "fs";
 import path from "path";
 
 import { StatCard, RecentInquiriesList, QuickActionsPanel } from "@/components/admin/dashboard";
+import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
+  const supabase = await createClient();
   
-  // Read data dynamically
-  const packagesPath = path.join(process.cwd(), 'src', 'data', 'packages.json');
+  // Fetch packages count from Supabase
+  const { count } = await supabase
+    .from('packages')
+    .select('*', { count: 'exact', head: true });
+    
+  const packagesCount = count || 0;
+
+  // Inquiries (Fallback to JSON for now if DB not set up for inquiries)
   const inquiriesPath = path.join(process.cwd(), 'src', 'data', 'inquiries.json');
-  
-  let packagesCount = 0;
-  if (fs.existsSync(packagesPath)) {
-    const pkgs = JSON.parse(fs.readFileSync(packagesPath, 'utf8'));
-    packagesCount = pkgs.length;
-  }
 
   let inquiries = [];
   let inquiriesCount = 0;

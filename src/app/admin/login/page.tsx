@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
-import { Loader } from "@/components/ui/Loader";
+import { Loader } from "@/components/ui";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");

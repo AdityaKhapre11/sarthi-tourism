@@ -10,7 +10,7 @@ import { MessageCircle, Plane } from "lucide-react";
 import { Package } from "@/data/packages";
 import { useRef, useState } from "react";
 import { ImageGallery } from "@/components/ui";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 interface PackageDetailsClientProps {
   pkg: Package;

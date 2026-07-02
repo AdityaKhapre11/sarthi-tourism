@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { Hero } from "@/components/home/Hero";
+import { Hero } from "@/components/home";
 import dynamic from "next/dynamic";
 import { Metadata } from "next";
 

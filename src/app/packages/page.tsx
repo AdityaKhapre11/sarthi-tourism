@@ -5,9 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Clock, ArrowRight } from "lucide-react";
-import { Loader } from "@/components/ui/Loader";
-import { ImageWithSkeleton } from "@/components/ui/ImageWithSkeleton";
+import { Loader } from "@/components/ui";
+import { PackageCard } from "@/components/packages";
 
 interface Package {
   id: number;
@@ -93,51 +92,7 @@ export default function PackagesPage() {
 
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
           {packages.map((pkg) => (
-            <Link href={`/packages/${pkg.id}`} key={pkg.id} className="package-card group relative bg-white/5 backdrop-blur-sm rounded-[2.5rem] border border-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden flex flex-col shadow-2xl hover:-translate-y-2">
-              <div className="relative h-72 overflow-hidden shrink-0 m-2 rounded-[2rem]">
-                <ImageWithSkeleton
-                  src={pkg.image}
-                  alt={pkg.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw"
-                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-              </div>
-
-              <div className="p-8 pt-4 flex flex-col flex-grow">
-                <div className="flex items-center text-blue-300 text-sm font-medium mb-4 uppercase tracking-wider">
-                  <Clock className="mr-2" />
-                  {pkg.duration}
-                </div>
-                <h3 className="text-2xl font-bold font-heading text-white mb-5 group-hover:text-blue-400 transition-colors leading-snug">
-                  {pkg.name}
-                </h3>
-
-                {/* Highlights Section */}
-                {pkg.highlights && pkg.highlights.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {pkg.highlights.map((highlight, idx) => (
-                      <span key={idx} className="bg-white/5 border border-white/10 text-gray-300 text-[10px] font-medium px-3 py-1.5 rounded-full uppercase tracking-wider">
-                        {highlight}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/10">
-                  <div>
-                    <span className="text-xs text-gray-500 uppercase tracking-widest block mb-1">Starting from</span>
-                    <div className="text-2xl font-bold text-white">{pkg.price}</div>
-                  </div>
-                  <div
-                    className="w-12 h-12 rounded-full bg-blue-600 group-hover:bg-blue-500 flex items-center justify-center text-white transition-all transform group-hover:rotate-45"
-                  >
-                    <ArrowRight size={20} className="-rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-                  </div>
-                </div>
-              </div>
-            </Link>
+            <PackageCard key={pkg.id} pkg={pkg as any} />
           ))}
         </div>
       </section>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ImageWithSkeleton } from "@/components/ui/ImageWithSkeleton";
+import { ImageWithSkeleton } from "@/components/ui";
 
 interface ImageGalleryProps {
   images: string[];

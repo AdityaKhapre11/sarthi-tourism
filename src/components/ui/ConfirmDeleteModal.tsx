@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AlertTriangle, Loader2, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 interface ConfirmDeleteModalProps {
   isOpen: boolean;
@@ -14,7 +14,7 @@ interface ConfirmDeleteModalProps {
   isDeleting?: boolean;
 }
 
-export default function ConfirmDeleteModal({
+export function ConfirmDeleteModal({
   isOpen,
   onClose,
   onConfirm,

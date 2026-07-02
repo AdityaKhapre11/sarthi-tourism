@@ -1,7 +1,7 @@
-export { ContactCTA } from "./ContactCTA";
-export { FeaturedPackages } from "./FeaturedPackages";
-export { GalleryPreview } from "./GalleryPreview";
-export { Hero } from "./Hero";
-export { PopularDestinations } from "./PopularDestinations";
-export { Testimonials } from "./Testimonials";
-export { WhyChooseUs } from "./WhyChooseUs";
+export * from "./ContactCTA";
+export * from "./FeaturedPackages";
+export * from "./GalleryPreview";
+export * from "./Hero";
+export * from "./PopularDestinations";
+export * from "./Testimonials";
+export * from "./WhyChooseUs";

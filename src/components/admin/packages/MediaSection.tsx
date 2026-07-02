@@ -2,7 +2,7 @@
 
 import { Upload, X, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 interface MediaSectionProps {
   mainImage: string;

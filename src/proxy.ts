@@ -1,29 +1,19 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { type NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const isAuthenticated = request.cookies.has("admin_auth");
-  
-  if (pathname === "/" && isAuthenticated) {
-    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-  }
-
-  if (pathname.startsWith("/admin")) {
-    const isLoginPage = pathname === "/admin/login";
-    
-    if (isAuthenticated && (pathname === "/admin" || isLoginPage)) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
-    
-    if (!isAuthenticated && !isLoginPage) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
-    }
-  }
-  
-  return NextResponse.next();
+export async function proxy(request: NextRequest) {
+  return await updateSession(request)
 }
 
 export const config = {
-  matcher: ["/", "/admin/:path*", "/admin"],
-};
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
+}

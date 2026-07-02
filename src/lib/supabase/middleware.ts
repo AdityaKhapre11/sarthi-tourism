@@ -35,18 +35,25 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protect the admin routes
-  if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
+  const pathname = request.nextUrl.pathname;
+
+  // Protect all admin routes
+  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
     if (!user) {
-      // no user, potentially respond by redirecting the user to the login page
+      // User is not logged in, redirect them to login page securely
       const url = request.nextUrl.clone()
       url.pathname = '/admin/login'
       return NextResponse.redirect(url)
     }
+    
+    // Disable caching for protected routes to prevent back-button access after logout
+    supabaseResponse.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+    supabaseResponse.headers.set('Pragma', 'no-cache');
+    supabaseResponse.headers.set('Expires', '0');
   }
 
   // Redirect to admin dashboard if logged in and visiting login page
-  if (request.nextUrl.pathname === '/admin/login' && user) {
+  if (pathname === '/admin/login' && user) {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/dashboard'
     return NextResponse.redirect(url)

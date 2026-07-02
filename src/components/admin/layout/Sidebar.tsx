@@ -18,6 +18,10 @@ export function Sidebar() {
 
   const handleLogout = async () => {
     try {
+      // 1. Call API to clear server cookies
+      await fetch('/api/admin/logout', { method: 'POST' });
+      
+      // 2. Clear client-side Supabase token
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
       await supabase.auth.signOut();
@@ -25,7 +29,10 @@ export function Sidebar() {
       console.error("Logout failed:", error);
     } finally {
       if (typeof window !== "undefined") {
+        // 3. Clear all potential legacy local storage items
         localStorage.removeItem("admin-auth");
+        sessionStorage.clear();
+        // 4. Force hard redirect to login
         window.location.replace("/admin/login");
       }
     }

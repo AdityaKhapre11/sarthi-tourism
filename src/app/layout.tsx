@@ -3,6 +3,7 @@ import { Inter, Outfit, Geist } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll, PublicLayout } from "@/components/layout";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -79,6 +80,19 @@ export default function RootLayout({
           <PublicLayout>{children}</PublicLayout>
         </SmoothScroll>
         <div id="modal-root" className="relative z-[9999]"></div>
+        <Toaster 
+          position="top-center" 
+          theme="dark"
+          toastOptions={{
+            classNames: {
+              toast: 'backdrop-blur-xl border',
+              success: 'bg-emerald-300/10 border-emerald-500/20 text-emerald-400',
+              error: 'bg-red-500/10 border-red-500/20 text-red-400',
+              info: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
+              warning: 'bg-orange-500/10 border-orange-500/20 text-orange-400',
+            }
+          }}
+        />
       </body>
     </html>
   );

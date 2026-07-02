@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, MapPin, ArrowRight, History, Trash2 } from "lucide-react";
+import { Loader2, Search, X, MapPin, ArrowRight, History, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui";
 
 interface Package {
@@ -272,7 +273,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                           <div className="flex items-center text-sm text-gray-400 mt-1">
                             <MapPin className="w-3.5 h-3.5 mr-1 text-blue-400/70" />
                             <span className="truncate">
-                              {pkg.duration} • {pkg.price}
+                              {pkg.duration} • {formatPrice(pkg.price)}
                             </span>
                           </div>
                         </div>

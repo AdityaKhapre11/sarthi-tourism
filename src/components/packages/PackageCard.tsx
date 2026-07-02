@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Clock, ArrowRight, Sparkles } from "lucide-react";
 import { ImageWithSkeleton } from "@/components/ui";
 import { Package } from "@/data/packages";
+import { formatPrice } from "@/lib/utils";
 
 interface PackageCardProps {
   pkg: Package;
@@ -66,7 +67,7 @@ export function PackageCard({ pkg, isFeatured = false }: PackageCardProps) {
             <span className="text-xs text-gray-500 uppercase tracking-widest block mb-1">
               Starting from
             </span>
-            <div className="text-2xl md:text-3xl font-bold text-white">{pkg.price}</div>
+            <div className="text-2xl md:text-3xl font-bold text-white">{formatPrice(pkg.price)}</div>
           </div>
           <div className="w-12 h-12 rounded-full bg-blue-600 group-hover:bg-blue-500 flex items-center justify-center text-white transition-all transform group-hover:rotate-45">
             <ArrowRight size={20} className="-rotate-45 group-hover:rotate-0 transition-transform duration-300" />

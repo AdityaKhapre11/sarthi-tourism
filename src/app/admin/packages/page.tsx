@@ -3,6 +3,7 @@ import { Plus, Edit, Map } from "lucide-react";
 import Image from "next/image";
 import { DeletePackageButton, PaginationControls } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
+import { formatPrice } from "@/lib/utils";
 
 export const dynamic = 'force-dynamic';
 
@@ -84,14 +85,14 @@ export default async function AdminPackages({
                   </h3>
                   <div className="hidden md:block text-right shrink-0">
                     <div className="text-sm text-gray-400 mb-0.5">Starting from</div>
-                    <div className="text-xl font-bold text-green-400">{pkg.price}</div>
+                    <div className="text-xl font-bold text-green-400">{formatPrice(pkg.price)}</div>
                   </div>
                 </div>
 
                 {/* Mobile Price */}
                 <div className="md:hidden flex items-center gap-2 mb-3">
                   <span className="text-sm text-gray-400">Starting from:</span>
-                  <span className="font-bold text-green-400">{pkg.price}</span>
+                  <span className="font-bold text-green-400">{formatPrice(pkg.price)}</span>
                 </div>
 
                 {/* Highlights */}

@@ -56,6 +56,7 @@ export function PackageForm({
   onDelete
 }: PackageFormProps) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState<PackageFormData>({
@@ -76,6 +77,7 @@ export function PackageForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
       const data = {
@@ -88,8 +90,9 @@ export function PackageForm({
       };
 
       await onSubmit(data);
-    } catch (error) {
-      console.error(error);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "An unexpected error occurred while saving.");
       setLoading(false);
     }
   };
@@ -110,6 +113,12 @@ export function PackageForm({
           </div>
           <div></div>
         </div>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-3">
+            <span className="font-semibold">Error:</span> {error}
+          </div>
+        )}
 
       <form id="package-form" className="space-y-8" onSubmit={handleSubmit}>
         {/* Basic Information */}

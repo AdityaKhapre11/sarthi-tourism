@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { PackageForm, PackageFormData } from "@/components/admin/packages";
 import { updatePackage, deletePackage } from "../../actions";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function EditPackage() {
   const router = useRouter();
@@ -39,12 +40,23 @@ export default function EditPackage() {
   }, [id]);
 
   const handleSubmit = async (data: PackageFormData) => {
-    await updatePackage(id, data);
+    const result = await updatePackage(id, data);
+    if (!result.success) {
+      toast.error(result.error || "Failed to update package.");
+      throw new Error(result.error || "Failed to update package.");
+    }
+    toast.success("Package updated successfully!");
     router.push("/admin/packages");
+    router.refresh();
   };
 
   const handleDelete = async () => {
-    await deletePackage(Number(id));
+    const result = await deletePackage(Number(id));
+    if (!result?.success) {
+      toast.error(result?.error || "Failed to delete package.");
+      return;
+    }
+    toast.success("Package deleted successfully!");
     router.push("/admin/packages");
   };
 

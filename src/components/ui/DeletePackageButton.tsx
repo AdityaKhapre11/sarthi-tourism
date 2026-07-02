@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 import { deletePackage } from "@/app/admin/packages/actions";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import { Button } from "@/components/ui";
+import { toast } from "sonner";
 
 export function DeletePackageButton({ id, packageName, onSuccess }: { id: string | number; packageName?: string; onSuccess?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,10 +14,16 @@ export function DeletePackageButton({ id, packageName, onSuccess }: { id: string
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deletePackage(id);
+      const result = await deletePackage(id);
+      if (!result?.success) {
+        toast.error(result?.error || "Failed to delete package.");
+        return;
+      }
+      toast.success("Package deleted successfully!");
       if (onSuccess) onSuccess();
     } catch (err) {
       console.error(err);
+      toast.error("An unexpected error occurred.");
     } finally {
       setIsDeleting(false);
       setIsOpen(false);

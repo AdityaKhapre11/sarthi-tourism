@@ -43,15 +43,18 @@ export async function updatePackage(id: string, data: any) {
   try {
     const supabase = await createClient();
     
-    // Separate itinerary from the rest of the package data
-    const { itinerary, ...packageData } = data;
+    // Separate itinerary and non-updatable properties from the rest of the package data
+    const { itinerary, id: _id, itineraries, created_at, updated_at, ...packageData } = data;
 
     const { error: packageError } = await supabase
       .from('packages')
       .update(packageData)
       .eq('id', id);
 
-    if (packageError) throw packageError;
+    if (packageError) {
+      console.error("Supabase package update error:", packageError);
+      throw packageError;
+    }
 
     // Handle itinerary updates by deleting existing and inserting new ones
     if (itinerary) {

@@ -10,6 +10,7 @@ import { MessageCircle, Plane } from "lucide-react";
 import { Package } from "@/data/packages";
 import { useRef, useState } from "react";
 import { ImageGallery } from "@/components/ui";
+import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui";
 
 interface PackageDetailsClientProps {
@@ -208,7 +209,7 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
               <div className="relative z-10">
                 <span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.2em] block mb-4">Get this Package</span>
                 <div className="text-4xl md:text-5xl font-bold text-white tracking-tighter mb-2">
-                  {pkg.price}
+                  {formatPrice(pkg.price)}
                 </div>
                 {pkg.price !== "Contact Us" && <span className="text-sm font-medium text-gray-500 block">per person</span>}
 

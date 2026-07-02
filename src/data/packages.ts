@@ -18,6 +18,3 @@ export interface Package {
   gallery?: string[];
 }
 
-import packagesData from './packages.json';
-
-export const packages: Package[] = packagesData;

@@ -18,13 +18,15 @@ export function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/admin/logout", { method: "POST" });
+      const { createClient } = await import("@/lib/supabase/client");
+      const supabase = createClient();
+      await supabase.auth.signOut();
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
       if (typeof window !== "undefined") {
         localStorage.removeItem("admin-auth");
-        window.location.replace("login");
+        window.location.replace("/admin/login");
       }
     }
   };

@@ -1,10 +1,24 @@
 import Link from "next/link";
 import { Plus, Edit, Map } from "lucide-react";
-import { packages } from "@/data/packages";
 import Image from "next/image";
 import DeletePackageButton from "@/components/ui/DeletePackageButton";
+import { createClient } from "@/lib/supabase/server";
 
-export default function AdminPackages() {
+export const dynamic = 'force-dynamic';
+
+export default async function AdminPackages() {
+  const supabase = await createClient();
+  const { data: packages, error } = await supabase
+    .from('packages')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching packages:', error);
+  }
+
+  const packageList = packages || [];
+
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500 pb-12">
       
@@ -30,7 +44,7 @@ export default function AdminPackages() {
 
       {/* Packages List */}
       <div className="grid gap-6">
-        {[...packages].sort((a, b) => b.id - a.id).map((pkg) => (
+        {packageList.map((pkg: any) => (
           <div key={pkg.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] rounded-2xl p-4 transition-all duration-300">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               
@@ -70,7 +84,7 @@ export default function AdminPackages() {
                 {/* Highlights */}
                 {pkg.highlights && pkg.highlights.length > 0 && (
                   <div className="flex flex-wrap gap-2 pt-2">
-                    {pkg.highlights.slice(0, 3).map((highlight, idx) => (
+                    {pkg.highlights.slice(0, 3).map((highlight: string, idx: number) => (
                       <span key={idx} className="px-2.5 py-1 bg-white/5 border border-white/5 rounded-full text-xs text-gray-300">
                         {highlight}
                       </span>
@@ -102,7 +116,7 @@ export default function AdminPackages() {
           </div>
         ))}
 
-        {packages.length === 0 && (
+        {packageList.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/5 rounded-2xl">
             <Map className="w-16 h-16 text-gray-600 mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">No Packages Found</h3>

@@ -5,8 +5,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, MapPin, ArrowRight, History, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { packages } from "@/data/packages";
 import { Button } from "@/components/ui/button";
+
+interface Package {
+  id: number;
+  name: string;
+  image: string;
+  duration: string;
+  price: string;
+  rating: number;
+  description: string;
+  highlights: string[];
+}
 
 interface RecentSearch {
   id: number;
@@ -36,13 +46,14 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
+  const [packages, setPackages] = useState<Package[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const defaultTags = ["Dubai", "Andaman", "Kerala", "Thailand"];
 
-  // Load recent searches on mount
+  // Load recent searches and packages on mount
   useEffect(() => {
     const saved = localStorage.getItem("sarthiRecentSearches");
     if (saved) {
@@ -50,6 +61,19 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         setTimeout(() => setRecentSearches(JSON.parse(saved)), 0);
       } catch (e) {}
     }
+
+    const fetchPackages = async () => {
+      try {
+        const res = await fetch("/api/packages");
+        if (res.ok) {
+          const data = await res.json();
+          setPackages(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch packages for search", err);
+      }
+    };
+    fetchPackages();
   }, []);
 
   // Focus input when modal opens & handle body scroll

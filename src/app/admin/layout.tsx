@@ -7,24 +7,7 @@ import { Sidebar } from "@/components/admin/layout";
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
-  // Client-side protection against back-button caching
-  useEffect(() => {
-    const checkAuth = () => {
-      if (pathname === "/admin/login") return;
-      
-      const isAuthenticated = document.cookie.includes("admin_auth=true");
-      if (!isAuthenticated) {
-        window.location.replace("/admin/login");
-      }
-    };
 
-    // Check on mount/route change
-    checkAuth();
-
-    // Check when restoring from bfcache (Back/Forward button)
-    window.addEventListener("pageshow", checkAuth);
-    return () => window.removeEventListener("pageshow", checkAuth);
-  }, [pathname]);
 
   // If we are on the login page, don't show the sidebar
   if (pathname === "/admin/login") {

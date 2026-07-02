@@ -1,17 +1,18 @@
 import { notFound } from "next/navigation";
-import { packages } from "@/data/packages";
 import PackageDetailsClient from "./PackageDetailsClient";
 import { Metadata } from "next";
-
-export async function generateStaticParams() {
-  return packages.map((pkg) => ({
-    id: pkg.id.toString(),
-  }));
-}
+import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const pkg = packages.find((p) => p.id.toString() === id);
+  
+  const supabase = await createClient();
+  const { data: pkg } = await supabase
+    .from('packages')
+    .select('*')
+    .eq('id', id)
+    .single();
+
   if (!pkg) return {};
 
   return {
@@ -37,11 +38,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function PackageDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const pkg = packages.find((p) => p.id.toString() === id);
+  
+  const supabase = await createClient();
+  const { data: pkg, error } = await supabase
+    .from('packages')
+    .select('*, itineraries(*)')
+    .eq('id', id)
+    .single();
 
-  if (!pkg) {
+  if (error || !pkg) {
     notFound();
   }
+
+  // Format itinerary
+  pkg.itinerary = pkg.itineraries?.sort((a: any, b: any) => a.day - b.day) || [];
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";
   const whatsappMessage = `Hi, I'm interested in the ${pkg.name} package (${pkg.duration}). Could you please share more details?`;

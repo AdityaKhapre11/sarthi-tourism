@@ -1,29 +1,32 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
-import { packages } from '@/data/packages';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET() {
   try {
-    const INSTAGRAM_ACCESS_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
-    const AI_API_KEY = process.env.AI_API_KEY;
+    const supabase = await createClient();
+    
+    const { data, error } = await supabase
+      .from('packages')
+      .select('*, itineraries(*)')
+      .order('created_at', { ascending: false });
 
-    // If keys are missing, return the fallback data
-    // This allows the site to function beautifully while waiting for backend configuration
-    if (!INSTAGRAM_ACCESS_TOKEN || !AI_API_KEY) {
-      const sortedPackages = [...packages].sort((a, b) => b.id - a.id);
-      return NextResponse.json(sortedPackages);
+    if (error) {
+      console.error("Error fetching from Supabase:", error);
+      return NextResponse.json({ error: "Failed to fetch packages." }, { status: 500 });
     }
 
-    // --- PIPELINE SCAFFOLDING ---
+    // Format the data to match the expected frontend structure
+    const formattedPackages = data.map(pkg => ({
+      ...pkg,
+      itinerary: pkg.itineraries?.sort((a: any, b: any) => a.day - b.day) || []
+    }));
 
-    // For now, return the fallback as the implementation placeholder
-    const sortedPackages = [...packages].sort((a, b) => b.id - a.id);
-    return NextResponse.json(sortedPackages);
-
+    return NextResponse.json(formattedPackages);
   } catch (error) {
     console.error("Error fetching packages:", error);
     return NextResponse.json(
-      { error: "Failed to fetch packages from Instagram." },
+      { error: "Failed to fetch packages from database." },
       { status: 500 }
     );
   }

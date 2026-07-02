@@ -9,9 +9,10 @@ interface ImageUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUpload: (url: string) => void;
+  folder?: string;
 }
 
-export default function ImageUploadModal({ isOpen, onClose, onUpload }: ImageUploadModalProps) {
+export default function ImageUploadModal({ isOpen, onClose, onUpload, folder = "packages" }: ImageUploadModalProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -58,6 +59,7 @@ export default function ImageUploadModal({ isOpen, onClose, onUpload }: ImageUpl
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("folder", folder);
 
       const response = await fetch("/api/upload", {
         method: "POST",

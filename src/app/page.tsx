@@ -1,6 +1,6 @@
-import dynamic from "next/dynamic";
+import { createClient } from "@/lib/supabase/server";
 import { Hero } from "@/components/home/Hero";
-import { packages } from "@/data/packages";
+import dynamic from "next/dynamic";
 import { Metadata } from "next";
 
 const PopularDestinations = dynamic(() => import("@/components/home").then(mod => mod.PopularDestinations), { ssr: true });
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
@@ -38,6 +38,21 @@ export default function Home() {
     ]
   };
 
+  const supabase = await createClient();
+  const { data: dbPackages, error } = await supabase
+    .from('packages')
+    .select('*, itineraries(*)')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error("Error fetching packages from Supabase:", error);
+  }
+
+  const formattedPackages = (dbPackages || []).map(pkg => ({
+    ...pkg,
+    itinerary: pkg.itineraries?.sort((a: any, b: any) => a.day - b.day) || []
+  }));
+
   return (
     <>
       <script
@@ -47,7 +62,7 @@ export default function Home() {
       <Hero />
       <PopularDestinations />
       <WhyChooseUs />
-      <FeaturedPackages initialPackages={packages} />
+      <FeaturedPackages initialPackages={formattedPackages} />
       <Testimonials />
       <GalleryPreview />
       <ContactCTA />

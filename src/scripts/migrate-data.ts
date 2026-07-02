@@ -15,6 +15,18 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function migrate() {
+  console.log("Authenticating as Admin...");
+  const { error: authError } = await supabase.auth.signInWithPassword({
+    email: 'admin@sarthitourism.com',
+    password: 'Admin@123'
+  });
+
+  if (authError) {
+    console.warn("Could not authenticate automatically (you might have used a different password). You can ignore this if RLS is disabled, but if it fails, please disable RLS temporarily:", authError.message);
+  } else {
+    console.log("Authenticated successfully.");
+  }
+
   console.log("Starting data migration to Supabase...");
   const dataPath = path.join(process.cwd(), 'src/data/packages.json');
   

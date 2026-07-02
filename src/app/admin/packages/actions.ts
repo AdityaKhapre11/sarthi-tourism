@@ -1,73 +1,113 @@
 "use server";
 
-import fs from 'fs';
-import path from 'path';
 import { revalidatePath } from 'next/cache';
-import { Package } from '@/data/packages';
+import { createClient } from '@/lib/supabase/server';
 
 export async function uploadImage(formData: FormData) {
   try {
     const file = formData.get("file") as File;
+    const folder = formData.get("folder") as string || "packages";
     if (!file) {
       return { success: false, error: "No file provided" };
     }
     
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const supabase = await createClient();
+    const filename = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
     
-    const filename = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-    const filepath = path.join(process.cwd(), 'public', 'images', filename);
+    const { data, error } = await supabase
+      .storage
+      .from('sarthi-tourism-media')
+      .upload(filename, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      console.error("Supabase storage error:", error);
+      return { success: false, error: "Failed to upload image to Supabase" };
+    }
     
-    fs.writeFileSync(filepath, buffer);
-    
-    return { success: true, url: `/images/${filename}` };
+    const { data: publicUrlData } = supabase
+      .storage
+      .from('sarthi-tourism-media')
+      .getPublicUrl(filename);
+      
+    return { success: true, url: publicUrlData.publicUrl };
   } catch (error) {
     console.error("Error uploading image:", error);
     return { success: false, error: "Failed to upload image" };
   }
 }
 
-export async function updatePackage(id: string, data: Partial<Package>) {
+export async function updatePackage(id: string, data: any) {
   try {
-    const filePath = path.join(process.cwd(), 'src', 'data', 'packages.json');
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const packages = JSON.parse(fileData);
-
-    const index = packages.findIndex((p: Package) => p.id.toString() === id.toString());
+    const supabase = await createClient();
     
-    if (index !== -1) {
-      // Update existing package
-      packages[index] = { ...packages[index], ...data, id: Number(id) };
-      fs.writeFileSync(filePath, JSON.stringify(packages, null, 2));
-      revalidatePath("/admin/packages");
-      revalidatePath("/");
-      return { success: true };
-    } else {
-      // If it doesn't exist, we could add it (for the "New Package" form later)
-      packages.push({ ...data, id: Number(id) || Date.now() });
-      fs.writeFileSync(filePath, JSON.stringify(packages, null, 2));
-      revalidatePath("/admin/packages");
-      revalidatePath("/");
-      return { success: true };
+    // Separate itinerary from the rest of the package data
+    const { itinerary, ...packageData } = data;
+
+    const { error: packageError } = await supabase
+      .from('packages')
+      .update(packageData)
+      .eq('id', id);
+
+    if (packageError) throw packageError;
+
+    // Handle itinerary updates by deleting existing and inserting new ones
+    if (itinerary) {
+      const { error: deleteError } = await supabase
+        .from('itineraries')
+        .delete()
+        .eq('package_id', id);
+        
+      if (deleteError) throw deleteError;
+
+      if (itinerary.length > 0) {
+        const { error: insertError } = await supabase
+          .from('itineraries')
+          .insert(itinerary.map((it: any) => ({
+            ...it,
+            package_id: id
+          })));
+          
+        if (insertError) throw insertError;
+      }
     }
+
+    revalidatePath("/admin/packages");
+    revalidatePath("/");
+    return { success: true };
   } catch (error) {
-    console.error("Error saving package:", error);
-    return { success: false, error: "Failed to save package" };
+    console.error("Error updating package:", error);
+    return { success: false, error: "Failed to update package" };
   }
 }
 
-export async function createPackage(data: Omit<Package, 'id'>) {
+export async function createPackage(data: any) {
   try {
-    const filePath = path.join(process.cwd(), 'src', 'data', 'packages.json');
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const packages = JSON.parse(fileData);
+    const supabase = await createClient();
+    
+    const { itinerary, ...packageData } = data;
 
-    // Generate a simple ID
-    const nextId = packages.length > 0 ? Math.max(...packages.map((p: Package) => p.id)) + 1 : 1;
-    
-    packages.push({ ...data, id: nextId });
-    fs.writeFileSync(filePath, JSON.stringify(packages, null, 2));
-    
+    const { data: insertedPackage, error: packageError } = await supabase
+      .from('packages')
+      .insert(packageData)
+      .select()
+      .single();
+
+    if (packageError) throw packageError;
+
+    if (itinerary && itinerary.length > 0) {
+      const { error: itineraryError } = await supabase
+        .from('itineraries')
+        .insert(itinerary.map((it: any) => ({
+          ...it,
+          package_id: insertedPackage.id
+        })));
+        
+      if (itineraryError) throw itineraryError;
+    }
+
     revalidatePath("/admin/packages");
     revalidatePath("/");
     
@@ -80,22 +120,18 @@ export async function createPackage(data: Omit<Package, 'id'>) {
 
 export async function deletePackage(id: string | number) {
   try {
-    const filePath = path.join(process.cwd(), 'src', 'data', 'packages.json');
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const packages = JSON.parse(fileData);
+    const supabase = await createClient();
+    
+    const { error } = await supabase
+      .from('packages')
+      .delete()
+      .eq('id', id);
 
-    const index = packages.findIndex((p: Package) => p.id.toString() === id.toString());
-    
-    if (index !== -1) {
-      packages.splice(index, 1);
-      fs.writeFileSync(filePath, JSON.stringify(packages, null, 2));
+    if (error) throw error;
       
-      revalidatePath("/admin/packages");
-      revalidatePath("/");
-      return { success: true };
-    }
-    
-    return { success: false, error: "Package not found" };
+    revalidatePath("/admin/packages");
+    revalidatePath("/");
+    return { success: true };
   } catch (error) {
     console.error("Error deleting package:", error);
     return { success: false, error: "Failed to delete package" };

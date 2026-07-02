@@ -237,6 +237,7 @@ export function PackageForm({
       {/* Modals */}
       <ImageUploadModal
         isOpen={uploadModalState.isOpen}
+        folder={uploadModalState.field === "gallery" ? "gallery" : "packages"}
         onClose={() => setUploadModalState({ isOpen: false, field: "main" })}
         onUpload={(url) => {
           if (uploadModalState.field === "main") {

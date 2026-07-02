@@ -7,6 +7,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 import { Loader } from "@/components/ui";
+import { toast } from "sonner";
 
 export default function AdminLoginIndex() {
   const [email, setEmail] = useState("");
@@ -48,6 +49,7 @@ export default function AdminLoginIndex() {
       }
 
       if (data.user) {
+        toast.success("Login successful.");
         router.push("/admin/dashboard");
         router.refresh();
       }

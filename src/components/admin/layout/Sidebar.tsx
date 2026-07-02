@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui";
+import { toast } from "sonner";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -20,7 +21,7 @@ export function Sidebar() {
     try {
       // 1. Call API to clear server cookies
       await fetch('/api/admin/logout', { method: 'POST' });
-      
+
       // 2. Clear client-side Supabase token
       const { createClient } = await import("@/lib/supabase/client");
       const supabase = createClient();
@@ -32,8 +33,10 @@ export function Sidebar() {
         // 3. Clear all potential legacy local storage items
         localStorage.removeItem("admin-auth");
         sessionStorage.clear();
-        // 4. Force hard redirect to login
-        window.location.replace("/admin/login");
+        toast.success("You have been logged out successfully.");
+        // 4. Redirect to login
+        router.push("/admin/login");
+        router.refresh();
       }
     }
   };

@@ -77,7 +77,7 @@ export default function PackagesPage() {
         {/* Decorative Background */}
         <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
 
-        <section ref={sectionRef} className="container relative z-10 mx-auto px-4">
+        <section ref={sectionRef} className="container relative z-10 mx-auto px-4 mt-6">
           <div className="text-center mb-16">
             <span className="text-blue-400 font-semibold tracking-wider uppercase text-xs md:text-sm">
               Explore The World

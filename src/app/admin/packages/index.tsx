@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Plus, Edit, Map } from "lucide-react";
 import Image from "next/image";
 import { DeletePackageButton, PaginationControls } from "@/components/ui";
+import { AdminSearch } from "@/components/admin/AdminSearch";
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/utils";
 
@@ -13,15 +14,22 @@ export default async function AdminPackagesIndex({
   const resolvedParams = await searchParams;
   const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
   const limit = typeof resolvedParams.limit === "string" ? parseInt(resolvedParams.limit, 10) : 10;
+  const searchQuery = typeof resolvedParams.q === "string" ? resolvedParams.q : "";
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
   const supabase = await createClient();
-  const { data: packages, count, error } = await supabase
+  let query = supabase
     .from('packages')
     .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
+
+  if (searchQuery) {
+    query = query.ilike('name', `%${searchQuery}%`);
+  }
+
+  const { data: packages, count, error } = await query;
 
   if (error) {
     console.error('Error fetching packages:', error);
@@ -45,13 +53,14 @@ export default async function AdminPackagesIndex({
             <p className="text-gray-400 mt-1">View, create, and manage your tour packages.</p>
           </div>
         </div>
-        <Link
-          href="/admin/packages/new"
-          className="group flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-all duration-300 font-medium shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_-5px_rgba(37,99,235,0.6)] hover:-translate-y-0.5"
-        >
-          <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
-          <span>Add New Package</span>
-        </Link>
+          <AdminSearch placeholder="Search packages by name..." />
+          <Link
+            href="/admin/packages/new"
+            className="group flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-all duration-300 font-medium shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_-5px_rgba(37,99,235,0.6)] hover:-translate-y-0.5 shrink-0"
+          >
+            <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
+            <span>Add New Package</span>
+          </Link>
       </div>
 
       {/* Packages List */}

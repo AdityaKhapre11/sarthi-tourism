@@ -141,6 +141,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               variant="ghost"
               size="icon"
               onClick={onOpenSearch}
+              aria-label="Search packages"
               className="text-gray-300 hover:text-white transition-colors cursor-hover p-2 rounded-full hover:bg-white/5"
             >
               <Search className="w-5 h-5" />
@@ -165,6 +166,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               variant="ghost"
               size="icon"
               onClick={onOpenSearch}
+              aria-label="Search packages"
               className="text-white z-50 hover:bg-white/10"
             >
               <Search className="h-6 w-6" />
@@ -174,6 +176,8 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               size="icon"
               className="text-white z-50 hover:bg-white/10"
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? (
                 <X className="h-7 w-7" />

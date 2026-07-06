@@ -14,20 +14,31 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   if (!pkg) return {};
 
+  const description = pkg.description ? pkg.description.substring(0, 160) : `Book the ${pkg.name} tour package starting at ${pkg.price}.`;
+  
+  // Conditionally set images to allow falling back to layout.tsx default OG image if no package image exists.
+  const images = pkg.image ? [
+    {
+      url: pkg.image,
+      width: 1200,
+      height: 630,
+      alt: pkg.name,
+    }
+  ] : undefined;
+
   return {
     title: pkg.name,
-    description: pkg.description ? pkg.description.substring(0, 160) : `Book the ${pkg.name} tour package starting at ${pkg.price}. Duration: ${pkg.duration}.`,
+    description: description,
     openGraph: {
       title: pkg.name,
-      description: pkg.description ? pkg.description.substring(0, 160) : `Book the ${pkg.name} tour package starting at ${pkg.price}.`,
-      images: [
-        {
-          url: pkg.image,
-          width: 1200,
-          height: 630,
-          alt: pkg.name,
-        },
-      ],
+      description: description,
+      ...(images && { images }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: pkg.name,
+      description: description,
+      ...(images && { images }),
     },
     alternates: {
       canonical: `/packages/${pkg.id}`,

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Outfit, Geist } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll, PublicLayout } from "@/components/layout";
-import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -80,8 +80,8 @@ export default function RootLayout({
           <PublicLayout>{children}</PublicLayout>
         </SmoothScroll>
         <div id="modal-root" className="relative z-[9999]"></div>
-        <Toaster
-          position="top-center"
+        <Toaster 
+          position="top-center" 
           theme="dark"
           toastOptions={{
             classNames: {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,6 +12,35 @@ export function Footer() {
   const pathname = usePathname();
   const lenis = useLenis();
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";
+  const [featuredTours, setFeaturedTours] = useState<{ name: string, link: string }[]>([
+    { name: "Ayodhya - Prayagraj", link: "/packages/1" },
+    { name: "Malaysia Getaway", link: "/packages/2" },
+    { name: "Kashmir Heaven on Earth", link: "/packages/3" },
+    { name: "Custom Group Tours", link: "#contact" },
+  ]);
+
+  useEffect(() => {
+    async function fetchPackages() {
+      try {
+        const res = await fetch("/api/packages");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.length > 0) {
+          const topPackages = data
+            .sort((a: any, b: any) => b.id - a.id)
+            .slice(0, 3)
+            .map((pkg: any) => ({
+              name: pkg.name,
+              link: `/packages/${pkg.id}`
+            }));
+          setFeaturedTours([...topPackages, { name: "Custom Group Tours", link: "#contact" }]);
+        }
+      } catch (error) {
+        console.error("Error fetching packages for footer:", error);
+      }
+    }
+    fetchPackages();
+  }, []);
 
   const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -72,12 +102,7 @@ export function Footer() {
           <div>
             <h4 className="text-white font-bold font-heading text-lg mb-6 tracking-wide">Featured Tours</h4>
             <ul className="space-y-3">
-              {[
-                { name: "Ayodhya - Prayagraj", link: "/packages/1" },
-                { name: "Malaysia Getaway", link: "/packages/2" },
-                { name: "Kashmir Heaven on Earth", link: "/packages/3" },
-                { name: "Custom Group Tours", link: "#contact" },
-              ].map((tour, idx) => (
+              {featuredTours.map((tour, idx) => (
                 <li key={idx}>
                   <Link
                     href={tour.link}

@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 import { Header, Footer } from "@/components/layout";
 import { SearchModal } from "@/components/ui";
 
-export function PublicLayout({ children }: { children: React.ReactNode }) {
+export function PublicLayout({ 
+  children,
+  featuredPackages = [] 
+}: { 
+  children: React.ReactNode,
+  featuredPackages?: {name: string, link: string}[]
+}) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -21,7 +27,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       {!isAdmin && <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />}
       {!isAdmin && <Header onOpenSearch={() => setIsSearchOpen(true)} />}
       <main className="flex-1">{children}</main>
-      {!isAdmin && <Footer />}
+      {!isAdmin && <Footer featuredPackages={featuredPackages} />}
     </>
   );
 }

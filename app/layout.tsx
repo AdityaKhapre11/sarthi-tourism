@@ -77,16 +77,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+import { createClient } from "@/lib/supabase/server";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let footerPackages: { name: string; link: string }[] = [];
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('packages')
+      .select('id, name')
+      .order('created_at', { ascending: false })
+      .limit(3);
+      
+    if (data) {
+      footerPackages = data.map(pkg => ({
+        name: pkg.name,
+        link: `/packages/${pkg.id}`
+      }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch footer packages:", error);
+  }
+
   return (
     <html lang="en" className={cn("dark", inter.variable, outfit.variable, "font-sans", geist.variable)}>
       <body className="font-sans antialiased text-foreground bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-white">
         <SmoothScroll>
-          <PublicLayout>{children}</PublicLayout>
+          <PublicLayout featuredPackages={footerPackages}>{children}</PublicLayout>
         </SmoothScroll>
         <div id="modal-root" className="relative z-[9999]"></div>
         <Toaster 

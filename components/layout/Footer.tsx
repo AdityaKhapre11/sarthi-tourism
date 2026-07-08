@@ -8,7 +8,7 @@ import { MapPin, Phone, Mail } from "lucide-react";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import { useLenis } from "@/components/layout";
 
-export function Footer() {
+export function Footer({ featuredPackages = [] }: { featuredPackages?: {name: string, link: string}[] }) {
   const pathname = usePathname();
   const lenis = useLenis();
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";
@@ -20,27 +20,10 @@ export function Footer() {
   ]);
 
   useEffect(() => {
-    async function fetchPackages() {
-      try {
-        const res = await fetch("/api/packages");
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data && data.length > 0) {
-          const topPackages = data
-            .sort((a: any, b: any) => b.id - a.id)
-            .slice(0, 3)
-            .map((pkg: any) => ({
-              name: pkg.name,
-              link: `/packages/${pkg.id}`
-            }));
-          setFeaturedTours([...topPackages, { name: "Custom Group Tours", link: "#contact" }]);
-        }
-      } catch (error) {
-        console.error("Error fetching packages for footer:", error);
-      }
+    if (featuredPackages.length > 0) {
+      setFeaturedTours([...featuredPackages, { name: "Custom Group Tours", link: "#contact" }]);
     }
-    fetchPackages();
-  }, []);
+  }, [featuredPackages]);
 
   const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault();

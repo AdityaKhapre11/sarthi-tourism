@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Loader } from "@/components/ui";
 import { PackageCard } from "@/components/packages";
 
 interface Package {
@@ -18,30 +15,12 @@ interface Package {
   highlights?: string[];
 }
 
-export default function PackagesIndex() {
+export default function PackagesClient({ packages }: { packages: Package[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPackages() {
-      try {
-        const res = await fetch("/api/packages");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setPackages(data);
-      } catch (error) {
-        console.error("Error fetching packages:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchPackages();
-  }, []);
-
-  useEffect(() => {
-    if (isLoading || packages.length === 0) return;
+    if (packages.length === 0) return;
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -68,11 +47,10 @@ export default function PackagesIndex() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [isLoading, packages]);
+  }, [packages]);
 
   return (
     <>
-      {isLoading && <Loader fullScreen solidBackground />}
       <main className="min-h-screen bg-transparent pt-32 pb-20 relative">
         {/* Decorative Background */}
         <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />

@@ -20,7 +20,14 @@ export default async function PackageDetailsIndex({ params }: { params: Promise<
   pkg.itinerary = pkg.itineraries?.sort((a: any, b: any) => a.day - b.day) || [];
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";
-  const whatsappMessage = `Hi, I'm interested in the ${pkg.name} package (${pkg.duration}). Could you please share more details?`;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://sarthitourism.com");
+  const packageUrl = `${baseUrl}/packages/${pkg.id}`;
+  
+  const highlightsText = pkg.highlights && pkg.highlights.length > 0 
+    ? `\n✨ *Highlights:* ${pkg.highlights.join(" | ")}` 
+    : "";
+
+  const whatsappMessage = `Hi Sarthi Tourism! 👋\n\nI'm interested in booking the following package:\n\n🌴 *${pkg.name}*\n💰 *Price:* ${pkg.price}\n⏱️ *Duration:* ${pkg.duration}${highlightsText}\n\nCould you please share more details?\n\n🔗 *View Package Details:*\n${packageUrl}`;
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   const jsonLd = {

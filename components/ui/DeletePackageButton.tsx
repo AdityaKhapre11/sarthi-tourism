@@ -37,6 +37,7 @@ export function DeletePackageButton({ id, packageName, onSuccess }: { id: string
         onClick={() => setIsOpen(true)}
         className="flex items-center gap-2 text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 transition-colors border border-red-500/20 rounded-xl px-4 py-2 font-medium"
         title="Delete Package"
+        size="lg"
       >
         <Trash2 className="w-4 h-4" />
         <span className="hidden sm:inline">Delete</span>
@@ -49,8 +50,8 @@ export function DeletePackageButton({ id, packageName, onSuccess }: { id: string
         isDeleting={isDeleting}
         title="Delete Package"
         message={
-          packageName 
-            ? `Are you sure you want to delete '${packageName}'? This action cannot be undone.` 
+          packageName
+            ? `Are you sure you want to delete '${packageName}'? This action cannot be undone.`
             : "Are you sure you want to delete this package? This action cannot be undone and will permanently remove all associated data."
         }
       />

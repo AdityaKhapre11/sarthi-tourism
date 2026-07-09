@@ -14,6 +14,9 @@ export function AdminSearch({ placeholder = "Search..." }: { placeholder?: strin
   const debouncedQuery = useDebounce(query, 300);
 
   useEffect(() => {
+    const currentQ = searchParams.get("q") || "";
+    if (debouncedQuery === currentQ) return; // Prevent infinite loop
+
     startTransition(() => {
       const params = new URLSearchParams(searchParams.toString());
       if (debouncedQuery) {

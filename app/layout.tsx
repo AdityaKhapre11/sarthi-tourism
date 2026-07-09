@@ -77,7 +77,7 @@ export const metadata: Metadata = {
   },
 };
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 
 export default async function RootLayout({
   children,
@@ -86,7 +86,10 @@ export default async function RootLayout({
 }>) {
   let footerPackages: { name: string; link: string }[] = [];
   try {
-    const supabase = await createClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
     const { data } = await supabase
       .from('packages')
       .select('id, name')

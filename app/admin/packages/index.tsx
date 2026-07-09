@@ -66,7 +66,8 @@ export default async function AdminPackagesIndex({
       {/* Packages List */}
       <div className="grid gap-6">
         {packageList.map((pkg: any) => (
-          <div key={pkg.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] rounded-2xl p-4 transition-all duration-300">
+          <div key={pkg.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] rounded-2xl p-4 transition-all duration-300 relative">
+            <Link href={`/admin/packages/edit/${pkg.id}`} className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50" aria-label={`Edit details of ${pkg.name}`} />
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
               
               {/* Image */}
@@ -85,14 +86,14 @@ export default async function AdminPackagesIndex({
               </div>
 
               {/* Content */}
-              <div className="flex-1 space-y-2">
+              <div className="flex-1 space-y-2 pointer-events-none">
                 <div className="flex items-start justify-between gap-4">
                   <h3 className="text-xl font-bold text-white line-clamp-2 leading-tight group-hover:text-blue-400 transition-colors">
                     {pkg.name}
                   </h3>
                   <div className="hidden md:block text-right shrink-0">
                     <div className="text-sm text-gray-400 mb-0.5">Starting from</div>
-                    <div className="text-xl font-bold text-green-400">{formatPrice(pkg.price)}</div>
+                    <div className="text-2xl font-bold text-green-400">{formatPrice(pkg.price)}</div>
                   </div>
                 </div>
 
@@ -120,7 +121,7 @@ export default async function AdminPackagesIndex({
               </div>
 
               {/* Actions */}
-              <div className="w-full md:w-auto flex md:flex-col justify-end gap-3 shrink-0 border-t border-white/5 md:border-t-0 pt-4 md:pt-0">
+              <div className="w-full md:w-auto flex md:flex-col justify-end gap-3 shrink-0 border-t border-white/5 md:border-t-0 pt-4 md:pt-0 relative z-10">
                 <Link 
                   href={`/admin/packages/edit/${pkg.id}`} 
                   className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-colors border border-blue-500/20"

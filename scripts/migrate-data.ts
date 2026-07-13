@@ -53,7 +53,8 @@ async function migrate() {
         highlights: pkg.highlights || [],
         included: pkg.included || [],
         excluded: pkg.excluded || [],
-        gallery: pkg.gallery || []
+        gallery: pkg.gallery || [],
+        itinerary: pkg.itinerary || []
       })
       .select()
       .single();
@@ -64,26 +65,6 @@ async function migrate() {
     }
 
     console.log(`Successfully inserted package: ${pkg.name} with ID: ${packageData.id}`);
-
-    // Insert Itineraries
-    if (pkg.itinerary && pkg.itinerary.length > 0) {
-      const itineraries = pkg.itinerary.map((it: any) => ({
-        package_id: packageData.id,
-        day: it.day,
-        title: it.title,
-        description: it.description
-      }));
-
-      const { error: itineraryError } = await supabase
-        .from('itineraries')
-        .insert(itineraries);
-
-      if (itineraryError) {
-        console.error(`Error inserting itineraries for ${pkg.name}:`, itineraryError);
-      } else {
-        console.log(`Successfully inserted ${itineraries.length} itinerary days for ${pkg.name}.`);
-      }
-    }
   }
 
   console.log("Migration complete!");

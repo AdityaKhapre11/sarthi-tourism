@@ -43,8 +43,8 @@ export async function updatePackage(id: string, data: any) {
   try {
     const supabase = await createClient();
     
-    // Separate itinerary and non-updatable properties from the rest of the package data
-    const { itinerary, id: _id, itineraries, created_at, updated_at, ...packageData } = data;
+    // Separate non-updatable properties from the rest of the package data
+    const { id: _id, itineraries, created_at, updated_at, ...packageData } = data;
 
     const { error: packageError } = await supabase
       .from('packages')
@@ -54,27 +54,6 @@ export async function updatePackage(id: string, data: any) {
     if (packageError) {
       console.error("Supabase package update error:", packageError);
       throw packageError;
-    }
-
-    // Handle itinerary updates by deleting existing and inserting new ones
-    if (itinerary) {
-      const { error: deleteError } = await supabase
-        .from('itineraries')
-        .delete()
-        .eq('package_id', id);
-        
-      if (deleteError) throw deleteError;
-
-      if (itinerary.length > 0) {
-        const { error: insertError } = await supabase
-          .from('itineraries')
-          .insert(itinerary.map((it: any) => ({
-            ...it,
-            package_id: id
-          })));
-          
-        if (insertError) throw insertError;
-      }
     }
 
     revalidatePath("/admin/packages");
@@ -90,26 +69,14 @@ export async function createPackage(data: any) {
   try {
     const supabase = await createClient();
     
-    const { itinerary, ...packageData } = data;
+    // itineraries property is only from joined selects in the past, but let's ensure it is stripped if it exists
+    const { itineraries, ...packageData } = data;
 
-    const { data: insertedPackage, error: packageError } = await supabase
+    const { error: packageError } = await supabase
       .from('packages')
-      .insert(packageData)
-      .select()
-      .single();
+      .insert(packageData);
 
     if (packageError) throw packageError;
-
-    if (itinerary && itinerary.length > 0) {
-      const { error: itineraryError } = await supabase
-        .from('itineraries')
-        .insert(itinerary.map((it: any) => ({
-          ...it,
-          package_id: insertedPackage.id
-        })));
-        
-      if (itineraryError) throw itineraryError;
-    }
 
     revalidatePath("/admin/packages");
     revalidatePath("/");

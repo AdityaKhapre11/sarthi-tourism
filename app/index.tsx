@@ -32,7 +32,7 @@ export default async function HomeIndex() {
   const supabase = await createClient();
   const { data: dbPackages, error } = await supabase
     .from('packages')
-    .select('*, itineraries(*)')
+    .select('*')
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -41,7 +41,7 @@ export default async function HomeIndex() {
 
   const formattedPackages = (dbPackages || []).map(pkg => ({
     ...pkg,
-    itinerary: pkg.itineraries?.sort((a: any, b: any) => a.day - b.day) || []
+    itinerary: pkg.itinerary?.sort((a: any, b: any) => a.day - b.day) || []
   }));
 
   return (

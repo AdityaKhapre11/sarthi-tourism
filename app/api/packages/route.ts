@@ -8,7 +8,7 @@ export async function GET() {
     
     const { data, error } = await supabase
       .from('packages')
-      .select('*, itineraries(*)')
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -19,7 +19,7 @@ export async function GET() {
     // Format the data to match the expected frontend structure
     const formattedPackages = data.map(pkg => ({
       ...pkg,
-      itinerary: pkg.itineraries?.sort((a: any, b: any) => a.day - b.day) || []
+      itinerary: pkg.itinerary?.sort((a: any, b: any) => a.day - b.day) || []
     }));
 
     return NextResponse.json(formattedPackages);

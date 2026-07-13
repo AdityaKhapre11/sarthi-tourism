@@ -5,21 +5,28 @@ ALTER TABLE public.packages
 ADD COLUMN itinerary JSONB DEFAULT '[]'::jsonb;
 
 -- 2. Migrate existing data from itineraries to packages.itinerary
-UPDATE public.packages p
-SET itinerary = COALESCE(
-    (
-        SELECT jsonb_agg(
+WITH sorted_itineraries AS (
+    SELECT package_id, day, title, description 
+    FROM public.itineraries 
+    ORDER BY day ASC
+),
+aggregated_itineraries AS (
+    SELECT 
+        package_id,
+        jsonb_agg(
             jsonb_build_object(
-                'day', i.day,
-                'title', i.title,
-                'description', i.description
-            ) ORDER BY i.day ASC
-        )
-        FROM public.itineraries i
-        WHERE i.package_id = p.id
-    ),
-    '[]'::jsonb
-);
+                'day', day,
+                'title', title,
+                'description', description
+            )
+        ) AS itinerary_json
+    FROM sorted_itineraries
+    GROUP BY package_id
+)
+UPDATE public.packages
+SET itinerary = aggregated_itineraries.itinerary_json
+FROM aggregated_itineraries
+WHERE public.packages.id = aggregated_itineraries.package_id;
 
 -- 3. Drop the itineraries table
-DROP TABLE public.itineraries;
+DROP TABLE public.itineraries CASCADE;

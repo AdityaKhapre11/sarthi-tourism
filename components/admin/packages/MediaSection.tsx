@@ -63,12 +63,12 @@ export function MediaSection({
               <div key={index} className="relative aspect-square rounded-xl border border-white/10 overflow-hidden group bg-white/5">
                 {img ? (
                   <>
-                    <Image src={img} alt={`Gallery ${index + 1}`} fill unoptimized className="object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                    <Image src={img} alt={`Gallery ${index + 1}`} fill unoptimized className="object-cover" onError={(e: any) => (e.currentTarget.style.display = 'none')} />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity gap-2">
-                      <Button type="button" variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); onGalleryImageClick(index); }} className="text-white hover:bg-white/20">
+                      <Button type="button" variant="ghost" size="icon" onClick={(e: any) => { e.stopPropagation(); onGalleryImageClick(index); }} className="text-white hover:bg-white/20">
                         <Upload className="w-4 h-4" />
                       </Button>
-                      <Button type="button" variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); onRemoveGalleryImage(index); }} className="text-red-400 hover:bg-red-500/30">
+                      <Button type="button" variant="ghost" size="icon" onClick={(e: any) => { e.stopPropagation(); onRemoveGalleryImage(index); }} className="text-red-400 hover:bg-red-500/30">
                         <X className="w-4 h-4" />
                       </Button>
                     </div>

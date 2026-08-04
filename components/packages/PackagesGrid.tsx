@@ -89,9 +89,9 @@ export function PackagesGrid({ initialPackages, totalCount }: PackagesGridProps)
       </div>
 
       <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10 pb-8">
-        {packages.map((pkg) => (
+        {packages.map((pkg, index) => (
           <div key={pkg.id} className="package-card opacity-0">
-            <PackageCard pkg={pkg} />
+            <PackageCard pkg={pkg} isFeatured={index === 0} />
           </div>
         ))}
 

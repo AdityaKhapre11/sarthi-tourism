@@ -14,6 +14,8 @@ export function PublicLayout({
 }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
+  const isPolicyPage = pathname === "/privacy-policy" || pathname === "/terms-of-service";
+  const hideHeaderFooter = isAdmin || isPolicyPage;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -24,10 +26,10 @@ export function PublicLayout({
 
   return (
     <>
-      {!isAdmin && <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />}
-      {!isAdmin && <Header onOpenSearch={() => setIsSearchOpen(true)} />}
+      {!hideHeaderFooter && <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />}
+      {!hideHeaderFooter && <Header onOpenSearch={() => setIsSearchOpen(true)} />}
       <main className="flex-1">{children}</main>
-      {!isAdmin && <Footer featuredPackages={featuredPackages} />}
+      {!hideHeaderFooter && <Footer featuredPackages={featuredPackages} />}
     </>
   );
 }

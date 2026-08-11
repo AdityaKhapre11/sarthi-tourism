@@ -15,7 +15,8 @@ export function PublicLayout({
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isPolicyPage = pathname === "/privacy-policy" || pathname === "/terms-of-service";
-  const hideHeaderFooter = isAdmin || isPolicyPage;
+  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const hideHeaderFooter = isAdmin || isPolicyPage || isAuthPage;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {

@@ -35,7 +35,7 @@ export function Sidebar() {
         sessionStorage.clear();
         toast.success("You have been logged out successfully.");
         // 4. Redirect to login
-        router.push("/admin/login");
+        router.push("/login");
         router.refresh();
       }
     }

@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScroll, PublicLayout } from "@/components/layout";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -126,6 +127,7 @@ export default async function RootLayout({
             }
           }}
         />
+        <Analytics />
       </body>
     </html>
   );

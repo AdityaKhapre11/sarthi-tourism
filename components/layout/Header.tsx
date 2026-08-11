@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, User, LogOut } from "lucide-react";
 import { useLenis } from "@/components/layout";
 import { Button } from "@/components/ui";
+import { createClient } from "@/lib/supabase/client";
 
 interface HeaderProps {
   onOpenSearch?: () => void;
@@ -16,9 +17,14 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const pathname = usePathname();
+  const router = useRouter();
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const supabase = createClient();
 
   const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -41,6 +47,71 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user || null);
+    };
+    
+    fetchSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [supabase.auth]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+      lenis?.stop();
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      lenis?.start();
+    }
+    
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      lenis?.start();
+    };
+  }, [isMobileMenuOpen, lenis]);
+
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        dropdownRef.current && !dropdownRef.current.contains(target) &&
+        mobileDropdownRef.current && !mobileDropdownRef.current.contains(target)
+      ) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setIsProfileOpen(false);
+    setIsMobileMenuOpen(false);
+    router.push("/login");
+  };
+
+  const getInitials = (name?: string, email?: string) => {
+    if (name) return name.charAt(0).toUpperCase();
+    if (email) return email.charAt(0).toUpperCase();
+    return "U";
+  };
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -88,7 +159,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               alt="Sarthi Tourism Logo"
               width={200}
               height={64}
-              className="object-contain h-20 sm:h-25 w-auto transition-all"
+              className="object-contain h-14 sm:h-20 w-auto transition-all"
               priority
             />
           </Link>
@@ -147,6 +218,67 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               <Search className="w-5 h-5" />
             </Button>
 
+            {user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all overflow-hidden border border-white/20"
+                >
+                  {user.user_metadata?.avatar_url ? (
+                    <Image src={user.user_metadata.avatar_url} alt="Profile" width={40} height={40} className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{getInitials(user.user_metadata?.full_name, user.email)}</span>
+                  )}
+                </button>
+
+                {/* Dropdown Menu */}
+                {isProfileOpen && (
+                  <div className="absolute right-0 mt-3 w-[260px] p-3 rounded-[24px] bg-[#11111a]/95 backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                    <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-3 rounded-[20px] w-full">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold shrink-0 overflow-hidden border border-white/20">
+                        {user.user_metadata?.avatar_url ? (
+                          <Image src={user.user_metadata.avatar_url} alt="Profile" width={40} height={40} className="w-full h-full object-cover" />
+                        ) : (
+                          <span>{getInitials(user.user_metadata?.full_name, user.email)}</span>
+                        )}
+                      </div>
+                      <div className="text-left overflow-hidden">
+                        <p className="text-sm font-semibold text-white truncate">{user.user_metadata?.full_name || "User"}</p>
+                        <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                      </div>
+                    </div>
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="w-full rounded-[20px] bg-transparent border border-white/10 hover:bg-white/5 font-bold text-white tracking-widest transition-all text-xs h-[44px] flex items-center justify-center gap-2 cursor-pointer uppercase"
+                    >
+                      <User className="w-4 h-4" />
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full rounded-[20px] bg-[#2a1114] border border-red-500/20 hover:bg-red-500/20 font-bold text-[#ff5c5c] tracking-widest transition-all text-xs h-[44px] flex items-center justify-center gap-2 cursor-pointer uppercase"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Button 
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  router.push("/login");
+                }}
+                variant="default"
+                className="cursor-pointer bg-blue-600 hover:bg-blue-500 rounded-full font-semibold"
+              >
+                <User className="w-3.5 h-3.5" />
+                Login
+              </Button>
+            )}
+
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -161,16 +293,70 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
             </a>
           </nav>
 
-          <div className="flex items-center gap-4 lg:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onOpenSearch}
-              aria-label="Search packages"
-              className="text-white z-50 hover:bg-white/10"
-            >
-              <Search className="h-6 w-6" />
-            </Button>
+          <div className="flex items-center gap-3 sm:gap-4 lg:hidden">
+            {!isMobileMenuOpen && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onOpenSearch}
+                  aria-label="Search packages"
+                  className="text-white z-50 hover:bg-white/10"
+                >
+                  <Search className="h-6 w-6" />
+                </Button>
+                
+                {user && (
+                  <div className="relative z-50" ref={mobileDropdownRef}>
+                    <button
+                      onClick={() => setIsProfileOpen(!isProfileOpen)}
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all overflow-hidden border border-white/20"
+                    >
+                      {user.user_metadata?.avatar_url ? (
+                        <Image src={user.user_metadata.avatar_url} alt="Profile" width={40} height={40} className="w-full h-full object-cover" />
+                      ) : (
+                        <span>{getInitials(user.user_metadata?.full_name, user.email)}</span>
+                      )}
+                    </button>
+
+                    {/* Mobile Dropdown Menu */}
+                    {isProfileOpen && (
+                      <div className="absolute right-0 mt-3 w-[260px] p-3 rounded-[24px] bg-[#11111a]/95 backdrop-blur-2xl border border-white/10 shadow-2xl flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-3 rounded-[20px] w-full">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-bold shrink-0 overflow-hidden border border-white/20">
+                            {user.user_metadata?.avatar_url ? (
+                              <Image src={user.user_metadata.avatar_url} alt="Profile" width={40} height={40} className="w-full h-full object-cover" />
+                            ) : (
+                              <span>{getInitials(user.user_metadata?.full_name, user.email)}</span>
+                            )}
+                          </div>
+                          <div className="text-left overflow-hidden">
+                            <p className="text-sm font-semibold text-white truncate">{user.user_metadata?.full_name || "User"}</p>
+                            <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                          </div>
+                        </div>
+                        <Link
+                          href="/profile"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="w-full rounded-[20px] bg-transparent border border-white/10 hover:bg-white/5 font-bold text-white tracking-widest transition-all text-xs h-[44px] flex items-center justify-center gap-2 cursor-pointer uppercase"
+                        >
+                          <User className="w-4 h-4" />
+                          Profile
+                        </Link>
+                        <button
+                          onClick={handleSignOut}
+                          className="w-full rounded-[20px] bg-[#2a1114] border border-red-500/20 hover:bg-red-500/20 font-bold text-[#ff5c5c] tracking-widest transition-all text-xs h-[44px] flex items-center justify-center gap-2 cursor-pointer uppercase"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Sign Out
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+
             <Button
               variant="ghost"
               size="icon"
@@ -224,15 +410,37 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
             );
           })}
 
+          {user ? (
+            <div className="hidden">
+              {/* User profile is now handled in the top navbar */}
+            </div>
+          ) : (
+            <Button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                router.push("/login");
+              }}
+              className="mt-4 mx-auto w-full max-w-[250px] rounded-full bg-white/5 border border-white/10 hover:bg-white/10 font-bold text-white uppercase tracking-widest transition-all text-sm h-[52px] flex items-center justify-center gap-2 cursor-pointer"
+              style={{
+                transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
+                opacity: isMobileMenuOpen ? 1 : 0,
+                transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s`,
+              }}
+            >
+              <User className="w-4 h-4" />
+              Login
+            </Button>
+          )}
+
           <a
             href={`https://wa.me/${WA_NUMBER}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 mx-auto rounded-full bg-blue-600 hover:bg-blue-500 px-10 py-4 text-center font-bold text-white shadow-[0_0_30px_rgba(37,99,235,0.4)] uppercase tracking-widest transition-all text-sm"
+            className="mt-4 mx-auto w-full max-w-[250px] rounded-full bg-blue-600 hover:bg-blue-500 px-10 py-4 text-center font-bold text-white shadow-[0_0_30px_rgba(37,99,235,0.4)] uppercase tracking-widest transition-all text-sm"
             style={{
               transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
               opacity: isMobileMenuOpen ? 1 : 0,
-              transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s`,
+              transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.6s`,
             }}
             onClick={() => setIsMobileMenuOpen(false)}
           >

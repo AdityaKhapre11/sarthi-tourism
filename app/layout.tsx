@@ -109,7 +109,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={cn("dark", inter.variable, outfit.variable, "font-sans", geist.variable)} suppressHydrationWarning>
-      <body className="font-sans antialiased text-foreground bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-white" suppressHydrationWarning>
+      <body className="font-sans antialiased text-foreground bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-white overflow-x-hidden" suppressHydrationWarning>
         <SmoothScroll>
           <PublicLayout featuredPackages={footerPackages}>{children}</PublicLayout>
         </SmoothScroll>

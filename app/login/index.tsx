@@ -8,13 +8,14 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { EmailVerificationAlert } from "@/components/auth/EmailVerificationAlert";
 
 export default function AdminLoginIndex() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => searchParams.get("email") || "");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(() => {
@@ -29,7 +30,6 @@ export default function AdminLoginIndex() {
       : "";
   });
   const [loading, setLoading] = useState(false);
-  const [resendCooldown, setResendCooldown] = useState(0);
 
   // Validate redirect URL
   let redirectUrl = searchParams.get("redirect");
@@ -50,7 +50,9 @@ export default function AdminLoginIndex() {
     const verified = searchParams.get("verified");
     if (verified === "true") {
       toast.success("Email verified successfully. You can now log in.");
-      // Clear URL parameter so it doesn't show again on refresh
+      window.history.replaceState(null, "", pathname || "/login");
+    } else if (verified === "already") {
+      toast.success("Your email is already verified. You can log in.");
       window.history.replaceState(null, "", pathname || "/login");
     }
 
@@ -68,34 +70,6 @@ export default function AdminLoginIndex() {
     };
     checkUser();
   }, [supabase.auth, redirectUrl, searchParams, pathname]);
-
-  useEffect(() => {
-    if (resendCooldown > 0) {
-      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [resendCooldown]);
-
-  const handleResendVerification = async () => {
-    if (resendCooldown > 0) return;
-    setLoading(true);
-    
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
-      email: email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/login?verified=true`
-      }
-    });
-
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Verification email sent!");
-      setResendCooldown(60);
-    }
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,23 +93,17 @@ export default function AdminLoginIndex() {
       }
 
       if (data.user) {
-        // Enforce email verification manually just in case
-        if (!data.user.email_confirmed_at) {
-          await supabase.auth.signOut();
-          setError("Please verify your email address before logging in.");
-          setLoading(false);
-          return;
-        }
-
-        // Fetch user role using maybeSingle to avoid crash if no row exists yet (for older accounts)
-        const { data: profile, error: profileError } = await supabase
+        // Fetch user profile from public.users to check custom email_verified status and role
+        const { data: profile } = await supabase
           .from("users")
-          .select("role")
+          .select("role, email_verified")
           .eq("id", data.user.id)
           .maybeSingle();
 
-        if (profileError) {
-          setError("Failed to verify account permissions.");
+        // Enforce custom email verification requirement
+        if (profile && profile.email_verified === false) {
+          await supabase.auth.signOut();
+          setError("Please verify your email address before logging in.");
           setLoading(false);
           return;
         }
@@ -160,7 +128,6 @@ export default function AdminLoginIndex() {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="h-[100vh] overflow-hidden flex w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
@@ -221,7 +188,9 @@ export default function AdminLoginIndex() {
             </div>
           )}
 
-          {error && (
+          {error && error === "Please verify your email address before logging in." ? (
+            <EmailVerificationAlert email={email} />
+          ) : error ? (
             <div className="bg-red-500/10 text-red-400 p-4 rounded-xl text-sm mb-8 border border-red-500/20 flex flex-col gap-3 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex items-center">
                 <svg className="w-5 h-5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -229,20 +198,8 @@ export default function AdminLoginIndex() {
                 </svg>
                 {error}
               </div>
-              {error === "Please verify your email address before logging in." && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleResendVerification}
-                  disabled={loading || resendCooldown > 0}
-                  className="w-full bg-white/5 hover:bg-white/10 text-white border-white/10 mt-1"
-                >
-                  {resendCooldown > 0 ? `Resend email in ${resendCooldown}s` : "Resend Verification Email"}
-                </Button>
-              )}
             </div>
-          )}
+          ) : null}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
@@ -265,6 +222,7 @@ export default function AdminLoginIndex() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
+                  autoFocus={!!searchParams.get("email")}
                   className="w-full px-5 py-4 pr-12 bg-white/[0.03] border border-white/10 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all duration-300 text-white placeholder-gray-600 backdrop-blur-xl hover:bg-white/[0.05]"
                   placeholder="••••••••"
                   value={password}

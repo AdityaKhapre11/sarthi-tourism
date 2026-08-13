@@ -66,44 +66,24 @@ export default function RegisterIndex() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, fullName }),
       });
 
-      if (error) {
-        console.error("Supabase signup error:", error);
-        if (error.message && typeof error.message === "string") {
-          if (error.message.includes("already registered")) {
-            setError("An account with this email already exists.");
-          } else if (error.message === "{}") {
-            // Supabase sometimes returns an empty object string for database trigger errors
-            setError("Registration failed. Please check your details or try again later.");
-          } else {
-            setError(error.message);
-          }
-        } else {
-          setError("An unexpected error occurred during registration.");
-        }
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.error || "Registration failed. Please check your details and try again.");
         setLoading(false);
         return;
       }
 
-      if (data.user) {
-        if (data.session) {
-          // Explicitly handle the flow so the user is not treated as logged in
-          await supabase.auth.signOut();
-        }
-        toast.success("Account created successfully. Please verify your email from Gmail before logging in.");
-        router.push("/login?registered=true");
-      }
+      toast.success("Account created successfully! Please check your email to verify your account before logging in.");
+      router.push("/login?registered=true");
     } catch {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred during registration. Please try again.");
     } finally {
       setLoading(false);
     }

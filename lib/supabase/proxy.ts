@@ -43,15 +43,19 @@ export async function updateSession(request: NextRequest) {
   const isProtectedPackageRoute = pathname.startsWith('/packages/') && pathname !== '/packages';
   const isProfileRoute = pathname.startsWith('/profile');
   
-  // Check role if we have a user and we need it
+  // Check role and custom email_verified status if we have a user
   let userRole = null;
+  let isEmailVerified = true;
   if (user) {
     const { data: profile } = await supabase
       .from('users')
-      .select('role')
+      .select('role, email_verified')
       .eq('id', user.id)
       .maybeSingle();
     userRole = profile?.role || 'user';
+    if (profile && profile.email_verified === false) {
+      isEmailVerified = false;
+    }
   }
 
   if (isProtectedAdminRoute || isProtectedDashboardRoute || isProtectedPackageRoute || isProfileRoute) {
@@ -63,10 +67,11 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    if (!user.email_confirmed_at) {
-      // User has not verified their email
+    if (!isEmailVerified) {
+      // User has not verified their email via Nodemailer custom flow
       const url = request.nextUrl.clone()
       url.pathname = '/login'
+      url.searchParams.set('error', 'unverified_email')
       return NextResponse.redirect(url)
     }
 

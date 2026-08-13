@@ -66,8 +66,8 @@ export default async function AdminPackagesIndex({
       {/* Packages List */}
       <div className="grid gap-6">
         {packageList.map((pkg: {
-          highlights: any; id: string | number; name: string; image?: string; duration?: string; price?: string 
-}) => (
+          highlights?: string[]; id: string | number; name: string; image?: string; duration?: string; price?: string 
+        }) => (
           <div key={pkg.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] rounded-2xl p-4 transition-all duration-300 relative">
             <Link href={`/admin/packages/edit/${pkg.id}`} className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50" aria-label={`Edit details of ${pkg.name}`} />
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">

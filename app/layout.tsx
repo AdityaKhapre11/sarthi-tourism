@@ -76,6 +76,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: "cmW4xs5nNrJz58zWUpqoSZ5hbKOisE2uMDFX0eIvFS0",
+  },
 };
 
 import { createClient } from "@supabase/supabase-js";

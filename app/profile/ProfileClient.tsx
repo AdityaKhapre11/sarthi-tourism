@@ -2,17 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { User, Mail, Shield, Calendar, ArrowLeft, LogOut, Camera, Loader2 } from "lucide-react";
+import { Mail, Shield, Calendar, ArrowLeft, Camera, Loader2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { performLogout } from "@/lib/auth/logout";
+import { AppUser, UserProfile } from "@/types";
 
 interface ProfileClientProps {
-  user: any;
-  profile: any;
+  user: AppUser;
+  profile?: UserProfile | null;
 }
 
 export default function ProfileClient({ user, profile }: ProfileClientProps) {
@@ -145,8 +146,9 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
       // This keeps the optimistic UI image active on the screen perfectly without reloading!
       // And we avoid router.refresh() which would cause a full page reload and screen flicker.
       
-    } catch (err: any) {
-      toast.error(err.message || "An error occurred while uploading");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "An error occurred while uploading";
+      toast.error(errorMessage);
       setPreviewUrl(null); // Revert optimistic UI on fail
       setFileToUpload(null);
     } finally {

@@ -90,9 +90,10 @@ export function PackageForm({
       };
 
       await onSubmit(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || "An unexpected error occurred while saving.");
+      const message = err instanceof Error ? err.message : "An unexpected error occurred while saving.";
+      setError(message);
       setLoading(false);
     }
   };

@@ -7,20 +7,29 @@ import Link from "next/link";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
-import { Loader } from "@/components/ui";
 import { toast } from "sonner";
 
 export default function AdminLoginIndex() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [resendCooldown, setResendCooldown] = useState(0);
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(() => {
+    const errParam = searchParams.get("error");
+    if (errParam === "admin_required") return "Access denied. Admin account required.";
+    if (errParam === "verification_failed") return "Email verification failed. The link may have expired.";
+    return "";
+  });
+  const [successMsg] = useState(() => {
+    return searchParams.get("registered") === "true"
+      ? "Registration successful. Please check your email and verify your account before logging in."
+      : "";
+  });
+  const [loading, setLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   // Validate redirect URL
   let redirectUrl = searchParams.get("redirect");
@@ -32,18 +41,8 @@ export default function AdminLoginIndex() {
   const supabase = createClient();
 
   useEffect(() => {
-    // Check for error parameters
-    const errParam = searchParams.get("error");
-    if (errParam === "admin_required") {
-      setError("Access denied. Admin account required.");
-    } else if (errParam === "verification_failed") {
-      setError("Email verification failed. The link may have expired.");
-    }
-    
-    // Check for registration success
-    const registered = searchParams.get("registered");
-    if (registered === "true") {
-      setSuccessMsg("Registration successful. Please check your email and verify your account before logging in.");
+    // Check for registration success - clear URL state if present
+    if (searchParams.get("registered") === "true") {
       window.history.replaceState(null, "", pathname || "/login");
     }
 
@@ -156,7 +155,7 @@ export default function AdminLoginIndex() {
         }
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
       setLoading(false);
     }
@@ -296,7 +295,7 @@ export default function AdminLoginIndex() {
 
             <div className="mt-6 text-center">
               <span className="text-gray-400 text-sm">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link href={`/register${redirectUrl !== "/admin/dashboard" ? `?redirect=${redirectUrl}` : ""}`} className="text-blue-500 hover:text-blue-400 font-semibold transition-colors">
                   Sign Up
                 </Link>

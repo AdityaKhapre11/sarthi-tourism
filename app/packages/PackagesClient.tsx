@@ -4,16 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PackageCard } from "@/components/packages";
-
-interface Package {
-  id: number;
-  name: string;
-  image: string;
-  duration: string;
-  price: string;
-  rating: number;
-  highlights?: string[];
-}
+import { Package } from "@/data/packages";
 
 export default function PackagesClient({ packages }: { packages: Package[] }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -70,7 +61,7 @@ export default function PackagesClient({ packages }: { packages: Package[] }) {
 
           <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
             {packages.map((pkg) => (
-              <PackageCard key={pkg.id} pkg={pkg as any} />
+              <PackageCard key={pkg.id} pkg={pkg} />
             ))}
           </div>
         </section>

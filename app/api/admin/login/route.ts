@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       { success: false, message: "Invalid email or password" },
       { status: 401 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }

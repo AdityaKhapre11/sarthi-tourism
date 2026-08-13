@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { PhoneCall, ArrowRight, MapPin } from "lucide-react";
+import { PhoneCall } from "lucide-react";
 
 export function ContactCTA() {
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";

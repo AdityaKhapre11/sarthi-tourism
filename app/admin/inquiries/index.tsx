@@ -8,7 +8,7 @@ export default function AdminInquiriesIndex() {
       </div>
       <h1 className="text-3xl font-bold text-white tracking-tight">Inquiries Management</h1>
       <p className="text-gray-400 max-w-md mx-auto">
-        This section is currently under construction. Soon, you'll be able to view and manage all customer inquiries and bookings from this dashboard.
+        This section is currently under construction. Soon, you&apos;ll be able to view and manage all customer inquiries and bookings from this dashboard.
       </p>
     </div>
   );

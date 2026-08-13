@@ -35,7 +35,7 @@ export default async function DashboardOverview() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Welcome back, {user.user_metadata?.full_name?.split(' ')[0] || 'Traveler'}!</h1>
-        <p className="text-gray-400">Here's an overview of your trips and account.</p>
+        <p className="text-gray-400">Here&apos;s an overview of your trips and account.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -89,7 +89,7 @@ export default async function DashboardOverview() {
         <div className="rounded-2xl border border-dashed border-white/20 p-12 text-center flex flex-col items-center justify-center bg-white/5">
           <Map className="w-12 h-12 text-gray-500 mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">No trips planned yet</h3>
-          <p className="text-gray-400 mb-6 max-w-md">You haven't booked any packages yet. Start exploring our premium packages and plan your next adventure!</p>
+          <p className="text-gray-400 mb-6 max-w-md">You haven&apos;t booked any packages yet. Start exploring our premium packages and plan your next adventure!</p>
           <Link href="/packages" className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-full font-semibold transition-colors">
             Explore Packages
           </Link>

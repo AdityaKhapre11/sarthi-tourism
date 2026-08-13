@@ -16,7 +16,7 @@ export default async function AdminDashboardIndex() {
   const packagesCount = count || 0;
 
   // Inquiries (Fallback to JSON for now if DB not set up for inquiries)
-  const inquiriesPath = path.join(process.cwd(), 'src', 'data', 'inquiries.json');
+  const inquiriesPath = path.join(process.cwd(), 'data', 'inquiries.json');
 
   let inquiries = [];
   let inquiriesCount = 0;
@@ -41,7 +41,7 @@ export default async function AdminDashboardIndex() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight">Dashboard Overview</h1>
-          <p className="text-gray-400 mt-1">Welcome back, Admin. Here's what's happening today.</p>
+          <p className="text-gray-400 mt-1">Welcome back, Admin. Here&apos;s what&apos;s happening today.</p>
         </div>
       </div>
 

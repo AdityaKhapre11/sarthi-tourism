@@ -1,6 +1,4 @@
 import { ImageResponse } from 'next/og';
-import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import { SITE_URL } from '@/constants/site';
 
 export const runtime = 'nodejs';
@@ -46,6 +44,7 @@ export default async function Image() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={blurBase64}
+            alt="Background"
             style={{
               position: 'absolute',
               left: 0,
@@ -88,6 +87,7 @@ export default async function Image() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={logoBase64}
+                alt="Sarthi Tourism Logo"
                 style={{
                   height: '300px',
                   objectFit: 'contain',

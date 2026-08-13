@@ -33,7 +33,7 @@ async function uploadFile(localPath: string, folder: string): Promise<string | n
   else if (fileName.endsWith('.webp')) contentType = 'image/webp';
   else if (fileName.endsWith('.svg')) contentType = 'image/svg+xml';
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from('sarthi-tourism-media')
     .upload(remotePath, fileBuffer, {
       contentType: contentType,
@@ -78,7 +78,7 @@ async function migrateImages() {
   for (const pkg of packages) {
     let needsUpdate = false;
     let newImage = pkg.image;
-    let newGallery = [...(pkg.gallery || [])];
+    const newGallery = [...(pkg.gallery || [])];
 
     if (newImage && newImage.startsWith('/images/')) {
       console.log(`Uploading main image for package: ${pkg.name}`);

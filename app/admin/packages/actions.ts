@@ -2,11 +2,12 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
+import { PackageFormData } from '@/components/admin/packages/PackageForm';
 
 export async function uploadImage(formData: FormData) {
   try {
     const file = formData.get("file") as File;
-    const folder = formData.get("folder") as string || "packages";
+    const folder = (formData.get("folder") as string) || "packages";
     if (!file) {
       return { success: false, error: "No file provided" };
     }
@@ -14,7 +15,7 @@ export async function uploadImage(formData: FormData) {
     const supabase = await createClient();
     const filename = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
     
-    const { data, error } = await supabase
+    const { error } = await supabase
       .storage
       .from('sarthi-tourism-media')
       .upload(filename, file, {
@@ -39,12 +40,16 @@ export async function uploadImage(formData: FormData) {
   }
 }
 
-export async function updatePackage(id: string, data: any) {
+export async function updatePackage(id: string, data: PackageFormData | Record<string, unknown>) {
   try {
     const supabase = await createClient();
     
-    // Separate non-updatable properties from the rest of the package data
-    const { id: _id, itineraries, created_at, updated_at, ...packageData } = data;
+    // Copy data and strip non-updatable database properties
+    const packageData = { ...data } as Record<string, unknown>;
+    delete packageData.id;
+    delete packageData.created_at;
+    delete packageData.updated_at;
+    delete packageData.itineraries;
 
     const { error: packageError } = await supabase
       .from('packages')
@@ -65,12 +70,12 @@ export async function updatePackage(id: string, data: any) {
   }
 }
 
-export async function createPackage(data: any) {
+export async function createPackage(data: PackageFormData | Record<string, unknown>) {
   try {
     const supabase = await createClient();
     
-    // itineraries property is only from joined selects in the past, but let's ensure it is stripped if it exists
-    const { itineraries, ...packageData } = data;
+    const packageData = { ...data } as Record<string, unknown>;
+    delete packageData.itineraries;
 
     const { error: packageError } = await supabase
       .from('packages')

@@ -9,6 +9,8 @@ import { useLenis } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 
+import { User as SupabaseUser } from "@supabase/supabase-js";
+
 interface HeaderProps {
   onOpenSearch?: () => void;
 }
@@ -17,7 +19,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
@@ -25,12 +27,6 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
   const router = useRouter();
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const supabase = createClient();
-
-  const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    lenis?.scrollTo(target, { offset: -80 });
-    setIsMobileMenuOpen(false);
-  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     setIsMobileMenuOpen(false);

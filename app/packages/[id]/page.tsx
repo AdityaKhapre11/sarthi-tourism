@@ -49,7 +49,7 @@ export default async function PackageDetailsPage({ params }: { params: Promise<{
     }
   } catch (err) {
     // If redirect was thrown, rethrow it so Next.js handles navigation
-    if (err && typeof err === 'object' && 'digest' in err && typeof (err as any).digest === 'string' && (err as any).digest.startsWith('NEXT_REDIRECT')) {
+    if (err && typeof err === 'object' && 'digest' in err && typeof (err as { digest: string }).digest === 'string' && (err as { digest: string }).digest.startsWith('NEXT_REDIRECT')) {
       throw err;
     }
     redirect(`/login?redirect=/packages/${id}`);

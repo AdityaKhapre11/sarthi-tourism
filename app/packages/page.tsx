@@ -1,10 +1,12 @@
 import PackagesClient from "./PackagesClient";
 import { createClient } from "@supabase/supabase-js";
 
+import { Package } from "@/data/packages";
+
 export const revalidate = 60;
 
 export default async function PackagesPage() {
-  let packages: any[] = [];
+  let packages: Package[] = [];
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

@@ -33,7 +33,7 @@ export async function performLogout(router: AppRouterInstance): Promise<boolean>
     router.replace("/");
     router.refresh();
     return true;
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Logout error:", err);
     toast.error("Logout failed. Please try again.");
     return false;

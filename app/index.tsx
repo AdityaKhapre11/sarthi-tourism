@@ -41,7 +41,7 @@ export default async function HomeIndex() {
 
   const formattedPackages = (dbPackages || []).map(pkg => ({
     ...pkg,
-    itinerary: pkg.itinerary?.sort((a: any, b: any) => a.day - b.day) || []
+    itinerary: pkg.itinerary?.sort((a: { day: number }, b: { day: number }) => a.day - b.day) || []
   }));
 
   return (

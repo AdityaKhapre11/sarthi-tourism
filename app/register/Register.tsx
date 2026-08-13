@@ -102,7 +102,7 @@ export default function RegisterIndex() {
         toast.success("Account created successfully. Please verify your email from Gmail before logging in.");
         router.push("/login?registered=true");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);

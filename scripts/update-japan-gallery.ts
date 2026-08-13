@@ -14,7 +14,7 @@ const imagePaths = [
 async function main() {
   try {
     console.log("Logging in...");
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    const { error: authError } = await supabase.auth.signInWithPassword({
       email: 'admin@sarthitourism.com',
       password: 'Admin@123'
     });
@@ -54,7 +54,7 @@ async function main() {
       const imageBuffer = fs.readFileSync(imagePath);
       const fileName = `gallery/japan-gallery-${i + 1}-${Date.now()}.png`;
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('sarthi-tourism-media')
         .upload(fileName, imageBuffer, {
           contentType: 'image/png',
@@ -74,7 +74,7 @@ async function main() {
     }
 
     console.log("Updating package gallery...");
-    const { data: updateData, error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from('packages')
       .update({ gallery: newGalleryUrls })
       .eq('id', japanPackage.id)

@@ -5,12 +5,12 @@ export interface ItineraryItem {
 }
 
 export interface Package {
-  id: number;
+  id: number | string;
   name: string;
   image: string;
   duration: string;
   price: string;
-  highlights: string[];
+  highlights?: string[];
   description?: string;
   itinerary?: ItineraryItem[];
   included?: string[];

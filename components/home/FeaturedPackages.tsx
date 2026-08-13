@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Clock, Star, ArrowRight, Sparkles } from "lucide-react";
-import { useLenis } from "@/components/layout";
+import { ArrowRight } from "lucide-react";
 import { PackageCard } from "@/components/packages";
 
 import { Package } from "@/data/packages";
@@ -14,8 +12,7 @@ import { Package } from "@/data/packages";
 export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: Package[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-  const lenis = useLenis();
-  const [packages, setPackages] = useState<Package[]>(() => [...initialPackages].sort((a, b) => b.id - a.id));
+  const [packages, setPackages] = useState<Package[]>(() => [...initialPackages].sort((a, b) => Number(b.id) - Number(a.id)));
 
   useEffect(() => {
     // If not passed via props, fetch (fallback)
@@ -25,7 +22,7 @@ export function FeaturedPackages({ initialPackages = [] }: { initialPackages?: P
           const res = await fetch("/api/packages");
           if (!res.ok) throw new Error("Failed to fetch");
           const data = await res.json();
-          setPackages(data.sort((a: Package, b: Package) => b.id - a.id));
+          setPackages(data.sort((a: Package, b: Package) => Number(b.id) - Number(a.id)));
         } catch (error) {
           console.error("Error fetching packages:", error);
         }

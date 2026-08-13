@@ -17,7 +17,7 @@ export default async function PackageDetailsIndex({ params }: { params: Promise<
   }
 
   // Format itinerary
-  pkg.itinerary = pkg.itinerary?.sort((a: any, b: any) => a.day - b.day) || [];
+  pkg.itinerary = pkg.itinerary?.sort((a: { day: number }, b: { day: number }) => a.day - b.day) || [];
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://sarthitourism.com");

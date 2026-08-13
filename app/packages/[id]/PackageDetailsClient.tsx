@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, Variants, useMotionValueEvent } from "framer-motion";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Clock, Check, X, ArrowLeft, MapPin, Star, Calendar, Shield, Coffee } from "lucide-react";
+import { Clock, Check, X, ArrowLeft, Calendar, Shield, Coffee } from "lucide-react";
 import { MessageCircle, Plane } from "lucide-react";
 import { Package } from "@/data/packages";
 import { useRef, useState } from "react";
@@ -21,11 +20,9 @@ interface PackageDetailsClientProps {
 }
 
 export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetailsClientProps) {
-  const containerRef = useRef(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 800], [0, 300]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
   const smoothY = useSpring(y, { stiffness: 100, damping: 30 });
 
   const heroRef = useRef<HTMLDivElement>(null);
@@ -49,14 +46,6 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-  };
-
-  const staggerContainer: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
   };
 
   // SEO Schemas

@@ -19,7 +19,7 @@ export async function GET() {
     // Format the data to match the expected frontend structure
     const formattedPackages = data.map(pkg => ({
       ...pkg,
-      itinerary: pkg.itinerary?.sort((a: any, b: any) => a.day - b.day) || []
+      itinerary: pkg.itinerary?.sort((a: { day: number }, b: { day: number }) => a.day - b.day) || []
     }));
 
     return NextResponse.json(formattedPackages);

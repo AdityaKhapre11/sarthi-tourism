@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 async function main() {
   try {
     console.log("Logging in...");
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    const { error: authError } = await supabase.auth.signInWithPassword({
       email: 'admin@sarthitourism.com',
       password: 'Admin@123'
     });
@@ -25,7 +25,7 @@ async function main() {
     const fileName = `packages/japan-autumn-${Date.now()}.png`;
 
     console.log("Uploading image...");
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('sarthi-tourism-media')
       .upload(fileName, imageBuffer, {
         contentType: 'image/png',

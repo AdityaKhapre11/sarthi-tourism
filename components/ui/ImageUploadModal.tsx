@@ -74,7 +74,7 @@ export function ImageUploadModal({ isOpen, onClose, onUpload, folder = "packages
       } else {
         setError(data.error || "Failed to upload image.");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred.");
     } finally {
       setIsUploading(false);

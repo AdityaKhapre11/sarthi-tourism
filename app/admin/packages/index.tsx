@@ -65,7 +65,9 @@ export default async function AdminPackagesIndex({
 
       {/* Packages List */}
       <div className="grid gap-6">
-        {packageList.map((pkg: any) => (
+        {packageList.map((pkg: {
+          highlights: any; id: string | number; name: string; image?: string; duration?: string; price?: string 
+}) => (
           <div key={pkg.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] rounded-2xl p-4 transition-all duration-300 relative">
             <Link href={`/admin/packages/edit/${pkg.id}`} className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50" aria-label={`Edit details of ${pkg.name}`} />
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -142,7 +144,7 @@ export default async function AdminPackagesIndex({
           <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/5 rounded-2xl">
             <Map className="w-16 h-16 text-gray-600 mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">No Packages Found</h3>
-            <p className="text-gray-400 mb-6 max-w-sm text-center">You haven't added any tour packages yet. Create your first package to get started.</p>
+            <p className="text-gray-400 mb-6 max-w-sm text-center">You haven&apos;t added any tour packages yet. Create your first package to get started.</p>
             <Link
               href="/admin/packages/new"
               className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-all"

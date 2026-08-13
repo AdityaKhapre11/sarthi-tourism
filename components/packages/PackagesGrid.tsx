@@ -6,16 +6,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Loader2, Plus } from "lucide-react";
 import { PackageCard } from "@/components/packages";
 import { fetchMorePackages } from "@/app/actions/packageActions";
+import { Package } from "@/data/packages";
 
 interface PackagesGridProps {
-  initialPackages: any[];
+  initialPackages: Package[];
   totalCount: number;
 }
 
 export function PackagesGrid({ initialPackages, totalCount }: PackagesGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-  const [packages, setPackages] = useState<any[]>(initialPackages);
+  const [packages, setPackages] = useState<Package[]>(initialPackages);
   const [page, setPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 

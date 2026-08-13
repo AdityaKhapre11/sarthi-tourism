@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Search, X, MapPin, ArrowRight, History, Trash2 } from "lucide-react";
+import { Search, X, MapPin, ArrowRight, History, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { formatPrice } from "@/lib/utils";
@@ -60,7 +60,7 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
     if (saved) {
       try {
         setTimeout(() => setRecentSearches(JSON.parse(saved)), 0);
-      } catch (e) {}
+      } catch {}
     }
 
     const fetchPackages = async () => {

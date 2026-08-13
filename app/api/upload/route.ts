@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const supabase = await createClient();
     const filename = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
     
-    const { data, error } = await supabase
+    const { error } = await supabase
       .storage
       .from('sarthi-tourism-media')
       .upload(filename, file, {

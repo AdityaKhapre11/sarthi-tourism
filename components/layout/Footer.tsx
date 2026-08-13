@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -12,18 +11,16 @@ export function Footer({ featuredPackages = [] }: { featuredPackages?: {name: st
   const pathname = usePathname();
   const lenis = useLenis();
   const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628";
-  const [featuredTours, setFeaturedTours] = useState<{ name: string, link: string }[]>([
+  const defaultFeatured = [
     { name: "Ayodhya - Prayagraj", link: "/packages/1" },
     { name: "Malaysia Getaway", link: "/packages/2" },
     { name: "Kashmir Heaven on Earth", link: "/packages/3" },
     { name: "Custom Group Tours", link: "#contact" },
-  ]);
+  ];
 
-  useEffect(() => {
-    if (featuredPackages.length > 0) {
-      setFeaturedTours([...featuredPackages, { name: "Custom Group Tours", link: "#contact" }]);
-    }
-  }, [featuredPackages]);
+  const featuredTours = featuredPackages.length > 0
+    ? [...featuredPackages, { name: "Custom Group Tours", link: "#contact" }]
+    : defaultFeatured;
 
   const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault();

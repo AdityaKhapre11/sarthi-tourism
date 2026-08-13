@@ -81,6 +81,9 @@ export const metadata: Metadata = {
 
 import { createClient } from "@supabase/supabase-js";
 
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getTravelAgencySchema } from "@/lib/seo";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -108,9 +111,12 @@ export default async function RootLayout({
     console.error("Failed to fetch footer packages:", error);
   }
 
+  const travelAgencySchema = getTravelAgencySchema();
+
   return (
     <html lang="en" className={cn("dark", inter.variable, outfit.variable, "font-sans", geist.variable)} suppressHydrationWarning>
       <body className="font-sans antialiased text-foreground bg-background min-h-screen flex flex-col selection:bg-primary/30 selection:text-white overflow-x-hidden" suppressHydrationWarning>
+        <JsonLd schema={travelAgencySchema} />
         <SmoothScroll>
           <PublicLayout featuredPackages={footerPackages}>{children}</PublicLayout>
         </SmoothScroll>

@@ -1,19 +1,30 @@
 import PackagesClient from "./PackagesClient";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 
-export const revalidate = 60; // Optional: revalidate every 60 seconds or use dynamic rendering
+export const revalidate = 60;
 
 export default async function PackagesPage() {
-  const supabase = await createClient();
-  
-  const { data: packages, error } = await supabase
-    .from("packages")
-    .select("*")
-    .order("created_at", { ascending: false });
+  let packages: any[] = [];
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (error) {
-    console.error("Error fetching packages:", error);
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      const { data, error } = await supabase
+        .from("packages")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching packages:", error);
+      } else if (data) {
+        packages = data;
+      }
+    }
+  } catch (err) {
+    console.error("Error in PackagesPage fetch:", err);
   }
 
-  return <PackagesClient packages={packages || []} />;
+  return <PackagesClient packages={packages} />;
 }

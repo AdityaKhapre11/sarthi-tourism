@@ -1,43 +1,33 @@
 import PackageDetailsIndex from "./index";
 import { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+import { generatePackageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   
-  const supabase = await createClient();
-  const { data: pkg } = await supabase
-    .from('packages')
-    .select('*')
-    .eq('id', id)
-    .single();
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!pkg) return {};
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+      const { data: pkg } = await supabase
+        .from('packages')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-  const description = pkg.description ? pkg.description.substring(0, 160) : `Book the ${pkg.name} tour package starting at ${pkg.price}.`;
-
-  let ogImage = pkg.image;
-  if (ogImage && ogImage.includes('/storage/v1/object/public/')) {
-    ogImage = ogImage.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + '?width=1200&height=630&resize=cover&quality=80';
+      if (pkg) {
+        return generatePackageMetadata(pkg);
+      }
+    }
+  } catch (error) {
+    console.error("Error generating package metadata:", error);
   }
 
   return {
-    title: pkg.name,
-    description: description,
-    openGraph: {
-      title: pkg.name,
-      description: description,
-      images: ogImage ? [{ url: ogImage, width: 1200, height: 630 }] : undefined,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: pkg.name,
-      description: description,
-      images: ogImage ? [ogImage] : undefined,
-    },
-    alternates: {
-      canonical: `/packages/${pkg.id}`,
-    },
+    title: "Tour Package Details | Sarthi Tourism",
   };
 }
 

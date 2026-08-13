@@ -12,6 +12,8 @@ import { useRef, useState } from "react";
 import { ImageGallery } from "@/components/ui";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getTouristTripSchema, getBreadcrumbSchema, getFAQPageSchema } from "@/lib/seo";
 
 interface PackageDetailsClientProps {
   pkg: Package;
@@ -57,8 +59,32 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
     }
   };
 
+  // SEO Schemas
+  const touristTripSchema = getTouristTripSchema(pkg);
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", item: "/" },
+    { name: "Tour Packages", item: "/packages" },
+    { name: pkg.name, item: `/packages/${pkg.id}` }
+  ]);
+  
+  const packageFaqs = getFAQPageSchema([
+    {
+      question: `How to book ${pkg.name} from Surat or Gujarat?`,
+      answer: `You can book ${pkg.name} directly through Sarthi Tourism by calling or messaging us on WhatsApp at +91 8780228628. We provide customized itineraries, departure assistance, and visa guidance from Surat and Gujarat.`
+    },
+    {
+      question: `What is included in the ${pkg.name} tour?`,
+      answer: pkg.included && pkg.included.length > 0 ? `Inclusions: ${pkg.included.join(', ')}.` : `Includes 4-star hotel accommodations, daily breakfast, airport transfers, and guided sightseeing.`
+    },
+    {
+      question: `Can this ${pkg.name} itinerary be customized for families or honeymoon couples?`,
+      answer: `Yes! Sarthi Tourism specializes in custom travel planning. We tailor flight schedules, hotel choices, food preferences, and daily activities to suit your specific group size and budget.`
+    }
+  ]);
+
   return (
     <div className="bg-transparent min-h-screen font-sans selection:bg-blue-500 selection:text-white text-gray-200">
+      <JsonLd schema={[touristTripSchema, breadcrumbSchema, packageFaqs]} />
 
       <div ref={heroRef} className="relative h-[80vh] min-h-[700px] w-full overflow-hidden">
         <motion.div
@@ -75,6 +101,21 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
         {/* Hero Content */}
         <div className="absolute bottom-25 left-0 w-full px-6 md:px-12 z-10">
           <div className="container mx-auto max-w-7xl">
+            {/* SEO Breadcrumbs Navigation */}
+            <nav aria-label="Breadcrumb" className="mb-6 hero-fade opacity-0">
+              <ol className="flex items-center space-x-2 text-xs md:text-sm text-gray-300">
+                <li>
+                  <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>
+                </li>
+                <li><span className="text-gray-500">/</span></li>
+                <li>
+                  <Link href="/packages" className="hover:text-blue-400 transition-colors">Tour Packages</Link>
+                </li>
+                <li><span className="text-gray-500">/</span></li>
+                <li className="text-blue-400 font-medium truncate max-w-[200px] sm:max-w-none">{pkg.name}</li>
+              </ol>
+            </nav>
+
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.05] tracking-tighter flex flex-wrap gap-x-4 overflow-hidden">
               {pkg.name.split(" ").map((word, i) => (
                 <span key={i} className="overflow-hidden inline-block pb-2">
@@ -234,6 +275,51 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
           </motion.div>
 
         </div>
+
+        {/* SEO FAQ Section */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          className="mt-20 max-w-4xl mx-auto"
+        >
+          <div className="bg-white/[0.02] backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
+              <Shield className="text-blue-500 w-7 h-7" />
+              Frequently Asked Questions — Booking from Surat & Gujarat
+            </h2>
+            <div className="space-y-6">
+              <div className="border-b border-white/5 pb-4">
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">How do I book {pkg.name} with Sarthi Tourism?</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  You can directly contact Sarthi Tourism via WhatsApp or call us at +91 8780228628. Our team in Surat will help customize your dates, flight departures from Surat or Ahmedabad, and issue booking confirmations.
+                </p>
+              </div>
+              <div className="border-b border-white/5 pb-4">
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">Can flight tickets and visa assistance be included?</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Yes, Sarthi Tourism offers complete end-to-end flight booking, visa documentation support, travel insurance, and hotel arrangements for travelers departing from Gujarat.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">Are food and dietary preferences accommodated?</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Absolutely. We organize Gujarati meals, Jain food options, and vegetarian breakfast/dinner arrangements wherever specified in our itinerary.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-white/10 flex justify-between items-center flex-wrap gap-4">
+              <Link
+                href="/packages"
+                className="inline-flex items-center text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" /> Explore All Tour Packages
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       {/* Travel-Themed Premium Divider */}

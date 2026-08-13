@@ -11,34 +11,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui";
-import { toast } from "sonner";
+import { performLogout } from "@/lib/auth/logout";
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
   const handleLogout = async () => {
-    try {
-      // 1. Call API to clear server cookies
-      await fetch('/api/admin/logout', { method: 'POST' });
-
-      // 2. Clear client-side Supabase token
-      const { createClient } = await import("@/lib/supabase/client");
-      const supabase = createClient();
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    } finally {
-      if (typeof window !== "undefined") {
-        // 3. Clear all potential legacy local storage items
-        localStorage.removeItem("admin-auth");
-        sessionStorage.clear();
-        toast.success("You have been logged out successfully.");
-        // 4. Redirect to login
-        router.push("/login");
-        router.refresh();
-      }
-    }
+    await performLogout(router);
   };
 
   const navItems = [

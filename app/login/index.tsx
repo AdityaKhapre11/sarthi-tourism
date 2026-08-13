@@ -60,7 +60,15 @@ export default function AdminLoginIndex() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        if (!user.email_confirmed_at) {
+        // Fetch role before checking email confirmation
+        const { data: profile } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", user.id)
+          .maybeSingle();
+        const role = profile?.role || "user";
+
+        if (!user.email_confirmed_at && role !== "admin") {
           await supabase.auth.signOut();
           return;
         }
@@ -100,15 +108,17 @@ export default function AdminLoginIndex() {
           .eq("id", data.user.id)
           .maybeSingle();
 
-        // Enforce custom email verification requirement
-        if (profile && profile.email_verified === false) {
+        // 1. Determine role FIRST
+        const role = profile?.role || "user";
+
+        // 2. Enforce email verification ONLY for non-admin users
+        if (role !== "admin" && profile && profile.email_verified === false) {
           await supabase.auth.signOut();
           setError("Please verify your email address before logging in.");
           setLoading(false);
           return;
         }
 
-        const role = profile?.role || "user";
         toast.success("Login successful.");
         
         if (role === "admin") {

@@ -67,8 +67,8 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    if (!isEmailVerified) {
-      // User has not verified their email via Nodemailer custom flow
+    if (!isEmailVerified && userRole !== 'admin') {
+      // Non-admin user has not verified their email via Nodemailer custom flow
       const url = request.nextUrl.clone()
       url.pathname = '/login'
       url.searchParams.set('error', 'unverified_email')
@@ -91,8 +91,8 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect if logged in and verified when visiting login page
   if (pathname === '/login' && user) {
-    if (!user.email_confirmed_at) {
-      // Allow unverified users to stay on the login page to see errors or resend email
+    if (!user.email_confirmed_at && userRole !== 'admin') {
+      // Allow unverified non-admin users to stay on the login page to see errors or resend email
       return supabaseResponse;
     }
     const url = request.nextUrl.clone()

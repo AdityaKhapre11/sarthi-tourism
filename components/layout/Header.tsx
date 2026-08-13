@@ -8,6 +8,7 @@ import { Menu, X, Search, User, LogOut } from "lucide-react";
 import { useLenis } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
+import { performLogout } from "@/lib/auth/logout";
 
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
@@ -97,10 +98,9 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
   }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
     setIsProfileOpen(false);
     setIsMobileMenuOpen(false);
-    router.push("/login");
+    await performLogout(router);
   };
 
   const getInitials = (name?: string, email?: string) => {

@@ -16,15 +16,15 @@ export function generatePageMetadata({
   ogImage,
   keywords = [],
 }: SeoPageProps = {}): Metadata {
-  const defaultTitle = "Sarthi Tourism | Premium Travel & Tour Packages from Surat & Gujarat";
-  const defaultDescription = "Sarthi Tourism is Surat's leading travel agency offering premium international and domestic tour packages, customized family vacations, and honeymoon trips from Gujarat.";
+  const defaultTitle = "Sarthi Tourism | Premium Travel & Tour Packages from  & Gujarat";
+  const defaultDescription = "Sarthi Tourism is 's leading travel agency offering premium international and domestic tour packages, customized family vacations, and honeymoon trips from Gujarat.";
   const defaultKeywords = [
     "Sarthi Tourism",
-    "travel agency in Surat",
-    "tour operator Surat",
-    "international tour packages from Surat",
+    "travel agency in ",
+    "tour operator ",
+    "international tour packages from ",
     "domestic tours Gujarat",
-    "holiday packages Surat",
+    "holiday packages ",
     "customized travel agency Gujarat",
   ];
 
@@ -92,12 +92,12 @@ export function generatePackageMetadata(pkg: {
   highlights?: string[];
 }): Metadata {
   const cleanName = pkg.name.trim();
-  const title = `${cleanName} Tour Package from Surat & Gujarat | Sarthi Tourism`;
-  
+  const title = `${cleanName} Tour Package from  & Gujarat | Sarthi Tourism`;
+
   const formattedPrice = pkg.price ? ` starting at ${pkg.price}` : '';
   const formattedDuration = pkg.duration ? ` (${pkg.duration})` : '';
   const baseDesc = pkg.description ? pkg.description.substring(0, 140) : `Explore ${cleanName} with Sarthi Tourism.`;
-  const description = `Book ${cleanName}${formattedDuration}${formattedPrice} from Surat, Gujarat with Sarthi Tourism. ${baseDesc}`;
+  const description = `Book ${cleanName}${formattedDuration}${formattedPrice} from , Gujarat with Sarthi Tourism. ${baseDesc}`;
 
   let ogImage = pkg.image;
   if (ogImage && ogImage.includes('/storage/v1/object/public/')) {
@@ -110,12 +110,12 @@ export function generatePackageMetadata(pkg: {
 
   const keywords = [
     `${cleanName}`,
-    `${destinationKeyword} tour package from Surat`,
+    `${destinationKeyword} tour package from `,
     `${destinationKeyword} trip from Gujarat`,
     `Sarthi Tourism ${destinationKeyword}`,
     `${destinationKeyword} family tour package`,
-    `${destinationKeyword} honeymoon package Surat`,
-    `best travel agency for ${destinationKeyword} in Surat`,
+    `${destinationKeyword} honeymoon package `,
+    `best travel agency for ${destinationKeyword} in `,
   ];
 
   return generatePageMetadata({
@@ -143,10 +143,10 @@ export function getTravelAgencySchema() {
     "telephone": "+918780228628",
     "email": "admin@sarthitourism.com",
     "priceRange": "₹₹ - ₹₹₹",
-    "description": "Sarthi Tourism is a premier travel agency based in Surat, Gujarat offering custom international and domestic tour packages, family vacations, honeymoon trips, and corporate travel.",
+    "description": "Sarthi Tourism is a premier travel agency based in , Gujarat offering custom international and domestic tour packages, family vacations, honeymoon trips, and corporate travel.",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Surat",
+      "addressLocality": "",
       "addressRegion": "Gujarat",
       "addressCountry": "IN"
     },
@@ -156,7 +156,7 @@ export function getTravelAgencySchema() {
       "longitude": "72.8311"
     },
     "areaServed": [
-      { "@type": "City", "name": "Surat" },
+      { "@type": "City", "name": "" },
       { "@type": "State", "name": "Gujarat" },
       { "@type": "Country", "name": "India" }
     ],
@@ -173,7 +173,7 @@ export function getWebSiteSchema() {
     "@id": `${SITE_URL}/#website`,
     "url": SITE_URL,
     "name": "Sarthi Tourism",
-    "description": "Premium Travel & Tour Packages from Surat, Gujarat",
+    "description": "Premium Travel & Tour Packages from , Gujarat",
     "publisher": {
       "@id": `${SITE_URL}/#organization`
     }
@@ -208,7 +208,7 @@ export function getTouristTripSchema(pkg: {
     "@context": "https://schema.org",
     "@type": ["TouristTrip", "Product"],
     "name": pkg.name,
-    "description": pkg.description || `Tour package for ${pkg.name} offered by Sarthi Tourism Surat.`,
+    "description": pkg.description || `Tour package for ${pkg.name} offered by Sarthi Tourism .`,
     "image": pkg.image || `${SITE_URL}/images/logo1.png`,
     "provider": {
       "@type": "TravelAgency",

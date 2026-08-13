@@ -66,11 +66,11 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
     { name: "Tour Packages", item: "/packages" },
     { name: pkg.name, item: `/packages/${pkg.id}` }
   ]);
-  
+
   const packageFaqs = getFAQPageSchema([
     {
-      question: `How to book ${pkg.name} from Surat or Gujarat?`,
-      answer: `You can book ${pkg.name} directly through Sarthi Tourism by calling or messaging us on WhatsApp at +91 8780228628. We provide customized itineraries, departure assistance, and visa guidance from Surat and Gujarat.`
+      question: `How to book ${pkg.name} from  or Gujarat?`,
+      answer: `You can book ${pkg.name} directly through Sarthi Tourism by calling or messaging us on WhatsApp at +91 8780228628. We provide customized itineraries, departure assistance, and visa guidance from  and Gujarat.`
     },
     {
       question: `What is included in the ${pkg.name} tour?`,
@@ -287,13 +287,13 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
           <div className="bg-white/[0.02] backdrop-blur-2xl rounded-3xl p-8 border border-white/10 shadow-2xl">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
               <Shield className="text-blue-500 w-7 h-7" />
-              Frequently Asked Questions — Booking from Surat & Gujarat
+              Frequently Asked Questions
             </h2>
             <div className="space-y-6">
               <div className="border-b border-white/5 pb-4">
                 <h3 className="text-lg font-semibold text-blue-400 mb-2">How do I book {pkg.name} with Sarthi Tourism?</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">
-                  You can directly contact Sarthi Tourism via WhatsApp or call us at +91 8780228628. Our team in Surat will help customize your dates, flight departures from Surat or Ahmedabad, and issue booking confirmations.
+                  You can directly contact Sarthi Tourism via WhatsApp or call us at +91 {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628"}. Our team in  will help customize your dates, flight departures from  or Ahmedabad, and issue booking confirmations.
                 </p>
               </div>
               <div className="border-b border-white/5 pb-4">

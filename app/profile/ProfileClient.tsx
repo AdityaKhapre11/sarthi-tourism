@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
+import { performLogout } from "@/lib/auth/logout";
 
 interface ProfileClientProps {
   user: any;
@@ -154,8 +155,7 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
+    await performLogout(router);
   };
 
   const getInitials = (name?: string, email?: string) => {

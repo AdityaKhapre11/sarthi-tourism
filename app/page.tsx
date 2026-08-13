@@ -21,8 +21,8 @@ export default function Home() {
   const websiteSchema = getWebSiteSchema();
   const homepageFaqs = getFAQPageSchema([
     {
-      question: "Which tour packages does Sarthi Tourism offer from Surat?",
-      answer: "Sarthi Tourism offers international tour packages (Japan, Dubai, Europe, Bali, Thailand) and domestic tour packages (Kashmir, Uttarakhand, Himachal, Kerala, Rajasthan, Gujarat) departing from Surat and Gujarat."
+      question: "Which tour packages does Sarthi Tourism offer?",
+      answer: "Sarthi Tourism offers international tour packages (Japan, Dubai, Europe, Bali, Thailand) and domestic tour packages (Kashmir, Uttarakhand, Himachal, Kerala, Rajasthan, Gujarat) departing from Gujarat."
     },
     {
       question: "Can Sarthi Tourism customize travel itineraries for families and groups?",
@@ -30,7 +30,7 @@ export default function Home() {
     },
     {
       question: "Where is Sarthi Tourism located?",
-      answer: "Sarthi Tourism is located in Surat, Gujarat, India. You can contact us directly via phone or WhatsApp at +91 8780228628."
+      answer: `Sarthi Tourism is located in Gujarat, India. You can contact us directly via phone or WhatsApp at +91 ${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8780228628"}.`
     }
   ]);
 

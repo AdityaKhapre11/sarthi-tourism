@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
 
+import { SITE_URL } from "@/constants/site";
+
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 const inter = Inter({
@@ -20,12 +22,8 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "https://sarthitourism.com");
-
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Sarthi Tourism | Premium Travel & Tour Packages",
     template: "%s | Sarthi Tourism",
@@ -51,7 +49,7 @@ export const metadata: Metadata = {
       template: "%s | Sarthi Tourism",
     },
     description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
-    url: baseUrl,
+    url: SITE_URL,
     siteName: "Sarthi Tourism",
     locale: "en_US",
     type: "website",

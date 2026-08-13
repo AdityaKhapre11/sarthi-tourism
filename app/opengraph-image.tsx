@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { SITE_URL } from '@/constants/site';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -12,9 +13,9 @@ export default async function Image() {
   try {
     // We use Node.js runtime (50MB limit) to avoid Vercel's strict 1MB Edge function limit.
     // Fetch local images securely via Vercel's network to bypass Node File Trace issues.
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL
+    const baseUrl = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : 'http://localhost:3000');
+      : SITE_URL;
 
 
     // Fetch a tiny, highly-compressed version to stretch and simulate a backdrop blur!

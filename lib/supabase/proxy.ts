@@ -39,7 +39,6 @@ export async function updateSession(request: NextRequest) {
 
   // Define protected routes
   const isProtectedAdminRoute = pathname.startsWith('/admin');
-  const isProtectedPackageRoute = pathname.startsWith('/packages/') && pathname !== '/packages';
   const isProfileRoute = pathname.startsWith('/profile');
   
   // Check role if we have a user and we need it
@@ -53,7 +52,7 @@ export async function updateSession(request: NextRequest) {
     userRole = profile?.role || 'user';
   }
 
-  if (isProtectedAdminRoute || isProtectedPackageRoute || isProfileRoute) {
+  if (isProtectedAdminRoute || isProfileRoute) {
     if (!user) {
       // User is not logged in, redirect them to login page securely with redirect param
       const url = request.nextUrl.clone()

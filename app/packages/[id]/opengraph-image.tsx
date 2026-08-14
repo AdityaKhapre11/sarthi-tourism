@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient as createPublicClient } from '@supabase/supabase-js';
 
 export const runtime = 'edge';
 export const alt = 'Package Cover';
@@ -8,7 +8,15 @@ export const contentType = 'image/jpeg';
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const supabase = await createClient();
+    
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return new Response('Configuration missing', { status: 500 });
+    }
+
+    const supabase = createPublicClient(supabaseUrl, supabaseAnonKey);
     const { data: pkg } = await supabase.from('packages').select('image').eq('id', id).single();
 
     if (!pkg || !pkg.image) {

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { PhoneCall } from "lucide-react";
 
 export function ContactCTA() {
@@ -45,18 +46,16 @@ export function ContactCTA() {
             </div>
 
             <div className="flex flex-col gap-5 w-full lg:w-auto shrink-0 mt-4 lg:mt-0">
-              <a
-                href={`https://wa.me/${WA_NUMBER}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/contact"
                 className="group relative overflow-hidden px-8 py-4 md:py-5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold text-lg rounded-full flex items-center justify-center gap-3 transition-all hover:scale-[1.02] shadow-[0_8px_32px_rgba(0,0,0,0.3)] uppercase tracking-wider"
               >
                 <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></span>
                 </span>
                 <span className="relative z-10">ENQUIRE NOW</span>
-              </a>
+              </Link>
               <a
                 href={`https://wa.me/${WA_NUMBER}`}
                 target="_blank"

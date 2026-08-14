@@ -15,11 +15,11 @@ export function Footer({ featuredPackages = [] }: { featuredPackages?: {name: st
     { name: "Ayodhya - Prayagraj", link: "/packages/1" },
     { name: "Malaysia Getaway", link: "/packages/2" },
     { name: "Kashmir Heaven on Earth", link: "/packages/3" },
-    { name: "Custom Group Tours", link: "#contact" },
+    { name: "Custom Group Tours", link: "/contact" },
   ];
 
   const featuredTours = featuredPackages.length > 0
-    ? [...featuredPackages, { name: "Custom Group Tours", link: "#contact" }]
+    ? [...featuredPackages, { name: "Custom Group Tours", link: "/contact" }]
     : defaultFeatured;
 
   const handleScrollTo = (target: string) => (e: React.MouseEvent) => {
@@ -52,7 +52,7 @@ export function Footer({ featuredPackages = [] }: { featuredPackages?: {name: st
             <h4 className="text-white font-bold font-heading text-lg mb-6 tracking-wide">Explore</h4>
             <ul className="space-y-3">
               {["Home", "Packages", "About", "Contact"].map((item) => {
-                const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : `/#${item.toLowerCase()}`;
+                const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "Contact" ? "/contact" : `/#${item.toLowerCase()}`;
                 const hashId = target.startsWith("/#") ? target.substring(1) : "";
                 return (
                   <li key={item}>

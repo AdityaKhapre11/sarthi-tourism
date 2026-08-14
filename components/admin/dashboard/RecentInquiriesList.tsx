@@ -1,8 +1,8 @@
 interface RecentInquiry {
-  id: number;
-  name: string;
-  packageInterested: string;
-  createdAt: string;
+  id: string | number;
+  full_name: string;
+  subject: string;
+  created_at: string;
 }
 
 interface RecentInquiriesListProps {
@@ -18,15 +18,15 @@ export function RecentInquiriesList({ inquiries }: RecentInquiriesListProps) {
           inquiries.map((inquiry) => (
             <div key={inquiry.id} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] transition-colors border border-white/5">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold uppercase">
-                  {inquiry.name.charAt(0)}
+                <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold uppercase shrink-0 border border-blue-500/20">
+                  {inquiry.full_name.charAt(0)}
                 </div>
-                <div>
-                  <p className="text-white font-medium">{inquiry.name}</p>
-                  <p className="text-sm text-gray-400">Interested in {inquiry.packageInterested}</p>
+                <div className="min-w-0">
+                  <p className="text-white font-medium truncate">{inquiry.full_name}</p>
+                  <p className="text-sm text-gray-400 truncate">{inquiry.subject}</p>
                 </div>
               </div>
-              <div className="text-sm text-gray-500">{new Date(inquiry.createdAt).toLocaleDateString()}</div>
+              <div className="text-sm text-gray-500 shrink-0 ml-4">{new Date(inquiry.created_at).toLocaleDateString()}</div>
             </div>
           ))
         ) : (

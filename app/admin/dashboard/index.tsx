@@ -15,19 +15,15 @@ export default async function AdminDashboardIndex() {
     
   const packagesCount = count || 0;
 
-  // Inquiries (Fallback to JSON for now if DB not set up for inquiries)
-  const inquiriesPath = path.join(process.cwd(), 'data', 'inquiries.json');
+  // Fetch real inquiries from Supabase
+  const { data: recentInquiriesData, count: totalInquiries } = await supabase
+    .from('inquiries')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .limit(3);
 
-  let inquiries = [];
-  let inquiriesCount = 0;
-  if (fs.existsSync(inquiriesPath)) {
-    inquiries = JSON.parse(fs.readFileSync(inquiriesPath, 'utf8'));
-    // Sort inquiries newest first
-    inquiries = inquiries.sort((a: { createdAt: string }, b: { createdAt: string }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    inquiriesCount = inquiries.length;
-  }
-
-  const recentInquiries = inquiries.slice(0, 3);
+  const inquiriesCount = totalInquiries || 0;
+  const recentInquiries = recentInquiriesData || [];
 
   const stats = [
     { name: "Total Packages", value: packagesCount.toString(), icon: Map, color: "text-blue-400", bg: "bg-blue-400/10" },

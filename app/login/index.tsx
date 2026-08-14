@@ -77,7 +77,7 @@ export default function AdminLoginIndex() {
       }
     };
     checkUser();
-  }, [supabase.auth, redirectUrl, searchParams, pathname]);
+  }, [supabase, supabase.auth, redirectUrl, searchParams, pathname]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

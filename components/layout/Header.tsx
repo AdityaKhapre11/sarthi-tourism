@@ -163,7 +163,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-8 lg:flex">
             {["Home", "About Us", "Packages", "Contact Us"].map((item) => {
-              const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/#contact";
+              const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/contact";
               const hashId = target.startsWith("/#") ? target.substring(1) : "";
 
               let isActive = false;
@@ -174,7 +174,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               } else if (item === "About Us") {
                 isActive = pathname === "/" && activeSection === "about";
               } else if (item === "Contact Us") {
-                isActive = pathname === "/" && activeSection === "contact";
+                isActive = pathname === "/contact" || (pathname === "/" && activeSection === "contact");
               }
 
               return (
@@ -275,18 +275,16 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               </Button>
             )}
 
-            <a
-              href={`https://wa.me/${WA_NUMBER}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/contact"
               className="rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 px-6 py-2.5 font-bold text-white transition-all uppercase tracking-wider text-[11px] flex items-center gap-2"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
               Enquire Now
-            </a>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3 sm:gap-4 lg:hidden">
@@ -378,7 +376,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
       >
         <div className="flex flex-col gap-6 sm:gap-8 text-center w-full px-6">
           {["Home", "Packages", "About Us", "Contact Us"].map((item, index) => {
-            const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/#contact";
+            const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/contact";
             const hashId = target.startsWith("/#") ? target.substring(1) : "";
             return (
               <Link
@@ -428,10 +426,8 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
             </Button>
           )}
 
-          <a
-            href={`https://wa.me/${WA_NUMBER}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/contact"
             className="mt-4 mx-auto w-full max-w-[250px] rounded-full bg-blue-600 hover:bg-blue-500 px-10 py-4 text-center font-bold text-white shadow-[0_0_30px_rgba(37,99,235,0.4)] uppercase tracking-widest transition-all text-sm"
             style={{
               transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
@@ -441,7 +437,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Enquire Now
-          </a>
+          </Link>
         </div>
       </div>
     </>

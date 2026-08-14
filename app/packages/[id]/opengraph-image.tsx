@@ -23,12 +23,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
       return new Response('Not Found', { status: 404 });
     }
 
-    let optimizedUrl = pkg.image;
-    if (pkg.image.includes('/storage/v1/object/public/')) {
-      optimizedUrl = pkg.image.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + '?width=1200&height=630&resize=cover&quality=80';
-    }
-
-    const imageRes = await fetch(optimizedUrl);
+    const imageRes = await fetch(pkg.image);
     if (!imageRes.ok) {
        return new Response('Failed to fetch image', { status: 500 });
     }

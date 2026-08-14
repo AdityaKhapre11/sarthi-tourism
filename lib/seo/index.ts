@@ -100,9 +100,7 @@ export function generatePackageMetadata(pkg: {
   const description = `Book ${cleanName}${formattedDuration}${formattedPrice} from , Gujarat with Sarthi Tourism. ${baseDesc}`;
 
   let ogImage = pkg.image;
-  if (ogImage && ogImage.includes('/storage/v1/object/public/')) {
-    ogImage = ogImage.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') + '?width=1200&height=630&resize=cover&quality=80';
-  } else if (!ogImage) {
+  if (!ogImage) {
     ogImage = `${SITE_URL}/opengraph-image`;
   }
 

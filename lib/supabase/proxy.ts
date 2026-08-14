@@ -42,6 +42,23 @@ export async function updateSession(request: NextRequest) {
   const isProtectedDashboardRoute = pathname.startsWith('/dashboard');
   const isProtectedPackageRoute = pathname.startsWith('/packages/') && pathname !== '/packages';
   const isProfileRoute = pathname.startsWith('/profile');
+
+  // Allow social media crawlers & bots through protected package routes
+  // so that generateMetadata can produce correct og:image/og:title tags.
+  const isProtectedForBots = isProtectedPackageRoute;
+  if (isProtectedForBots) {
+    const ua = (request.headers.get('user-agent') || '').toLowerCase();
+    const BOT_PATTERNS = [
+      'facebookexternalhit', 'twitterbot', 'linkedinbot', 'whatsapp',
+      'slackbot', 'telegrambot', 'discordbot', 'googlebot', 'bingbot',
+      'applebot', 'ia_archiver', 'embedly', 'showyoubot', 'rogerbot',
+      'quora link preview',
+    ];
+    if (BOT_PATTERNS.some((p) => ua.includes(p))) {
+      return NextResponse.next({ request });
+    }
+  }
+
   
   // Check role and custom email_verified status if we have a user
   let userRole = null;

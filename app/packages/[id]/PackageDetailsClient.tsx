@@ -91,14 +91,14 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
         <div className="absolute bottom-25 left-0 w-full px-6 md:px-12 z-10">
           <div className="container mx-auto max-w-7xl">
             {/* SEO Breadcrumbs Navigation */}
-            <nav aria-label="Breadcrumb" className="mb-6 hero-fade opacity-0">
+            <nav aria-label="Breadcrumb" className="mb-50 hero-fade opacity-0">
               <ol className="flex items-center space-x-2 text-xs md:text-sm text-gray-300">
                 <li>
                   <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>
                 </li>
                 <li><span className="text-gray-500">/</span></li>
                 <li>
-                  <Link href="/packages" className="hover:text-blue-400 transition-colors">Tour Packages</Link>
+                  <Link href="/packages" className="hover:text-blue-400 transition-colors">Packages</Link>
                 </li>
                 <li><span className="text-gray-500">/</span></li>
                 <li className="text-blue-400 font-medium truncate max-w-[200px] sm:max-w-none">{pkg.name}</li>

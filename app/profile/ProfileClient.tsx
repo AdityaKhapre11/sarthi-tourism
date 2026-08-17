@@ -10,6 +10,7 @@ import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { performLogout } from "@/lib/auth/logout";
 import { AppUser, UserProfile } from "@/types";
+import FaqSection from "./FaqSection";
 
 interface ProfileClientProps {
   user: AppUser;
@@ -294,6 +295,9 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
             </Button>
           </div>
         </div>
+
+        {/* FAQ Section */}
+        <FaqSection />
       </div>
     </div>
   );

@@ -9,6 +9,25 @@ export interface SeoPageProps {
   keywords?: string[];
 }
 
+/**
+ * Ensures an OG image URL is absolute.
+ * - If already absolute (https://...), returns as-is.
+ * - If relative (/path/...), prepends SITE_URL.
+ * - Falls back to the root opengraph-image route.
+ */
+function resolveOgImageUrl(ogImage?: string): string {
+  if (!ogImage) {
+    return `${SITE_URL}/opengraph-image`;
+  }
+  // Already an absolute URL
+  if (ogImage.startsWith('http://') || ogImage.startsWith('https://')) {
+    return ogImage;
+  }
+  // Relative path — make absolute
+  const cleanPath = ogImage.startsWith('/') ? ogImage : `/${ogImage}`;
+  return `${SITE_URL}${cleanPath}`;
+}
+
 export function generatePageMetadata({
   title,
   description,
@@ -33,7 +52,7 @@ export function generatePageMetadata({
   const canonicalUrl = `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
   const metaKeywords = Array.from(new Set([...defaultKeywords, ...keywords]));
 
-  const image = ogImage || `${SITE_URL}/opengraph-image`;
+  const image = resolveOgImageUrl(ogImage);
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -111,13 +130,15 @@ export function generatePackageMetadata(pkg: {
     `best travel agency for ${destinationKeyword} in `,
   ];
 
-  // NOTE: ogImage is intentionally omitted here.
-  // The file-based `app/packages/[id]/opengraph-image.tsx` dynamically generates
-  // a branded OG image for each package, which Next.js automatically uses.
+  // The file-based `app/packages/[id]/opengraph-image.tsx` generates a branded
+  // OG image. However, we also set the package's hero image as the og:image in
+  // metadata so crawlers that support direct image URLs get the best result.
+  // The file-based route takes priority via Next.js conventions when both exist.
   return generatePageMetadata({
     title,
     description,
     path: `/packages/${pkg.id}`,
+    ogImage: pkg.image || undefined,
     keywords,
   });
 }

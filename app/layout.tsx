@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image",
+        url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
         alt: "Sarthi Tourism | Premium Travel",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
       template: "%s | Sarthi Tourism",
     },
     description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
-    images: ["/opengraph-image"],
+    images: [`${SITE_URL}/opengraph-image`],
   },
   alternates: {
     canonical: "/",
@@ -78,6 +78,7 @@ export const metadata: Metadata = {
     google: "cmW4xs5nNrJz58zWUpqoSZ5hbKOisE2uMDFX0eIvFS0",
   },
 };
+
 
 import { createClient } from "@supabase/supabase-js";
 

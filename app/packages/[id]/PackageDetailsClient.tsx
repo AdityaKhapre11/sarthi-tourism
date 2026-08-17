@@ -91,7 +91,7 @@ export default function PackageDetailsClient({ pkg, whatsappUrl }: PackageDetail
         <div className="absolute bottom-25 left-0 w-full px-6 md:px-12 z-10">
           <div className="container mx-auto max-w-7xl">
             {/* SEO Breadcrumbs Navigation */}
-            <nav aria-label="Breadcrumb" className="mb-50 hero-fade opacity-0">
+            <nav aria-label="Breadcrumb" className="mb-25 hero-fade opacity-0">
               <ol className="flex items-center space-x-2 text-xs md:text-sm text-gray-300">
                 <li>
                   <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>

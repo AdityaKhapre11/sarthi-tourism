@@ -99,11 +99,6 @@ export function generatePackageMetadata(pkg: {
   const baseDesc = pkg.description ? pkg.description.substring(0, 140) : `Explore ${cleanName} with Sarthi Tourism.`;
   const description = `Book ${cleanName}${formattedDuration}${formattedPrice} from , Gujarat with Sarthi Tourism. ${baseDesc}`;
 
-  let ogImage = pkg.image;
-  if (!ogImage) {
-    ogImage = `${SITE_URL}/opengraph-image`;
-  }
-
   const destinationKeyword = cleanName.replace(/tour|package|2026|2025|grand|autumn|spring|summer|winter/gi, '').trim();
 
   const keywords = [
@@ -116,14 +111,17 @@ export function generatePackageMetadata(pkg: {
     `best travel agency for ${destinationKeyword} in `,
   ];
 
+  // NOTE: ogImage is intentionally omitted here.
+  // The file-based `app/packages/[id]/opengraph-image.tsx` dynamically generates
+  // a branded OG image for each package, which Next.js automatically uses.
   return generatePageMetadata({
     title,
     description,
     path: `/packages/${pkg.id}`,
-    ogImage,
     keywords,
   });
 }
+
 
 /**
  * Structured Data (JSON-LD) Generators

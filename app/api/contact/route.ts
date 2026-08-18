@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     const countWords = (text: string) => text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
     if (countWords(message) > 500) {
       return NextResponse.json(
-        { error: "Message cannot exceed 500 words." },
+        { error: "Message cannot exceed 200 words." },
         { status: 400 }
       );
     }

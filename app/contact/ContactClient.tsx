@@ -36,7 +36,7 @@ export default function ContactClient() {
       required: "Please enter your message.",
       custom: (val) => {
         const countWords = (text: string) => text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
-        return countWords(val) > 500 ? "Message cannot exceed 500 words." : null;
+        return countWords(val) > 200 ? "Message cannot exceed 200 words." : null;
       }
     }
   });
@@ -139,7 +139,7 @@ export default function ContactClient() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-background/80 to-background" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-4 pt-40 pb-20">
+      <div className="container relative z-10 mx-auto px-4 pt-50 pb-20">
         {/* Header */}
         <div className="text-center mb-16 contact-title">
           <span className="text-blue-500 dark:text-blue-400 font-semibold tracking-wider uppercase text-sm">
@@ -245,7 +245,7 @@ export default function ContactClient() {
                   onChange={(val) => handleCustomChange("message", val)}
                   onBlur={() => handleBlur("message", formData.message, formData)}
                   placeholder="How can we help you?"
-                  maxWords={500}
+                  maxWords={200}
                   hasError={!!errors.message}
                   aria-invalid={!!errors.message}
                   aria-describedby={errors.message ? "message-error" : undefined}

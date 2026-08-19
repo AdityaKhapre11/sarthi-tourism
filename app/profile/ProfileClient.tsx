@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Shield, Calendar, ArrowLeft, Camera, Loader2, LogOut } from "lucide-react";
+import { Mail, Shield, Calendar, ArrowLeft, Camera, Loader2, LogOut, MapPin, Phone, User as UserIcon, Edit } from "lucide-react";
 import { Button } from "@/components/ui";
+import { PhoneInput } from "@/components/ui/PhoneInput";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
@@ -24,6 +25,20 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    full_name: user.user_metadata?.full_name || "",
+    gender: user.user_metadata?.gender || "",
+    mobile_number: user.user_metadata?.mobile_number || "",
+    address: user.user_metadata?.address || "",
+    dob: user.user_metadata?.dob || "",
+  });
+
+  // Use optimistic name for the header title if editing but not yet saved,
+  // or use the current metadata if not. Actually, let's keep the header reflecting real saved data,
+  // or optimistic if we manually update it on save. We refresh on save anyway.
 
   const currentAvatar = previewUrl || user.user_metadata?.avatar_url;
 
@@ -157,6 +172,58 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
     }
   };
 
+  const handleSaveProfile = async () => {
+    if (!formData.full_name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+    
+    if (formData.gender && !["Male", "Female", "Other"].includes(formData.gender)) {
+      toast.error("Invalid gender selection");
+      return;
+    }
+    
+    if (formData.mobile_number) {
+      const digitsOnly = formData.mobile_number.startsWith("+91")
+        ? formData.mobile_number.slice(3)
+        : formData.mobile_number.replace(/\D/g, "");
+      
+      if (digitsOnly.length > 0 && digitsOnly.length < 10) {
+        toast.error("Please enter a valid 10-digit mobile number");
+        return;
+      }
+    }
+
+    setIsSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          full_name: formData.full_name,
+          gender: formData.gender,
+          mobile_number: formData.mobile_number,
+          address: formData.address,
+          dob: formData.dob,
+        }
+      });
+      
+      if (error) throw error;
+      
+      // Attempt to update public.users, but ignore errors if columns don't exist
+      await supabase.from('users').update({
+        full_name: formData.full_name,
+      }).eq('id', user.id);
+
+      toast.success("Profile updated successfully!");
+      setIsEditing(false);
+      router.refresh();
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to update profile";
+      toast.error(errorMessage);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleSignOut = async () => {
     await performLogout(router);
   };
@@ -167,11 +234,6 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
     return "U";
   };
 
-  const formattedDate = new Date(user.created_at).toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background text-foreground font-sans relative overflow-hidden py-24 px-6">
@@ -189,7 +251,7 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
       {/* Decorative Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none z-0" />
 
-      <div className="w-full max-w-2xl relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
+      <div className="w-full max-w-4xl relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 pt-28">
         <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 font-medium">
           <ArrowLeft className="w-4 h-4" />
           Back to Home
@@ -259,26 +321,169 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
                 </div>
               )}
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-center sm:justify-start gap-4 text-gray-300">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5">
-                    <Mail className="w-5 h-5" />
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mt-8 w-full text-left">
+                <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                  <h3 className="text-lg font-semibold text-white">Personal Information</h3>
+                  {!isEditing && (
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => setIsEditing(true)} 
+                      className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 h-8 px-3 rounded-lg"
+                    >
+                      <Edit className="w-3.5 h-3.5 mr-2" />
+                      Edit
+                    </Button>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {/* Full Name */}
+                  <div className="flex items-start gap-4 text-gray-300">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
+                      <UserIcon className="w-5 h-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Full Name</p>
+                      {isEditing ? (
+                        <input 
+                          type="text" 
+                          value={formData.full_name}
+                          onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                          className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
+                          placeholder="Your full name"
+                        />
+                      ) : (
+                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.full_name || "Not provided"}</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Email Address</p>
-                    <p className="text-white font-medium">{user.email}</p>
+
+                  {/* Gender */}
+                  <div className="flex items-start gap-4 text-gray-300">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
+                      <UserIcon className="w-5 h-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Gender</p>
+                      {isEditing ? (
+                        <select 
+                          value={formData.gender}
+                          onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                          className="w-full bg-[#1e293b] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none text-sm"
+                        >
+                          <option value="">Select Gender</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      ) : (
+                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.gender || "Not provided"}</p>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Email (Read Only) */}
+                  <div className="flex items-start gap-4 text-gray-300">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
+                      <Mail className="w-5 h-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Email Address</p>
+                      <p className="text-gray-300 font-medium mt-1.5 opacity-80">{user.email}</p>
+                    </div>
+                  </div>
+
+                  {/* Mobile Number */}
+                  <div className="flex items-start gap-4 text-gray-300">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Mobile Number</p>
+                      {isEditing ? (
+                        <PhoneInput 
+                          value={formData.mobile_number}
+                          onChange={(val) => setFormData({...formData, mobile_number: val})}
+                          className="w-full bg-black/20 border-white/10 text-white placeholder-gray-500 text-sm"
+                        />
+                      ) : (
+                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.mobile_number || "Not provided"}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Address */}
+                  <div className="flex items-start gap-4 text-gray-300 sm:col-span-2">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Address</p>
+                      {isEditing ? (
+                        <textarea 
+                          value={formData.address}
+                          onChange={(e) => setFormData({...formData, address: e.target.value})}
+                          className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px] resize-none transition-all text-sm"
+                          placeholder="Your full address"
+                        />
+                      ) : (
+                        <p className="text-white font-medium mt-1.5 whitespace-pre-wrap">{user.user_metadata?.address || "Not provided"}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Date of Birth */}
+                  <div className="flex items-start gap-4 text-gray-300 sm:col-span-2">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
+                      <Calendar className="w-5 h-5" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Date of Birth</p>
+                      {isEditing ? (
+                        <input 
+                          type="date"
+                          value={formData.dob}
+                          onChange={(e) => setFormData({...formData, dob: e.target.value})}
+                          className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm max-w-sm block"
+                        />
+                      ) : (
+                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.dob ? new Date(user.user_metadata.dob).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "Not provided"}</p>
+                      )}
+                    </div>
+                  </div>
+
+
                 </div>
 
-                <div className="flex items-center justify-center sm:justify-start gap-4 text-gray-300">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5">
-                    <Calendar className="w-5 h-5" />
+                {isEditing && (
+                  <div className="flex gap-3 mt-8 pt-6 border-t border-white/10 justify-end">
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        setFormData({
+                          full_name: user.user_metadata?.full_name || "",
+                          gender: user.user_metadata?.gender || "",
+                          mobile_number: user.user_metadata?.mobile_number || "",
+                          address: user.user_metadata?.address || "",
+                          dob: user.user_metadata?.dob || "",
+                        });
+                        setIsEditing(false);
+                      }}
+                      disabled={isSaving}
+                      className="rounded-xl text-gray-300 hover:text-white border border-white/10 px-6"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSaveProfile}
+                      disabled={isSaving}
+                      className="rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6"
+                    >
+                      {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                      Save Changes
+                    </Button>
                   </div>
-                  <div className="text-left">
-                    <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Joined</p>
-                    <p className="text-white font-medium">{formattedDate}</p>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

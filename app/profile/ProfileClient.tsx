@@ -211,6 +211,10 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
       // Attempt to update public.users, but ignore errors if columns don't exist
       await supabase.from('users').update({
         full_name: formData.full_name,
+        gender: formData.gender,
+        mobile_number: formData.mobile_number,
+        address: formData.address,
+        dob: formData.dob || null, // Convert empty string to null for date column
       }).eq('id', user.id);
 
       toast.success("Profile updated successfully!");

@@ -6,11 +6,19 @@ export default async function PackageDetailsIndex({ params }: { params: Promise<
   const { id } = await params;
   
   const supabase = await createClient();
-  const { data: pkg, error } = await supabase
-    .from('packages')
-    .select('*')
-    .eq('id', id)
-    .single();
+  
+  const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  
+  let query = supabase.from('packages').select('*');
+  if (isUUID) {
+    query = query.eq('id', id);
+  } else {
+    // If it's a slug like 'thailand-getaway-5n-6d', extract the first few words to match the name
+    const searchName = id.split('-').slice(0, 2).join(' ');
+    query = query.ilike('name', `${searchName}%`);
+  }
+
+  const { data: pkg, error } = await query.single();
 
   if (error || !pkg) {
     notFound();

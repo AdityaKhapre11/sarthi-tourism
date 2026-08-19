@@ -4,9 +4,22 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PackageCard } from "@/components/packages";
+import { PaginationControls } from "@/components/ui/PaginationControls";
 import { Package } from "@/data/packages";
 
-export default function PackagesClient({ packages }: { packages: Package[] }) {
+export default function PackagesClient({ 
+  packages, 
+  currentPage = 1, 
+  totalPages = 1, 
+  totalItems = 0, 
+  limit = 10 
+}: { 
+  packages: Package[];
+  currentPage?: number;
+  totalPages?: number;
+  totalItems?: number;
+  limit?: number;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
@@ -64,6 +77,18 @@ export default function PackagesClient({ packages }: { packages: Package[] }) {
               <PackageCard key={pkg.id} pkg={pkg} />
             ))}
           </div>
+
+          {/* Pagination */}
+          {packages.length > 0 && (
+            <div className="mt-16 w-full max-w-8xl mx-auto">
+              <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={totalItems}
+                limit={limit}
+              />
+            </div>
+          )}
         </section>
       </main>
     </>

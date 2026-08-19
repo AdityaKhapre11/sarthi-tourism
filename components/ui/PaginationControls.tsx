@@ -42,69 +42,105 @@ export function PaginationControls({
 
   if (totalPages <= 1 && totalItems === 0) return null;
 
-  // Generate page numbers safely
+  // Generate page numbers with ellipsis
   const getVisiblePages = () => {
-    const pages = [];
-    let start = Math.max(1, currentPage - 2);
-    const end = Math.min(totalPages, start + 4);
+    const pages: (number | string)[] = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
+    }
+
+    pages.push(1);
     
-    if (end - start < 4) {
-      start = Math.max(1, end - 4);
+    let start = Math.max(2, currentPage - 1);
+    let end = Math.min(totalPages - 1, currentPage + 1);
+    
+    if (currentPage <= 3) {
+      end = 4;
+    }
+    if (currentPage >= totalPages - 2) {
+      start = totalPages - 3;
+    }
+
+    if (start > 2) {
+      pages.push('ellipsis-start');
     }
 
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
+
+    if (end < totalPages - 1) {
+      pages.push('ellipsis-end');
+    }
+
+    pages.push(totalPages);
+    
     return pages;
   };
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-6 py-4 px-6 bg-white/[0.02] border border-white/5 rounded-2xl shadow-sm backdrop-blur-md animate-in fade-in duration-500">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 py-4 px-4 md:px-6 bg-white/[0.02] border border-white/5 rounded-2xl shadow-sm backdrop-blur-md animate-in fade-in duration-500 w-full">
       
       {/* Left: Info */}
-      <div className="flex items-center text-sm text-gray-400">
+      <div className="hidden md:flex items-center justify-center text-xs sm:text-sm text-gray-400 w-full md:w-auto order-2 md:order-1 mt-2 md:mt-0">
         <div>
           Showing <span className="font-medium text-white">{Math.min((currentPage - 1) * limit + 1, totalItems)}</span> to <span className="font-medium text-white">{Math.min(currentPage * limit, totalItems)}</span> of <span className="font-medium text-white">{totalItems}</span> results
         </div>
       </div>
 
       {/* Center: Pagination numbers */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 w-full md:w-auto order-1 md:order-2">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage <= 1 || isPending}
-          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1 px-2 sm:px-3 py-2 text-sm font-medium text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          aria-label="Previous page"
         >
           <ChevronLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Prev</span>
         </button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center justify-center gap-1">
           {isPending ? (
-            <div className="w-9 h-9 flex items-center justify-center">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center">
                <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
             </div>
           ) : (
-            getVisiblePages().map(page => (
-              <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm font-medium transition-all duration-200 ${
-                  currentPage === page 
-                    ? 'bg-blue-600 text-white shadow-md' 
-                    : 'text-gray-400 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                {page}
-              </button>
-            ))
+            getVisiblePages().map((page) => {
+              if (typeof page === 'string') {
+                return (
+                  <span key={page} className="px-1 text-gray-500 flex items-center justify-center w-6 h-8 sm:w-8 sm:h-9">
+                    ...
+                  </span>
+                );
+              }
+              return (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center text-xs sm:text-sm font-medium transition-all duration-200 ${
+                    currentPage === page 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'text-gray-400 hover:bg-white/10 hover:text-white'
+                  }`}
+                  aria-label={`Page ${page}`}
+                  aria-current={currentPage === page ? "page" : undefined}
+                >
+                  {page}
+                </button>
+              );
+            })
           )}
         </div>
 
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage >= totalPages || isPending}
-          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1 px-2 sm:px-3 py-2 text-sm font-medium text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          aria-label="Next page"
         >
           <span className="hidden sm:inline">Next</span>
           <ChevronRight className="w-4 h-4" />
@@ -112,14 +148,15 @@ export function PaginationControls({
       </div>
 
       {/* Right: Select Limit */}
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-500">Per page:</span>
+      <div className="hidden md:flex items-center justify-center gap-2 sm:gap-3 w-full md:w-auto order-3 mt-2 md:mt-0">
+        <span className="text-xs sm:text-sm text-gray-500">Per page:</span>
         <div className="relative">
           <select
             value={limit}
             onChange={(e) => handleLimitChange(Number(e.target.value))}
             disabled={isPending}
-            className="appearance-none bg-white/5 border border-white/10 hover:border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 py-1.5 pl-3 pr-8 cursor-pointer disabled:opacity-50 transition-colors"
+            className="appearance-none bg-white/5 border border-white/10 hover:border-white/20 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 py-1.5 pl-3 pr-8 cursor-pointer disabled:opacity-50 transition-colors"
+            aria-label="Results per page"
           >
             <option value="10" className="bg-[#0f172a] text-white">10</option>
             <option value="20" className="bg-[#0f172a] text-white">20</option>

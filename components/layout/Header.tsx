@@ -26,7 +26,6 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
   const lenis = useLenis();
   const pathname = usePathname();
   const router = useRouter();
-  const WA_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const supabase = createClient();
 
   const handleLogoClick = (e: React.MouseEvent) => {

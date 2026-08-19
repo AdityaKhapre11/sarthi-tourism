@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 interface WordLimitTextareaProps {
   value: string;
   onChange: (value: string) => void;
@@ -35,28 +34,17 @@ export function WordLimitTextarea({
   "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedby,
 }: WordLimitTextareaProps) {
-  const [internalValue, setInternalValue] = useState(value);
-  const [wordCount, setWordCount] = useState(0);
-
-  // Function to count words
   const countWords = (text: string) => {
     return text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
   };
 
-  useEffect(() => {
-    if (value !== internalValue) {
-      setInternalValue(value);
-      setWordCount(countWords(value));
-    }
-  }, [value]);
+  const wordCount = countWords(value);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     const currentWords = countWords(text);
 
     if (currentWords <= maxWords) {
-      setInternalValue(text);
-      setWordCount(currentWords);
       onChange(text);
     } else {
       // If user pastes or types a word that exceeds the limit, 
@@ -71,8 +59,6 @@ export function WordLimitTextarea({
           return;
       }
       
-      setInternalValue(allowedText);
-      setWordCount(maxWords);
       onChange(allowedText);
     }
   };
@@ -84,8 +70,7 @@ export function WordLimitTextarea({
       <textarea
         id={id}
         name={name}
-        value={internalValue}
-        onChange={handleChange}
+        value={value}        onChange={handleChange}
         onBlur={onBlur}
         required={required}
         disabled={disabled}

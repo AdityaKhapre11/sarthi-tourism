@@ -8,7 +8,7 @@ export type ValidationRules<T> = {
   };
 };
 
-export function useFormValidation<T extends Record<string, any>>(rules: ValidationRules<T>) {
+export function useFormValidation<T extends Record<string, unknown>>(rules: ValidationRules<T>) {
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
 
   const validateField = useCallback((name: keyof T, value: T[keyof T], allValues: T): string | null => {

@@ -5,7 +5,7 @@ import { Eye } from "lucide-react";
 import { DeleteInquiryButton } from "./DeleteInquiryButton";
 import { InquiryDetailsModal } from "./InquiryDetailsModal";
 
-interface Inquiry {
+export interface Inquiry {
   id: string;
   full_name: string;
   email: string;

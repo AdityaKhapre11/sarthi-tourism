@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 interface PhoneInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -30,16 +29,7 @@ export function PhoneInput({
   "aria-describedby": ariaDescribedby,
 }: PhoneInputProps) {
   // Extract just the digits from the incoming value if it already has +91
-  const initialDigits = value.startsWith("+91") ? value.slice(3).trim() : value.replace(/\D/g, "").slice(0, 10);
-  const [digits, setDigits] = useState(initialDigits);
-
-  useEffect(() => {
-    // Sync external value changes if needed
-    const newDigits = value.startsWith("+91") ? value.slice(3).trim() : value.replace(/\D/g, "").slice(0, 10);
-    if (newDigits !== digits) {
-      setDigits(newDigits);
-    }
-  }, [value]);
+  const digits = value.startsWith("+91") ? value.slice(3).trim() : value.replace(/\D/g, "").slice(0, 10);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Only allow numeric characters
@@ -47,8 +37,6 @@ export function PhoneInput({
     
     // Truncate to 10 digits
     const truncatedValue = rawValue.slice(0, 10);
-    
-    setDigits(truncatedValue);
     
     // Emit the final formatted value or empty string if empty
     if (truncatedValue.length > 0) {

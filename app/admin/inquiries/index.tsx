@@ -2,8 +2,7 @@ import { MessageSquare } from "lucide-react";
 import { PaginationControls } from "@/components/ui";
 import { AdminSearch } from "@/components/admin/AdminSearch";
 import { createClient } from "@/lib/supabase/server";
-import { InquiryRow } from "./components/InquiryRow";
-
+import { InquiryRow, Inquiry } from "./components/InquiryRow";
 export default async function AdminInquiriesIndex({
   searchParams,
 }: {
@@ -56,7 +55,7 @@ export default async function AdminInquiriesIndex({
 
       {/* Inquiries List */}
       <div className="grid gap-4">
-        {inquiryList.map((inquiry: any) => (
+        {inquiryList.map((inquiry: Inquiry) => (
           <InquiryRow key={inquiry.id} inquiry={inquiry} />
         ))}
 

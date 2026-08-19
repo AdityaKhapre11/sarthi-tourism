@@ -1,6 +1,4 @@
 import { Map, Users, TrendingUp, CalendarCheck } from "lucide-react";
-import fs from "fs";
-import path from "path";
 
 import { StatCard, RecentInquiriesList, QuickActionsPanel } from "@/components/admin/dashboard";
 import { createClient } from "@/lib/supabase/server";

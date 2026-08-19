@@ -310,10 +310,10 @@ export function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                             data-selected={isSelected}
                             onMouseEnter={() => setSelectedIndex(idx)}
                             onClick={() => handleNavigate(recent.id, recent.name)}
-                            className={`w-full h-auto justify-start text-left flex items-center p-3 rounded-xl transition-all border ${
+                            className={`w-full h-auto justify-start text-left flex items-center p-3 rounded-xl transition-all border cursor-pointer${
                               isSelected
-                                ? "bg-white/10 border-white/20 hover:bg-white/10"
-                                : "bg-transparent border-transparent hover:bg-white/5"
+                                ? "bg-white/10 border-white/20 hover:bg-white/10 cursor-pointer"
+                                : "bg-transparent border-transparent hover:bg-white/5 cursor-pointer"
                             }`}
                           >
                             <History className={`w-5 h-5 mr-3 ${isSelected ? "text-blue-400" : "text-gray-500"}`} />

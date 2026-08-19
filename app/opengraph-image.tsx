@@ -1,5 +1,7 @@
 import { ImageResponse } from 'next/og';
-import { SITE_URL } from '@/constants/site';
+
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -9,26 +11,13 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   try {
-    // We use Node.js runtime (50MB limit) to avoid Vercel's strict 1MB Edge function limit.
-    // Fetch local images securely via Vercel's network to bypass Node File Trace issues.
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : SITE_URL;
-
-
-    // Fetch a tiny, highly-compressed version to stretch and simulate a backdrop blur!
-    // Next.js restricts the 'q' parameter, so we use 75 to avoid 400 Bad Request errors.
-    const blurRes = await fetch(new URL('/_next/image?url=%2Fimages%2Futtarakhand_3.png&w=48&q=75', baseUrl));
-    if (!blurRes.ok) throw new Error(`Failed to fetch blur image: ${await blurRes.text()}`);
-    const blurContentType = blurRes.headers.get('content-type') || 'image/jpeg';
-    const blurBuffer = await blurRes.arrayBuffer();
-    const blurBase64 = `data:${blurContentType};base64,${Buffer.from(blurBuffer).toString('base64')}`;
-
-    const logoRes = await fetch(new URL('/images/logo1.png', baseUrl));
-    if (!logoRes.ok) throw new Error(`Failed to fetch logo: ${await logoRes.text()}`);
-    const logoContentType = logoRes.headers.get('content-type') || 'image/png';
-    const logoBuffer = await logoRes.arrayBuffer();
-    const logoBase64 = `data:${logoContentType};base64,${Buffer.from(logoBuffer).toString('base64')}`;
+    let logoBase64 = '';
+    try {
+      const logoBuffer = readFileSync(join(process.cwd(), 'public/images/logo1.png'));
+      logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    } catch (e) {
+      console.error('Failed to read logo via fs', e);
+    }
 
     return new ImageResponse(
       (
@@ -40,18 +29,15 @@ export default async function Image() {
             position: 'relative',
           }}
         >
-          {/* Layer 1: The blurred, stretched background filling the entire canvas */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={blurBase64}
-            alt="Background"
+          {/* Layer 1: Dark gradient background replacing the fetched image */}
+          <div
             style={{
               position: 'absolute',
               left: 0,
               top: 0,
               width: '1200px',
               height: '630px',
-              objectFit: 'cover',
+              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
             }}
           />
 

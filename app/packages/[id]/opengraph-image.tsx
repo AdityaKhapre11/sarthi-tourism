@@ -1,6 +1,5 @@
 import { ImageResponse } from 'next/og';
 import { createClient } from '@supabase/supabase-js';
-import { SITE_URL } from '@/constants/site';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -35,21 +34,15 @@ export default async function Image({
     console.error('Error fetching package for OG image:', error);
   }
 
-  // Fetch the logo as base64
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : SITE_URL;
-
+  // Fetch the logo as base64 using fs
   let logoBase64 = '';
   try {
-    const logoRes = await fetch(new URL('/images/logo1.png', baseUrl));
-    if (logoRes.ok) {
-      const logoContentType = logoRes.headers.get('content-type') || 'image/png';
-      const logoBuffer = await logoRes.arrayBuffer();
-      logoBase64 = `data:${logoContentType};base64,${Buffer.from(logoBuffer).toString('base64')}`;
-    }
-  } catch {
-    // Logo fetch failed, continue without it
+    const { readFileSync } = await import('fs');
+    const { join } = await import('path');
+    const logoBuffer = readFileSync(join(process.cwd(), 'public/images/logo1.png'));
+    logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+  } catch (e) {
+    console.error('Failed to read logo for package OG', e);
   }
 
   // Fetch the package cover image as base64

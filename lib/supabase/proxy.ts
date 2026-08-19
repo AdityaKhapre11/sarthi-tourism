@@ -40,7 +40,7 @@ export async function updateSession(request: NextRequest) {
   // Define protected routes
   const isProtectedAdminRoute = pathname.startsWith('/admin');
   const isProtectedDashboardRoute = pathname.startsWith('/dashboard');
-  const isProtectedPackageRoute = pathname.startsWith('/packages/') && pathname !== '/packages';
+  const isProtectedPackageRoute = pathname.startsWith('/packages/') && pathname !== '/packages' && !pathname.endsWith('/opengraph-image');
   const isProfileRoute = pathname.startsWith('/profile');
 
   // Allow social media crawlers & bots through protected package routes

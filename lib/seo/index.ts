@@ -47,15 +47,21 @@ export function generatePageMetadata({
     "customized travel agency Gujarat",
   ];
 
-  const metaTitle = title ? `${title} | Sarthi Tourism` : defaultTitle;
+  const metaTitle = title ? title : defaultTitle;
   const metaDescription = description || defaultDescription;
   const canonicalUrl = `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
   const metaKeywords = Array.from(new Set([...defaultKeywords, ...keywords]));
 
   const image = resolveOgImageUrl(ogImage);
+  
+  // If no title is passed (like on the homepage), we want to use the defaultTitle absolutely
+  // so that Next.js doesn't append " | Sarthi Tourism" to it.
+  const titleConfig = title ? metaTitle : { absolute: defaultTitle };
+  // The OG and Twitter titles should always be the full string because they don't use the layout template automatically in all platforms
+  const fullMetaTitle = title ? `${title} | Sarthi Tourism` : defaultTitle;
 
   const openGraph: Metadata['openGraph'] = {
-    title: metaTitle,
+    title: fullMetaTitle,
     description: metaDescription,
     url: canonicalUrl,
     siteName: "Sarthi Tourism",
@@ -66,21 +72,21 @@ export function generatePageMetadata({
         url: image,
         width: 1200,
         height: 630,
-        alt: metaTitle,
+        alt: fullMetaTitle,
       },
     ],
   };
 
   const twitter: Metadata['twitter'] = {
     card: "summary_large_image",
-    title: metaTitle,
+    title: fullMetaTitle,
     description: metaDescription,
     images: [image],
   };
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: metaTitle,
+    title: titleConfig,
     description: metaDescription,
     keywords: metaKeywords,
     authors: [{ name: "Sarthi Tourism", url: SITE_URL }],
@@ -115,7 +121,7 @@ export function generatePackageMetadata(pkg: {
   highlights?: string[];
 }): Metadata {
   const cleanName = pkg.name.trim();
-  const title = `${cleanName} Tour Package from  & Gujarat | Sarthi Tourism`;
+  const title = `${cleanName} Tour Package`;
 
   const formattedPrice = pkg.price ? ` starting at ${pkg.price}` : '';
   const formattedDuration = pkg.duration ? ` (${pkg.duration})` : '';

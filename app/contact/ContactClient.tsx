@@ -283,7 +283,7 @@ export default function ContactClient() {
             {/* Map Container */}
             <div className="bg-card/80 dark:bg-white/[0.03] backdrop-blur-2xl border border-border dark:border-white/10 rounded-[2rem] shadow-2xl p-4 overflow-hidden h-[300px] sm:h-[400px] relative">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3683.4243884488316!2d72.8596!3d22.7000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDQyJzAwLjAiTiA3MsKwNTEnMzQuNiJF!5e0!3m2!1sen!2sin!4v1655000000000!5m2!1sen!2sin" 
+                src="https://maps.google.com/maps?q=Sarthi+Tourism,+Siddhi+Vinayak+Complex,+Mission+Rd,+Nadiad,+Gujarat+387002&t=&z=16&ie=UTF8&iwloc=&output=embed" 
                 className="w-full h-full rounded-2xl border-0" 
                 allowFullScreen={true} 
                 loading="lazy" 
@@ -291,7 +291,7 @@ export default function ContactClient() {
                 title="Sarthi Tourism Location"
               />
               <a 
-                href="https://www.google.com/maps/search/?api=1&query=105,+Siddhivinayak+Complex,+Mission+Road,+Nadiad+387002"
+                href="https://www.google.com/maps/dir//Ground+Floor,+Sarthi+Tourism,+Siddhi+Vinayak+Complex,+105,+Mission+Rd,+opposite+DDMM+Hospital,+Nadiad,+Gujarat+387002/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x395e5b69f4411553:0xc1b1b97ada3bea96?sa=X&ved=1t:57443&ictx=111"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute bottom-8 right-8 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 font-semibold px-4 py-2 rounded-lg shadow-lg text-sm hover:scale-105 transition-transform flex items-center gap-2"

@@ -90,7 +90,7 @@ export default function RegisterIndex() {
   };
 
   return (
-    <div className="h-[100vh] overflow-y-auto lg:overflow-hidden flex w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
+    <div className="h-[100dvh] overflow-y-auto overflow-x-hidden lg:overflow-hidden flex w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
       {/* Left Side - Image/Branding */}
       <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-r border-white/5 p-12">
         <div className="absolute inset-0">
@@ -118,20 +118,22 @@ export default function RegisterIndex() {
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-start p-8 sm:p-12 lg:p-24 relative lg:overflow-hidden overflow-y-auto lg:pt-20 xl:pt-28">
+      <div className="w-full lg:w-1/2 flex flex-col justify-start p-8 sm:p-12 lg:p-24 relative lg:overflow-hidden overflow-y-auto overflow-x-hidden lg:pt-20 xl:pt-28">
         {/* Subtle background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10 mx-auto pb-8 lg:pb-0">
           <div className="mb-8">
             {/* Mobile Logo */}
-            <Image
-              src="/images/logo1.png"
-              alt="Sarthi Tourism"
-              width={220}
-              height={46}
-              className="object-contain mix-blend-screen opacity-90 mb-10 lg:hidden"
-            />
+            <div className="flex justify-center w-full lg:hidden mb-10">
+              <Image
+                src="/images/logo1.png"
+                alt="Sarthi Tourism"
+                width={220}
+                height={46}
+                className="object-contain mix-blend-screen opacity-90"
+              />
+            </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">Create Account</h2>
             <p className="text-gray-400 text-lg">Sign up to get started.</p>
           </div>

@@ -40,6 +40,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 50);
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

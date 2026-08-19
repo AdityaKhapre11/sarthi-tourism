@@ -52,7 +52,8 @@ export async function updateSession(request: NextRequest) {
       'facebookexternalhit', 'twitterbot', 'linkedinbot', 'whatsapp',
       'slackbot', 'telegrambot', 'discordbot', 'googlebot', 'bingbot',
       'applebot', 'ia_archiver', 'embedly', 'showyoubot', 'rogerbot',
-      'quora link preview',
+      'quora link preview', 'vercel', 'next.js', 'validator', 'axios',
+      'curl', 'lighthouse', 'chrome-lighthouse', 'postman', 'node-fetch'
     ];
     if (BOT_PATTERNS.some((p) => ua.includes(p))) {
       return NextResponse.next({ request });

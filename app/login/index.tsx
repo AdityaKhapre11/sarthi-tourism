@@ -101,10 +101,10 @@ export default function AdminLoginIndex() {
       }
 
       if (data.user) {
-        // Fetch user profile from public.users to check custom email_verified status and role
+        // Fetch user profile from public.users to check role
         const { data: profile } = await supabase
           .from("users")
-          .select("role, email_verified")
+          .select("role")
           .eq("id", data.user.id)
           .maybeSingle();
 
@@ -112,10 +112,9 @@ export default function AdminLoginIndex() {
         const role = profile?.role || "user";
 
         // 2. Enforce email verification ONLY for non-admin users
-        if (role !== "admin" && profile && profile.email_verified === false) {
+        if (role !== "admin" && !data.user.email_confirmed_at) {
           await supabase.auth.signOut();
-          setError("Please verify your email address before logging in.");
-          setLoading(false);
+          router.push(`/verify-email?email=${encodeURIComponent(email)}`);
           return;
         }
 

@@ -41,6 +41,24 @@ export default function RegisterIndex() {
     checkUser();
   }, [supabase.auth, redirectUrl]);
 
+  useEffect(() => {
+    // Hide scrollbar globally for the auth page to allow clean native document scrolling
+    document.documentElement.style.scrollbarWidth = 'none';
+    const style = document.createElement('style');
+    style.id = 'auth-hide-scrollbar';
+    style.innerHTML = `
+      body::-webkit-scrollbar { display: none !important; }
+      html::-webkit-scrollbar { display: none !important; }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.documentElement.style.scrollbarWidth = '';
+      const existing = document.getElementById('auth-hide-scrollbar');
+      if (existing) existing.remove();
+    };
+  }, []);
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -80,8 +98,8 @@ export default function RegisterIndex() {
         return;
       }
 
-      toast.success("Account created successfully! Please check your email to verify your account before logging in.");
-      router.push("/login?registered=true");
+      toast.success("Account created successfully! Please check your email for the verification code.");
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch {
       setError("An error occurred during registration. Please try again.");
     } finally {
@@ -90,9 +108,9 @@ export default function RegisterIndex() {
   };
 
   return (
-    <div className="h-[100dvh] overflow-y-auto overflow-x-hidden lg:overflow-hidden flex w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
+    <div className="min-h-screen flex flex-col lg:flex-row w-full bg-background text-foreground font-sans selection:bg-primary/30 selection:text-white">
       {/* Left Side - Image/Branding */}
-      <div className="hidden lg:flex w-1/2 relative flex-col justify-center items-center overflow-hidden border-r border-white/5 p-12">
+      <div className="hidden lg:flex w-full lg:w-1/2 relative flex-col justify-center items-center overflow-hidden border-r border-white/5 p-12 lg:sticky lg:top-0 lg:h-screen">
         <div className="absolute inset-0">
           <Image
             src="/images/dubai.png"
@@ -118,11 +136,11 @@ export default function RegisterIndex() {
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-start p-8 sm:p-12 lg:p-24 relative lg:overflow-hidden overflow-y-auto overflow-x-hidden lg:pt-20 xl:pt-28">
+      <div className="w-full lg:w-1/2 flex flex-col justify-start p-8 sm:p-12 lg:p-24 relative overflow-x-hidden min-h-screen">
         {/* Subtle background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="w-full max-w-md relative z-10 mx-auto pb-8 lg:pb-0">
+        <div className="w-full max-w-md relative z-10 mx-auto my-auto py-8">
           <div className="mb-8">
             {/* Mobile Logo */}
             <div className="flex justify-center w-full lg:hidden mb-10">

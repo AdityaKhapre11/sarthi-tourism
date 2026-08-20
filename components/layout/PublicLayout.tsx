@@ -15,7 +15,7 @@ export function PublicLayout({
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isPolicyPage = pathname === "/privacy-policy" || pathname === "/terms-of-service";
-  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname === "/reset-password";
+  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname === "/reset-password" || pathname === "/verify-email";
   const hideHeaderFooter = isAdmin || isPolicyPage || isAuthPage;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 

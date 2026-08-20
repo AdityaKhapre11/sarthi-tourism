@@ -61,19 +61,17 @@ export async function updateSession(request: NextRequest) {
   }
 
   
-  // Check role and custom email_verified status if we have a user
+  // Check role if we have a user
   let userRole = null;
   let isEmailVerified = true;
   if (user) {
     const { data: profile } = await supabase
       .from('users')
-      .select('role, email_verified')
+      .select('role')
       .eq('id', user.id)
       .maybeSingle();
     userRole = profile?.role || 'user';
-    if (profile && profile.email_verified === false) {
-      isEmailVerified = false;
-    }
+    isEmailVerified = !!user.email_confirmed_at;
   }
 
   if (isProtectedAdminRoute || isProtectedDashboardRoute || isProtectedPackageRoute || isProfileRoute) {
@@ -86,10 +84,11 @@ export async function updateSession(request: NextRequest) {
     }
 
     if (!isEmailVerified && userRole !== 'admin') {
-      // Non-admin user has not verified their email via Nodemailer custom flow
+      // Non-admin user has not verified their email
       const url = request.nextUrl.clone()
-      url.pathname = '/login'
-      url.searchParams.set('error', 'unverified_email')
+      url.pathname = '/verify-email'
+      if (user.email) url.searchParams.set('email', user.email)
+      url.searchParams.set('redirect', pathname)
       return NextResponse.redirect(url)
     }
 

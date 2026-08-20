@@ -4,9 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Loader2, Mail, ArrowRight, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui";
-import { createClient } from "@/lib/supabase/client";
+import { Loader2, Mail, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 export default function VerifyEmailClient() {
@@ -31,6 +29,12 @@ export default function VerifyEmailClient() {
     const newOtp = [...otp];
     newOtp[index] = digit;
     setOtp(newOtp);
+    
+    const currentToken = newOtp.join("");
+    if (currentToken.length === 6 && email && !loading) {
+      verifySubmit(currentToken);
+    }
+
     if (digit !== "" && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -60,6 +64,12 @@ export default function VerifyEmailClient() {
       newOtp[i] = pastedData[i];
     }
     setOtp(newOtp);
+    
+    const currentToken = newOtp.join("");
+    if (currentToken.length === 6 && email && !loading) {
+      verifySubmit(currentToken);
+    }
+
     const focusIndex = Math.min(5, pastedData.length);
     if (focusIndex < 6 && pastedData.length < 6) {
       inputRefs.current[focusIndex]?.focus();
@@ -68,7 +78,6 @@ export default function VerifyEmailClient() {
     }
   };
 
-  const supabase = createClient();
 
   useEffect(() => {
     // If we have a cooldown, tick it down every second
@@ -117,12 +126,7 @@ export default function VerifyEmailClient() {
     }
   };
 
-  useEffect(() => {
-    const currentToken = otp.join("");
-    if (currentToken.length === 6 && email && !loading) {
-      verifySubmit(currentToken);
-    }
-  }, [otp]);
+
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,7 +224,7 @@ export default function VerifyEmailClient() {
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">Verify your email</h2>
             <p className="text-gray-400 text-lg">
-              We've sent a 6-digit verification code to <br className="hidden lg:block"/>
+              We&apos;ve sent a 6-digit verification code to <br className="hidden lg:block"/>
               <span className="font-semibold text-white">{email || "your email address"}</span>
             </p>
           </div>
@@ -290,7 +294,7 @@ export default function VerifyEmailClient() {
 
           <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 text-sm">Didn't receive the code?</span>
+              <span className="text-gray-400 text-sm">Didn&apos;t receive the code?</span>
               <button
                 type="button"
                 onClick={handleResend}

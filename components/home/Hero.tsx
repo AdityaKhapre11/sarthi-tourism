@@ -10,14 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const heroImages = [
-  "/images/hero.png",
-  "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&q=80&w=1920", // Kerala Backwaters, India
-  "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&q=80&w=1920", // Goa, India
-  "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&q=80&w=1920", // Ladakh, India
-];
-
-export function Hero() {
+export function Hero({ heroImages }: { heroImages?: string[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -29,12 +22,18 @@ export function Hero() {
     lenis?.scrollTo(target, { offset: -80 });
   };
 
+  const imagesToDisplay = heroImages && heroImages.length > 0 
+    ? heroImages 
+    : ["/images/hero.png"]; // Safe fallback if no images are in DB yet
+
   useEffect(() => {
+    if (imagesToDisplay.length <= 1) return; // No need to cycle if only 1 image
+
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % heroImages.length);
+      setCurrentIndex((prev) => (prev + 1) % imagesToDisplay.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [imagesToDisplay.length]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -79,7 +78,7 @@ export function Hero() {
             className="absolute inset-0"
           >
             <Image
-              src={heroImages[currentIndex]}
+              src={imagesToDisplay[currentIndex]}
               alt={`Sarthi Tourism Premium Travel Destination - Breathtaking views ${currentIndex + 1}`}
               fill
               className="object-cover"

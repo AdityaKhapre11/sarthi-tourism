@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Hero } from "@/components/home";
 import dynamic from "next/dynamic";
+import { getHomeSettings } from "@/app/admin/home/actions";
 
 const PopularDestinations = dynamic(() => import("@/components/home").then(mod => mod.PopularDestinations), { ssr: true });
 const WhyChooseUs = dynamic(() => import("@/components/home").then(mod => mod.WhyChooseUs), { ssr: true });
@@ -44,13 +45,18 @@ export default async function HomeIndex() {
     itinerary: pkg.itinerary?.sort((a: { day: number }, b: { day: number }) => a.day - b.day) || []
   }));
 
+  const { images } = await getHomeSettings();
+  
+  // Pass all uploaded images for the automatic sliding carousel.
+  const heroImageToPass = images && images.length > 0 ? images : undefined;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Hero />
+      <Hero heroImages={heroImageToPass} />
       <PopularDestinations />
       <WhyChooseUs />
       <FeaturedPackages initialPackages={formattedPackages} />

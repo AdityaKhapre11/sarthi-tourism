@@ -7,7 +7,8 @@ import {
   Map,
   MessageSquare,
   Settings,
-  LogOut
+  LogOut,
+  Home
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui";
@@ -25,6 +26,7 @@ export function Sidebar() {
     { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
     { name: "Packages", href: "/admin/packages", icon: Map },
     { name: "Inquiries", href: "/admin/inquiries", icon: MessageSquare },
+    { name: "Home Page", href: "/admin/home", icon: Home },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
 

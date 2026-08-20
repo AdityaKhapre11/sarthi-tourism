@@ -123,8 +123,9 @@ export default async function RootLayout({
         </SmoothScroll>
         <div id="modal-root" className="relative z-[9999]"></div>
         <Toaster 
-          position="top-center" 
+          position="bottom-right" 
           theme="dark"
+          style={{ zIndex: 99999 }}
           toastOptions={{
             classNames: {
               toast: 'backdrop-blur-xl border',

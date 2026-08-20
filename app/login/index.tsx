@@ -229,7 +229,12 @@ export default function AdminLoginIndex() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">Password</label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wider">Password</label>
+                <Link href="/forgot-password" className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors cursor-pointer">
+                  Forgot Password?
+                </Link>
+              </div>
               <div className="relative group">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -243,7 +248,7 @@ export default function AdminLoginIndex() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-black transition-colors focus:outline-none"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition-colors focus:outline-none"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>

@@ -16,6 +16,8 @@ export default async function PackagesPage({
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
+  const category = typeof resolvedParams.category === "string" ? resolvedParams.category : undefined;
+
   let packages: Package[] = [];
   let totalItems = 0;
   let totalPages = 0;
@@ -26,9 +28,16 @@ export default async function PackagesPage({
 
     if (supabaseUrl && supabaseAnonKey) {
       const supabase = createClient(supabaseUrl, supabaseAnonKey);
-      const { data, count, error } = await supabase
+      
+      let query = supabase
         .from("packages")
-        .select("*", { count: 'exact' })
+        .select("*", { count: 'exact' });
+        
+      if (category && category !== "All") {
+        query = query.eq("category", category);
+      }
+
+      const { data, count, error } = await query
         .order("created_at", { ascending: false })
         .range(from, to);
 
@@ -50,7 +59,8 @@ export default async function PackagesPage({
       currentPage={page} 
       totalPages={totalPages} 
       totalItems={totalItems} 
-      limit={limit} 
+      limit={limit}
+      category={category}
     />
   );
 }

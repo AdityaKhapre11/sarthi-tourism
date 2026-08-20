@@ -16,6 +16,7 @@ import { MediaSection } from "./MediaSection";
 export interface PackageFormData {
   id?: number;
   name: string;
+  category: string;
   duration: string;
   price: string;
   image: string;
@@ -37,6 +38,7 @@ interface PackageFormProps {
 
 const defaultFormData: PackageFormData = {
   name: "",
+  category: "International",
   duration: "",
   price: "",
   image: "",
@@ -130,16 +132,30 @@ export function PackageForm({
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Package Name</label>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white placeholder-gray-600"
-                placeholder="e.g. Majestic Dubai Tour"
-              />
+            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Package Name</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white placeholder-gray-600"
+                  placeholder="e.g. Majestic Dubai Tour"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">Category</label>
+                <select
+                  required
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white"
+                >
+                  <option value="International">International</option>
+                  <option value="Domestic">Domestic</option>
+                </select>
+              </div>
             </div>
 
             <div>

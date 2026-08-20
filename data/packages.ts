@@ -10,6 +10,7 @@ export interface Package {
   image: string;
   duration: string;
   price: string;
+  category?: string;
   highlights?: string[];
   description?: string;
   itinerary?: ItineraryItem[];

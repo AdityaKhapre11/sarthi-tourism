@@ -56,9 +56,9 @@ export function generatePageMetadata({
   
   // If no title is passed (like on the homepage), we want to use the defaultTitle absolutely
   // so that Next.js doesn't append " | Sarthi Tourism" to it.
-  const titleConfig = title ? metaTitle : { absolute: defaultTitle };
+  const titleConfig = { absolute: metaTitle };
   // The OG and Twitter titles should always be the full string because they don't use the layout template automatically in all platforms
-  const fullMetaTitle = title ? `${title} | Sarthi Tourism` : defaultTitle;
+  const fullMetaTitle = title ? (title.includes("Sarthi") ? title : `${title} | Sarthi Tourism`) : defaultTitle;
 
   const openGraph: Metadata['openGraph'] = {
     title: fullMetaTitle,

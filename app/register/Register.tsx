@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
@@ -139,6 +139,16 @@ export default function RegisterIndex() {
       <div className="w-full lg:w-1/2 flex flex-col justify-start p-8 sm:p-12 lg:p-24 relative overflow-x-hidden min-h-screen">
         {/* Subtle background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
+
+        {/* Back Button */}
+        <button
+          onClick={() => router.back()}
+          type="button"
+          className="absolute top-6 left-6 sm:top-10 sm:left-10 lg:top-12 lg:left-12 z-20 flex items-center gap-2 text-gray-400 hover:text-white transition-colors cursor-pointer group"
+        >
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium text-sm sm:text-base">Back</span>
+        </button>
 
         <div className="w-full max-w-md relative z-10 mx-auto my-auto py-8">
           <div className="mb-8">

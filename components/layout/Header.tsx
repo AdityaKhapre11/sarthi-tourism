@@ -163,7 +163,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-8 lg:flex">
             {["Home", "About Us", "Packages", "Contact Us"].map((item) => {
-              const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/contact";
+              const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/about-us" : "/contact";
               const hashId = target.startsWith("/#") ? target.substring(1) : "";
 
               let isActive = false;
@@ -172,7 +172,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               } else if (item === "Packages") {
                 isActive = pathname.startsWith("/packages") || (pathname === "/" && activeSection === "packages");
               } else if (item === "About Us") {
-                isActive = pathname === "/" && activeSection === "about";
+                isActive = pathname === "/about-us";
               } else if (item === "Contact Us") {
                 isActive = pathname === "/contact" || (pathname === "/" && activeSection === "contact");
               }
@@ -376,7 +376,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
       >
         <div className="flex flex-col gap-6 sm:gap-8 text-center w-full px-6">
           {["Home", "Packages", "About Us", "Contact Us"].map((item, index) => {
-            const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/#about" : "/contact";
+            const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "About Us" ? "/about-us" : "/contact";
             const hashId = target.startsWith("/#") ? target.substring(1) : "";
             return (
               <Link

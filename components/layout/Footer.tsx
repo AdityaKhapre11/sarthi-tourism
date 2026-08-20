@@ -52,7 +52,7 @@ export function Footer({ featuredPackages = [] }: { featuredPackages?: {name: st
             <h4 className="text-white font-bold font-heading text-lg mb-6 tracking-wide">Explore</h4>
             <ul className="space-y-3">
               {["Home", "Packages", "About", "Contact"].map((item) => {
-                const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "Contact" ? "/contact" : `/#${item.toLowerCase()}`;
+                const target = item === "Home" ? "/" : item === "Packages" ? "/packages" : item === "Contact" ? "/contact" : item === "About" ? "/about-us" : `/#${item.toLowerCase()}`;
                 const hashId = target.startsWith("/#") ? target.substring(1) : "";
                 return (
                   <li key={item}>

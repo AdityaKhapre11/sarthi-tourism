@@ -53,7 +53,7 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
       </section>
 
       {/* 2. About Sarthi Tourism */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="pb-24 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px] -z-10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
@@ -64,7 +64,7 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
               <h2 className="text-3xl md:text-5xl font-bold font-heading mb-8 text-white leading-tight">
                 {aboutData.introduction.title}
               </h2>
-              <div className="space-y-6 text-gray-400 text-lg leading-relaxed font-light">
+              <div className="space-y-6 text-gray-400 text-lg leading-relaxed font-light text-justify">
                 {aboutData.introduction.content.map((paragraph, idx) => (
                   <p key={idx}>{paragraph}</p>
                 ))}

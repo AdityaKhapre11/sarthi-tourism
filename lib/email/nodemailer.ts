@@ -20,7 +20,7 @@ interface SendPasswordResetEmailOptions {
   resetUrl: string;
 }
 
-export function getTransporter() {
+function getTransporter() {
   const host = process.env.SMTP_HOST || "smtp.gmail.com";
   const port = parseInt(process.env.SMTP_PORT || "587", 10);
   const user = process.env.SMTP_USER || "";

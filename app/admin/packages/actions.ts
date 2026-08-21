@@ -4,42 +4,6 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { PackageFormData } from '@/components/admin/packages/PackageForm';
 
-export async function uploadImage(formData: FormData) {
-  try {
-    const file = formData.get("file") as File;
-    const folder = (formData.get("folder") as string) || "packages";
-    if (!file) {
-      return { success: false, error: "No file provided" };
-    }
-    
-    const supabase = await createClient();
-    const filename = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-    
-    const { error } = await supabase
-      .storage
-      .from('sarthi-tourism-media')
-      .upload(filename, file, {
-        cacheControl: '3600',
-        upsert: false
-      });
-
-    if (error) {
-      console.error("Supabase storage error:", error);
-      return { success: false, error: "Failed to upload image to Supabase" };
-    }
-    
-    const { data: publicUrlData } = supabase
-      .storage
-      .from('sarthi-tourism-media')
-      .getPublicUrl(filename);
-      
-    return { success: true, url: publicUrlData.publicUrl };
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    return { success: false, error: "Failed to upload image" };
-  }
-}
-
 export async function updatePackage(id: string, data: PackageFormData | Record<string, unknown>) {
   try {
     const supabase = await createClient();

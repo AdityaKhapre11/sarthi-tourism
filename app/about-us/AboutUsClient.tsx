@@ -26,19 +26,22 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-          <div className="absolute inset-0 bg-black/40" />
+
         </div>
-        
+
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-20">
-          <motion.h1 
+          <span className="text-blue-500 dark:text-blue-400 font-semibold tracking-wider uppercase text-md">
+            About Us
+          </span>
+          <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white mb-6 tracking-tight"
+            className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white mb-6 mt-3 tracking-tight"
           >
             {aboutData.hero.title}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -73,9 +76,8 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
                   src={aboutData.introduction.image}
                   alt="Who we are"
                   fill
-                  className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105"
+                  className="object-cover duration-500 "
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>
           </div>
@@ -87,7 +89,7 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
         <div className="absolute inset-0 bg-blue-950/30 border-y border-white/5" />
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
-            
+
             <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-colors">
               <div className="text-4xl md:text-5xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">
                 100+
@@ -148,10 +150,10 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
       {/* 5. Our Services & Why Travel With Us Split */}
       <section className="py-24 relative overflow-hidden">
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-900/10 rounded-full blur-[100px] -z-10 -translate-x-1/3 translate-y-1/3 pointer-events-none" />
-        
+
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
-            
+
             {/* Services */}
             <div className="w-full lg:w-1/2">
               <span className="text-blue-400 font-semibold tracking-wider uppercase text-sm mb-3 block">
@@ -196,7 +198,7 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
                 </ul>
               </div>
             </div>
-            
+
           </div>
         </div>
       </section>
@@ -227,20 +229,19 @@ export default function AboutUsClient({ stats }: AboutUsClientProps) {
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-blue-950/20 border-t border-white/5" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
-        
+
         <div className="container mx-auto px-4 max-w-4xl text-center relative z-10">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading mb-8 text-white tracking-tight">{aboutData.cta.heading}</h2>
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto font-light leading-relaxed">{aboutData.cta.description}</p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             {aboutData.cta.buttons.map((btn, idx) => (
-              <Link 
-                key={idx} 
+              <Link
+                key={idx}
                 href={btn.href}
-                className={`inline-flex items-center justify-center font-bold tracking-wider uppercase transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background ${
-                  btn.variant === 'default' 
-                    ? "bg-blue-600 hover:bg-blue-500 text-white text-sm h-14 px-10 rounded-full shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1 w-full sm:w-auto" 
+                className={`inline-flex items-center justify-center font-bold tracking-wider uppercase transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background ${btn.variant === 'default'
+                    ? "bg-blue-600 hover:bg-blue-500 text-white text-sm h-14 px-10 rounded-full shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:-translate-y-1 w-full sm:w-auto"
                     : "bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 backdrop-blur-md text-sm h-14 px-10 rounded-full w-full sm:w-auto hover:-translate-y-1"
-                }`}
+                  }`}
               >
                 {btn.label}
               </Link>

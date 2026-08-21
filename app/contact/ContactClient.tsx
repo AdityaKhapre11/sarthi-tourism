@@ -134,7 +134,7 @@ export default function ContactClient() {
           alt="Contact Us Background"
           fill
           priority
-          className="object-cover opacity-60 dark:opacity-30 mix-blend-overlay"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-background/80 to-background" />
       </div>
@@ -146,7 +146,7 @@ export default function ContactClient() {
             Get in Touch
           </span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-foreground mt-4 mb-6 tracking-tight">
-            Contact Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-400">Experts</span>
+            Contact Our Experts
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Have a question about our tour packages or need help planning your next adventure? Our team is here to assist you.
@@ -163,7 +163,7 @@ export default function ContactClient() {
             className="lg:col-span-7 bg-card/80 dark:bg-white/[0.03] backdrop-blur-2xl border border-border dark:border-white/10 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative overflow-hidden"
           >
             {/* Subtle Glow Background */}
-            <div className="absolute -top-32 -left-32 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]" />
+            {/* <div className="absolute -top-32 -left-32 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]" /> */}
 
             <h2 className="text-2xl font-bold text-foreground mb-8 relative z-10">Send us a Message</h2>
             
@@ -301,7 +301,7 @@ export default function ContactClient() {
             </div>
 
             {/* Contact Info Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4">
               <div className="bg-card/80 dark:bg-white/[0.03] backdrop-blur-xl border border-border dark:border-white/10 p-6 rounded-3xl shadow-lg flex flex-col items-center text-center hover:bg-card dark:hover:bg-white/[0.05] transition-colors">
                 <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center mb-4">
                   <Phone className="w-5 h-5" />
@@ -318,7 +318,7 @@ export default function ContactClient() {
                 <p className="text-muted-foreground text-sm font-medium">info@sarthitourism.com</p>
               </div>
               
-              <div className="bg-card/80 dark:bg-white/[0.03] backdrop-blur-xl border border-border dark:border-white/10 p-6 rounded-3xl shadow-lg flex flex-col items-center text-center hover:bg-card dark:hover:bg-white/[0.05] transition-colors sm:col-span-2">
+              <div className="bg-card/80 dark:bg-white/[0.03] backdrop-blur-xl border border-border dark:border-white/10 p-6 rounded-3xl shadow-lg flex flex-col items-center text-center hover:bg-card dark:hover:bg-white/[0.05] transition-colors sm:col-span-2 md:col-span-1 lg:col-span-2">
                 <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center mb-4">
                   <MapPin className="w-5 h-5" />
                 </div>

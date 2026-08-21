@@ -50,7 +50,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
       const { data } = await supabase.auth.getSession();
       setUser(data.session?.user || null);
     };
-    
+
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
@@ -73,7 +73,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
       document.body.style.touchAction = "";
       lenis?.start();
     }
-    
+
     return () => {
       document.body.style.overflow = "";
       document.body.style.touchAction = "";
@@ -218,7 +218,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all overflow-hidden border border-white/20"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all overflow-hidden border border-white/20 cursor-pointer"
                 >
                   {user.user_metadata?.avatar_url ? (
                     <Image src={user.user_metadata.avatar_url} alt="Profile" width={40} height={40} className="w-full h-full object-cover" />
@@ -262,7 +262,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
                 )}
               </div>
             ) : (
-              <Button 
+              <Button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   router.push("/login");
@@ -299,7 +299,7 @@ export function Header({ onOpenSearch }: HeaderProps = {}) {
                 >
                   <Search className="h-6 w-6" />
                 </Button>
-                
+
                 {user && (
                   <div className="relative z-50" ref={mobileDropdownRef}>
                     <button

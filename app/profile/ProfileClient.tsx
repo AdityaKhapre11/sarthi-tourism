@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Shield, Calendar, ArrowLeft, Camera, Loader2, LogOut, MapPin, Phone, User as UserIcon, Edit } from "lucide-react";
+import { Mail, Shield, Calendar, ArrowLeft, Camera, Loader2, LogOut, MapPin, Phone, User as UserIcon, Edit, CheckCircle2, XCircle, KeyRound, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import { createClient } from "@/lib/supabase/client";
@@ -36,11 +36,9 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
     dob: user.user_metadata?.dob || "",
   });
 
-  // Use optimistic name for the header title if editing but not yet saved,
-  // or use the current metadata if not. Actually, let's keep the header reflecting real saved data,
-  // or optimistic if we manually update it on save. We refresh on save anyway.
-
   const currentAvatar = previewUrl || user.user_metadata?.avatar_url;
+  const isVerified = !!user.email_confirmed_at;
+  const joinedDate = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : "Recently";
 
   const compressImage = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
@@ -158,9 +156,6 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
 
       toast.success("Profile photo updated successfully!");
       setFileToUpload(null);
-      // Notice we are intentionally NOT setting previewUrl to null here.
-      // This keeps the optimistic UI image active on the screen perfectly without reloading!
-      // And we avoid router.refresh() which would cause a full page reload and screen flicker.
       
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "An error occurred while uploading";
@@ -238,277 +233,300 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
     return "U";
   };
 
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-foreground font-sans relative overflow-hidden py-24 px-6">
+    <div className="min-h-screen bg-[#020617] text-white pt-48 pb-16 px-4 sm:px-6 relative overflow-hidden font-sans">
       {/* Background elements */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/dubai.png"
-          alt="Background"
-          fill
-          className="object-cover opacity-30 mix-blend-luminosity scale-105 blur-sm"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-blue-600/30 blur-[150px] rounded-[100%]" />
       </div>
 
-      {/* Decorative Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none z-0" />
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="mb-8 ">
+          <Link href="/" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-medium text-sm">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+          <h1 className="text-3xl sm:text-4xl font-bold mt-4 tracking-tight">My Profile</h1>
+        </div>
 
-      <div className="w-full max-w-4xl relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 pt-28">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8 font-medium">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Home
-        </Link>
-
-        <div className="bg-white/[0.02] backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 sm:p-12 shadow-2xl overflow-hidden relative">
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-600/20 to-transparent" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          <div className="relative flex flex-col sm:flex-row items-center sm:items-start gap-8 z-10">
-            {/* Avatar */}
-            <div className="w-32 h-32 rounded-full border-4 border-background/50 shadow-2xl overflow-hidden bg-blue-600 flex items-center justify-center shrink-0 relative group">
-              {currentAvatar ? (
-                <Image src={currentAvatar} alt="Profile" fill className="object-cover" />
-              ) : (
-                <span className="text-5xl font-bold text-white">{getInitials(user.user_metadata?.full_name, user.email)}</span>
-              )}
-
-              {/* Upload Overlay */}
-              <div 
-                className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                onClick={() => !isUploading && fileInputRef.current?.click()}
-              >
-                {isUploading ? (
-                  <Loader2 className="w-8 h-8 text-white animate-spin" />
-                ) : (
-                  <Camera className="w-8 h-8 text-white" />
-                )}
-              </div>
-            </div>
+          {/* Left Column (Header Card & Actions) */}
+          <div className="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
             
-            <input 
-              type="file" 
-              ref={fileInputRef} 
-              className="hidden" 
-              accept="image/png, image/jpeg, image/jpg, image/webp"
-              onChange={handleFileSelect}
-              disabled={isUploading}
-            />
-
-            {/* Main Info */}
-            <div className="flex-1 text-center sm:text-left pt-2">
-              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">{user.user_metadata?.full_name || "User"}</h1>
+            {/* Main Profile Card */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl flex flex-col items-center text-center relative overflow-hidden h-full">
+              <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-blue-600/20 to-transparent" />
               
-              <div className="inline-flex items-center justify-center sm:justify-start gap-2 bg-blue-500/10 text-blue-400 px-4 py-1.5 rounded-full text-sm font-medium border border-blue-500/20 mb-6">
-                <Shield className="w-4 h-4" />
-                <span className="capitalize">{profile?.role || 'User'} Account</span>
+              <div className="relative w-32 h-32 rounded-full border-4 border-[#020617] shadow-xl mb-4 group shrink-0">
+                <div className="absolute inset-0 rounded-full bg-blue-600 flex items-center justify-center overflow-hidden">
+                  {currentAvatar ? (
+                    <Image src={currentAvatar} alt="Avatar" fill className="object-cover" />
+                  ) : (
+                    <span className="text-4xl font-bold text-white">{getInitials(user.user_metadata?.full_name, user.email)}</span>
+                  )}
+                </div>
+                
+                {/* Upload Overlay */}
+                <div 
+                  className="absolute inset-0 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer backdrop-blur-sm z-10"
+                  onClick={() => !isUploading && fileInputRef.current?.click()}
+                >
+                  {isUploading ? (
+                    <Loader2 className="w-6 h-6 text-white animate-spin" />
+                  ) : (
+                    <Camera className="w-6 h-6 text-white" />
+                  )}
+                </div>
+                
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  accept="image/png, image/jpeg, image/jpg, image/webp"
+                  onChange={handleFileSelect}
+                  disabled={isUploading}
+                />
               </div>
 
+              {/* Upload Actions if file selected */}
               {fileToUpload && (
-                <div className="flex items-center justify-center sm:justify-start gap-3 mb-6 animate-in fade-in slide-in-from-top-2">
-                  <Button 
-                    onClick={handleUpload} 
-                    disabled={isUploading}
-                    className="bg-green-600 hover:bg-green-500 text-white rounded-full font-semibold"
-                  >
-                    {isUploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                    Save Photo
+                <div className="flex items-center gap-2 mb-4 w-full justify-center">
+                  <Button size="sm" onClick={handleUpload} disabled={isUploading} className="bg-green-600 hover:bg-green-500 rounded-full text-xs h-8 px-4 cursor-pointer">
+                    {isUploading ? <Loader2 className="w-3 h-3 mr-1.5 animate-spin" /> : null}
+                    Save
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    onClick={cancelUpload}
-                    disabled={isUploading}
-                    className="text-gray-300 hover:text-white rounded-full"
-                  >
+                  <Button size="sm" variant="ghost" onClick={cancelUpload} disabled={isUploading} className="text-gray-300 hover:text-white rounded-full text-xs h-8 px-4 cursor-pointer">
                     Cancel
                   </Button>
                 </div>
               )}
 
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mt-8 w-full text-left">
-                <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                  <h3 className="text-lg font-semibold text-white">Personal Information</h3>
-                  {!isEditing && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => setIsEditing(true)} 
-                      className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 h-8 px-3 rounded-lg"
-                    >
-                      <Edit className="w-3.5 h-3.5 mr-2" />
-                      Edit
-                    </Button>
-                  )}
+              <h2 className="text-2xl font-bold text-white truncate w-full">{user.user_metadata?.full_name || "Guest User"}</h2>
+              <p className="text-gray-400 text-sm truncate w-full mb-4">{user.email}</p>
+
+              <div className="flex flex-wrap items-center justify-center gap-2 w-full mt-2">
+                <div className="flex items-center gap-1.5 bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-xs font-semibold border border-blue-500/20">
+                  <Shield className="w-3.5 h-3.5" />
+                  <span className="capitalize">{profile?.role || 'User'}</span>
                 </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {/* Full Name */}
-                  <div className="flex items-start gap-4 text-gray-300">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
-                      <UserIcon className="w-5 h-5" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Full Name</p>
-                      {isEditing ? (
-                        <input 
-                          type="text" 
-                          value={formData.full_name}
-                          onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                          className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
-                          placeholder="Your full name"
-                        />
-                      ) : (
-                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.full_name || "Not provided"}</p>
-                      )}
-                    </div>
+                {isVerified ? (
+                  <div className="flex items-center gap-1.5 bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-xs font-semibold border border-green-500/20">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Verified
                   </div>
-
-                  {/* Gender */}
-                  <div className="flex items-start gap-4 text-gray-300">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
-                      <UserIcon className="w-5 h-5" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Gender</p>
-                      {isEditing ? (
-                        <select 
-                          value={formData.gender}
-                          onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                          className="w-full bg-[#1e293b] border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none text-sm"
-                        >
-                          <option value="">Select Gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                          <option value="Other">Other</option>
-                        </select>
-                      ) : (
-                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.gender || "Not provided"}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Email (Read Only) */}
-                  <div className="flex items-start gap-4 text-gray-300">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
-                      <Mail className="w-5 h-5" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Email Address</p>
-                      <p className="text-gray-300 font-medium mt-1.5 opacity-80">{user.email}</p>
-                    </div>
-                  </div>
-
-                  {/* Mobile Number */}
-                  <div className="flex items-start gap-4 text-gray-300">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
-                      <Phone className="w-5 h-5" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Mobile Number</p>
-                      {isEditing ? (
-                        <PhoneInput 
-                          value={formData.mobile_number}
-                          onChange={(val) => setFormData({...formData, mobile_number: val})}
-                          className="w-full bg-black/20 border-white/10 text-white placeholder-gray-500 text-sm"
-                        />
-                      ) : (
-                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.mobile_number || "Not provided"}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Address */}
-                  <div className="flex items-start gap-4 text-gray-300 sm:col-span-2">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
-                      <MapPin className="w-5 h-5" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Address</p>
-                      {isEditing ? (
-                        <textarea 
-                          value={formData.address}
-                          onChange={(e) => setFormData({...formData, address: e.target.value})}
-                          className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px] resize-none transition-all text-sm"
-                          placeholder="Your full address"
-                        />
-                      ) : (
-                        <p className="text-white font-medium mt-1.5 whitespace-pre-wrap">{user.user_metadata?.address || "Not provided"}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Date of Birth */}
-                  <div className="flex items-start gap-4 text-gray-300 sm:col-span-2">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 border border-white/5 shrink-0 mt-1">
-                      <Calendar className="w-5 h-5" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Date of Birth</p>
-                      {isEditing ? (
-                        <input 
-                          type="date"
-                          value={formData.dob}
-                          onChange={(e) => setFormData({...formData, dob: e.target.value})}
-                          className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm max-w-sm block"
-                        />
-                      ) : (
-                        <p className="text-white font-medium mt-1.5">{user.user_metadata?.dob ? new Date(user.user_metadata.dob).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "Not provided"}</p>
-                      )}
-                    </div>
-                  </div>
-
-
-                </div>
-
-                {isEditing && (
-                  <div className="flex gap-3 mt-8 pt-6 border-t border-white/10 justify-end">
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        setFormData({
-                          full_name: user.user_metadata?.full_name || "",
-                          gender: user.user_metadata?.gender || "",
-                          mobile_number: user.user_metadata?.mobile_number || "",
-                          address: user.user_metadata?.address || "",
-                          dob: user.user_metadata?.dob || "",
-                        });
-                        setIsEditing(false);
-                      }}
-                      disabled={isSaving}
-                      className="rounded-xl text-gray-300 hover:text-white border border-white/10 px-6"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handleSaveProfile}
-                      disabled={isSaving}
-                      className="rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6"
-                    >
-                      {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                      Save Changes
-                    </Button>
+                ) : (
+                  <div className="flex items-center gap-1.5 bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-xs font-semibold border border-orange-500/20">
+                    <XCircle className="w-3.5 h-3.5" />
+                    Unverified
                   </div>
                 )}
               </div>
             </div>
+
+            {/* Actions Card */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-2xl flex flex-col justify-center gap-4 h-full">
+              <Button 
+                onClick={() => setIsEditing(!isEditing)} 
+                variant="ghost" 
+                className={`w-full justify-start rounded-xl h-12 cursor-pointer border border-white/5 transition-all ${isEditing ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white'}`}
+              >
+                <Edit className="w-4 h-4 mr-3" />
+                {isEditing ? "Cancel Editing" : "Edit Profile"}
+              </Button>
+              <Button 
+                onClick={() => router.push('/forgot-password')} 
+                variant="ghost" 
+                className="w-full justify-start rounded-xl h-12 cursor-pointer border border-white/5 bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white transition-all"
+              >
+                <KeyRound className="w-4 h-4 mr-3" />
+                Change Password
+              </Button>
+              <div className="pt-2">
+                <Button 
+                  onClick={handleSignOut} 
+                  variant="destructive" 
+                  className="w-full justify-start rounded-xl h-12 cursor-pointer bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 font-semibold transition-all"
+                >
+                  <LogOut className="w-4 h-4 mr-3" />
+                  Sign Out
+                </Button>
+              </div>
+            </div>
+
           </div>
 
-          <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row gap-4 justify-between items-center relative z-10">
-            <p className="text-sm text-gray-500 text-center sm:text-left">Manage your account settings and preferences.</p>
-            <Button 
-              onClick={handleSignOut}
-              variant="destructive" 
-              className="w-full sm:w-auto rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 font-semibold cursor-pointer"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
+          {/* Right Column (Personal Information) */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-6 sm:p-10 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
+              
+              <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6 relative z-10">
+                <div>
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <UserIcon className="w-5 h-5 text-blue-400" />
+                    Personal Information
+                  </h3>
+                  <p className="text-gray-400 text-sm mt-1">Manage your personal details and contact information.</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                {/* Full Name */}
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Full Name</label>
+                  {isEditing ? (
+                    <input 
+                      type="text" 
+                      value={formData.full_name}
+                      onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
+                      placeholder="Your full name"
+                    />
+                  ) : (
+                    <div className="flex items-center gap-3 bg-black/20 border border-white/5 rounded-xl px-4 py-3">
+                      <UserIcon className="w-4 h-4 text-gray-500" />
+                      <span className="text-white text-sm font-medium">{user.user_metadata?.full_name || "Not provided"}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Email (Read Only) */}
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Address</label>
+                  <div className="flex items-center gap-3 bg-black/40 border border-white/5 rounded-xl px-4 py-3 opacity-80 cursor-not-allowed">
+                    <Mail className="w-4 h-4 text-gray-500" />
+                    <span className="text-gray-300 text-sm font-medium truncate">{user.email}</span>
+                  </div>
+                </div>
+
+                {/* Mobile Number */}
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Mobile Number</label>
+                  {isEditing ? (
+                    <PhoneInput 
+                      value={formData.mobile_number}
+                      onChange={(val) => setFormData({...formData, mobile_number: val})}
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 text-sm focus-within:ring-2 focus-within:ring-blue-500/50 transition-all"
+                    />
+                  ) : (
+                    <div className="flex items-center gap-3 bg-black/20 border border-white/5 rounded-xl px-4 py-3">
+                      <Phone className="w-4 h-4 text-gray-500" />
+                      <span className="text-white text-sm font-medium">{user.user_metadata?.mobile_number || "Not provided"}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Gender */}
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Gender</label>
+                  {isEditing ? (
+                    <select 
+                      value={formData.gender}
+                      onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 appearance-none text-sm cursor-pointer"
+                    >
+                      <option value="" className="bg-[#0f172a]">Select Gender</option>
+                      <option value="Male" className="bg-[#0f172a]">Male</option>
+                      <option value="Female" className="bg-[#0f172a]">Female</option>
+                      <option value="Other" className="bg-[#0f172a]">Other</option>
+                    </select>
+                  ) : (
+                    <div className="flex items-center gap-3 bg-black/20 border border-white/5 rounded-xl px-4 py-3">
+                      <UserIcon className="w-4 h-4 text-gray-500" />
+                      <span className="text-white text-sm font-medium">{user.user_metadata?.gender || "Not provided"}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Date of Birth */}
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Date of Birth</label>
+                  {isEditing ? (
+                    <input 
+                      type="date"
+                      value={formData.dob}
+                      onChange={(e) => setFormData({...formData, dob: e.target.value})}
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm cursor-pointer"
+                      style={{ colorScheme: 'dark' }}
+                    />
+                  ) : (
+                    <div className="flex items-center gap-3 bg-black/20 border border-white/5 rounded-xl px-4 py-3">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      <span className="text-white text-sm font-medium">
+                        {user.user_metadata?.dob ? new Date(user.user_metadata.dob).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "Not provided"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Joined Date (Read Only) */}
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Joined</label>
+                  <div className="flex items-center gap-3 bg-black/40 border border-white/5 rounded-xl px-4 py-3 opacity-80 cursor-not-allowed">
+                    <CalendarDays className="w-4 h-4 text-gray-500" />
+                    <span className="text-gray-300 text-sm font-medium">{joinedDate}</span>
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Address</label>
+                  {isEditing ? (
+                    <textarea 
+                      value={formData.address}
+                      onChange={(e) => setFormData({...formData, address: e.target.value})}
+                      className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 min-h-[120px] resize-none transition-all text-sm"
+                      placeholder="Your full residential address"
+                    />
+                  ) : (
+                    <div className="flex items-start gap-3 bg-black/20 border border-white/5 rounded-xl px-4 py-3 min-h-[100px]">
+                      <MapPin className="w-4 h-4 text-gray-500 mt-0.5 shrink-0" />
+                      <span className="text-white text-sm font-medium whitespace-pre-wrap">{user.user_metadata?.address || "Not provided"}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Save / Cancel Buttons */}
+              {isEditing && (
+                <div className="mt-8 pt-6 border-t border-white/10 flex flex-col-reverse sm:flex-row gap-3 justify-end items-center relative z-10 animate-in fade-in slide-in-from-bottom-4">
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setFormData({
+                        full_name: user.user_metadata?.full_name || "",
+                        gender: user.user_metadata?.gender || "",
+                        mobile_number: user.user_metadata?.mobile_number || "",
+                        address: user.user_metadata?.address || "",
+                        dob: user.user_metadata?.dob || "",
+                      });
+                      setIsEditing(false);
+                    }}
+                    disabled={isSaving}
+                    className="w-full sm:w-auto rounded-xl text-gray-300 hover:text-white hover:bg-white/5 px-6 cursor-pointer"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSaveProfile}
+                    disabled={isSaving}
+                    className="w-full sm:w-auto rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all"
+                  >
+                    {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />}
+                    Save Changes
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* FAQ Section */}
-        <FaqSection />
+        <div className="mt-12">
+          <FaqSection />
+        </div>
       </div>
     </div>
   );
 }
-

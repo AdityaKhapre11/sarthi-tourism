@@ -49,33 +49,31 @@ export async function sendContactEmail({ name, email, phone, subject, message }:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Premium Modern Email Template */
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f4f5; color: #27272a; margin: 0; padding: 40px 20px; -webkit-font-smoothing: antialiased; }
-    .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+    /* Premium Modern Dark Email Template */
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b1120; color: #f3f4f6; margin: 0; padding: 40px 20px; -webkit-font-smoothing: antialiased; }
+    .container { max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
     
-    .header { background: linear-gradient(135deg, #09090b, #27272a); padding: 40px 30px; text-align: center; position: relative; }
-    .header-accent { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899); }
+    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 30px; text-align: center; position: relative; }
     .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.025em; }
-    .header p { color: #a1a1aa; font-size: 13px; margin: 8px 0 0 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+    .header p { color: #93c5fd; font-size: 13px; margin: 8px 0 0 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
     
     .content { padding: 40px 30px; }
     
-    .field-group { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #f4f4f5; }
+    .field-group { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #334155; }
     .field-group:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
     
-    .label { font-size: 12px; text-transform: uppercase; color: #71717a; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 6px; display: block; }
-    .value { font-size: 16px; color: #09090b; line-height: 1.5; font-weight: 500; }
+    .label { font-size: 12px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 6px; display: block; }
+    .value { font-size: 16px; color: #f8fafc; line-height: 1.5; font-weight: 500; }
     
-    .message-box { background-color: #f8fafc; border-left: 4px solid #3b82f6; padding: 20px; border-radius: 0 8px 8px 0; margin-top: 10px; font-size: 15px; color: #334155; line-height: 1.6; white-space: pre-wrap; font-style: italic; }
+    .message-box { background-color: #0f172a; border: 1px solid #334155; border-left: 4px solid #3b82f6; padding: 20px; border-radius: 0 8px 8px 0; margin-top: 10px; font-size: 15px; color: #cbd5e1; line-height: 1.6; white-space: pre-wrap; font-style: italic; }
     
-    .footer { padding: 30px; text-align: center; font-size: 13px; color: #a1a1aa; background-color: #fafafa; border-top: 1px solid #f4f4f5; }
-    .footer-link { color: #3b82f6; text-decoration: none; font-weight: 600; }
+    .footer { padding: 30px; text-align: center; font-size: 13px; color: #64748b; background-color: #0f172a; border-top: 1px solid #334155; }
+    .footer-link { color: #60a5fa; text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <div class="header-accent"></div>
       <h1>New Inquiry</h1>
       <p>Sarthi Tourism Platform</p>
     </div>
@@ -87,7 +85,7 @@ export async function sendContactEmail({ name, email, phone, subject, message }:
       
       <div class="field-group">
         <span class="label">Email Address</span>
-        <div class="value"><a href="mailto:${email}" style="color: #3b82f6; text-decoration: none;">${email}</a></div>
+        <div class="value"><a href="mailto:${email}" style="color: #60a5fa; text-decoration: none;">${email}</a></div>
       </div>
       
       <div class="field-group">

@@ -1,4 +1,4 @@
-import { Map, TrendingUp, CalendarCheck } from "lucide-react";
+import { Map, CalendarCheck, MessageSquare } from "lucide-react";
 
 import { StatCard, RecentInquiriesList, QuickActionsPanel, RealtimeInquiriesCard } from "@/components/admin/dashboard";
 import { createClient } from "@/lib/supabase/server";
@@ -26,13 +26,18 @@ export default async function AdminDashboardIndex() {
     .select('*', { count: 'exact', head: true })
     .or('is_read.is.null,is_read.eq.false');
 
+  // Fetch total inquiries count
+  const { count: totalInquiries } = await supabase
+    .from('inquiries')
+    .select('*', { count: 'exact', head: true });
+
   const inquiriesCount = unreadCount || 0;
   const recentInquiries = recentInquiriesData || [];
 
   const stats = [
+    { name: "Total Inquiries", value: (totalInquiries || 0).toString(), icon: MessageSquare, color: "text-indigo-400", bg: "bg-indigo-400/10" },
     { name: "Total Packages", value: packagesCount.toString(), icon: Map, color: "text-blue-400", bg: "bg-blue-400/10" },
-    { name: "Bookings This Month", value: "15", icon: CalendarCheck, color: "text-purple-400", bg: "bg-purple-400/10" },
-    { name: "Revenue (Est)", value: "₹4.2L", icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-400/10" },
+    { name: "Monthly Bookings", value: "15", icon: CalendarCheck, color: "text-purple-400", bg: "bg-purple-400/10" },
   ];
 
   return (

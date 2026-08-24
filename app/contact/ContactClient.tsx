@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function ContactClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,6 +21,8 @@ export default function ContactClient() {
     subject: "",
     message: "",
   });
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { errors, validateAll, handleChange: handleValidationChange, handleBlur, setErrors } = useFormValidation<typeof formData>({
     name: { required: "Please enter your full name." },
@@ -71,7 +74,37 @@ export default function ContactClient() {
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    // Auth state handling
+    const supabase = createClient();
+    
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user?.email) {
+        setFormData(prev => ({ ...prev, email: session.user.email as string }));
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+      setIsLoadingAuth(false);
+    }
+    
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user?.email) {
+        setFormData(prev => ({ ...prev, email: session.user.email as string }));
+        setIsLoggedIn(true);
+      } else {
+        setFormData(prev => ({ ...prev, email: "" }));
+        setIsLoggedIn(false);
+      }
+    });
+
+    return () => {
+      ctx.revert();
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -187,18 +220,22 @@ export default function ContactClient() {
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Email Address *</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    onBlur={(e) => handleBlur("email", e.target.value, formData)}
-                    className={`w-full bg-background/50 dark:bg-black/20 border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-border dark:border-white/10 focus:ring-blue-500'} rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                    placeholder="john@example.com"
-                    aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? "email-error" : undefined}
-                  />
+                  <div className="relative">
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      onBlur={(e) => handleBlur("email", e.target.value, formData)}
+                      className={`w-full bg-background/50 dark:bg-black/20 border ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-border dark:border-white/10 focus:ring-blue-500'} rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:border-transparent transition-all ${isLoggedIn || isLoadingAuth ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      placeholder={isLoadingAuth ? "Loading..." : "john@example.com"}
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "email-error" : undefined}
+                      readOnly={isLoggedIn || isLoadingAuth}
+                    />
+                    {isLoadingAuth && <Loader2 className="absolute right-3 top-3.5 w-5 h-5 animate-spin text-muted-foreground" />}
+                  </div>
                   {errors.email && <p id="email-error" className="text-sm text-red-500 dark:text-red-400 mt-1">{errors.email}</p>}
                 </div>
               </div>

@@ -6,12 +6,15 @@ import { getLegalPage, updateLegalPage } from "./actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui";
 import { Loader2 } from "lucide-react";
+import { isEqual } from "@/lib/utils";
 
 export default function LegalPagesAdmin() {
   const [activeTab, setActiveTab] = useState<'privacy_policy' | 'terms_conditions'>('privacy_policy');
   
   const [privacyData, setPrivacyData] = useState({ title: 'Privacy Policy', content: '' });
+  const [savedPrivacyData, setSavedPrivacyData] = useState({ title: 'Privacy Policy', content: '' });
   const [termsData, setTermsData] = useState({ title: 'Terms of Service', content: '' });
+  const [savedTermsData, setSavedTermsData] = useState({ title: 'Terms of Service', content: '' });
   
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -22,8 +25,14 @@ export default function LegalPagesAdmin() {
       try {
         const pData = await getLegalPage('privacy_policy');
         const tData = await getLegalPage('terms_conditions');
-        if (pData?.content) setPrivacyData(pData);
-        if (tData?.content) setTermsData(tData);
+        if (pData?.content) {
+          setPrivacyData(pData);
+          setSavedPrivacyData(pData);
+        }
+        if (tData?.content) {
+          setTermsData(tData);
+          setSavedTermsData(tData);
+        }
       } catch {
         toast.error("Failed to load legal pages");
       } finally {
@@ -50,6 +59,11 @@ export default function LegalPagesAdmin() {
       const result = await updateLegalPage(activeTab, currentData.title, currentData.content);
       
       if (result.success) {
+        if (activeTab === 'privacy_policy') {
+          setSavedPrivacyData(currentData);
+        } else {
+          setSavedTermsData(currentData);
+        }
         toast.success(`${currentData.title} saved successfully`);
       } else {
         toast.error(result.error || "Failed to save changes");
@@ -73,10 +87,15 @@ export default function LegalPagesAdmin() {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold font-heading text-white tracking-tight">Legal Pages</h1>
-        <Button onClick={handleSave} disabled={isSaving} className={`bg-blue-600 text-white min-w-[120px] ${isSaving ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700 cursor-pointer"}`}>
-          {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-          {isSaving ? "Saving..." : "Save Changes"}
-        </Button>
+        {(() => {
+          const isDirty = activeTab === 'privacy_policy' ? !isEqual(privacyData, savedPrivacyData) : !isEqual(termsData, savedTermsData);
+          return (
+            <Button onClick={handleSave} disabled={isSaving || !isDirty} className={`bg-blue-600 text-white min-w-[120px] ${isSaving || !isDirty ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700 cursor-pointer"}`}>
+              {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              {isSaving ? "Saving..." : "Save Changes"}
+            </Button>
+          );
+        })()}
       </div>
 
       <div className="flex space-x-2 border-b border-white/10 pb-4">

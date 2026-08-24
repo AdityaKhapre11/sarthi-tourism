@@ -6,7 +6,8 @@ import Image from "next/image";
 import { Button, Loader, ImageUploadModal } from "@/components/ui";
 import { ConfirmDeleteModal } from "@/components/ui/ConfirmDeleteModal";
 import { updateHomeSettings, deleteHeroImage } from "./actions";
-import { toast } from "sonner"; // Assuming sonner is used for toasts, else I can use standard alert/UI
+import { toast } from "sonner";
+import { isEqual } from "@/lib/utils";
 
 export function HomeSettingsClient({ 
   initialImages 
@@ -14,7 +15,10 @@ export function HomeSettingsClient({
   initialImages: string[]
 }) {
   const [images, setImages] = useState<string[]>(initialImages);
+  const [savedImages, setSavedImages] = useState<string[]>(initialImages);
   const [loading, setLoading] = useState(false);
+
+  const isDirty = !isEqual(images, savedImages);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imageToDelete, setImageToDelete] = useState<string | null>(null);
@@ -26,6 +30,7 @@ export function HomeSettingsClient({
       const validImages = images.filter(img => img.trim() !== "");
       const res = await updateHomeSettings(validImages, null);
       if (res.success) {
+        setSavedImages(validImages);
         if (toast && toast.success) {
           toast.success("Home settings updated successfully!");
         } else {
@@ -49,7 +54,9 @@ export function HomeSettingsClient({
     try {
       const res = await deleteHeroImage(imageToDelete, images, null);
       if (res.success) {
-        setImages(prev => prev.filter(img => img !== imageToDelete));
+        const newImages = images.filter(img => img !== imageToDelete);
+        setImages(newImages);
+        setSavedImages(newImages);
         if (toast && toast.success) {
           toast.success("Image deleted successfully!");
         } else {
@@ -75,9 +82,13 @@ export function HomeSettingsClient({
     const newImages = [...images, url];
     setImages(newImages);
     
+    
     // Auto-save when an image is uploaded to ensure DB is in sync with Storage
     setLoading(true);
-    await updateHomeSettings(newImages, null);
+    const res = await updateHomeSettings(newImages, null);
+    if (res.success) {
+      setSavedImages(newImages);
+    }
     setLoading(false);
   };
 
@@ -93,8 +104,8 @@ export function HomeSettingsClient({
           </div>
           <Button
             onClick={handleSave}
-            disabled={loading}
-            className={`bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-2 font-bold ${loading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+            disabled={loading || !isDirty}
+            className={`bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-2 font-bold ${loading || !isDirty ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
           >
             <Save className="w-5 h-5" />
             Save Changes

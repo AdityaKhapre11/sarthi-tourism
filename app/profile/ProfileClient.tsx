@@ -11,6 +11,7 @@ import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { performLogout } from "@/lib/auth/logout";
 import { AppUser, UserProfile } from "@/types";
+import { isEqual } from "@/lib/utils";
 import FaqSection from "./FaqSection";
 
 interface ProfileClientProps {
@@ -28,13 +29,19 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [formData, setFormData] = useState({
+  
+  const initialFormData = {
     full_name: user.user_metadata?.full_name || "",
     gender: user.user_metadata?.gender || "",
     mobile_number: user.user_metadata?.mobile_number || "",
     address: user.user_metadata?.address || "",
     dob: user.user_metadata?.dob || "",
-  });
+  };
+  
+  const [savedFormData, setSavedFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(initialFormData);
+
+  const isDirty = !isEqual(formData, savedFormData);
 
   const currentAvatar = previewUrl || user.user_metadata?.avatar_url;
   const isVerified = !!user.email_confirmed_at;
@@ -213,6 +220,7 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
       }).eq('id', user.id);
 
       toast.success("Profile updated successfully!");
+      setSavedFormData(formData);
       setIsEditing(false);
       router.refresh();
     } catch (err: unknown) {
@@ -494,13 +502,7 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
                   <Button
                     variant="ghost"
                     onClick={() => {
-                      setFormData({
-                        full_name: user.user_metadata?.full_name || "",
-                        gender: user.user_metadata?.gender || "",
-                        mobile_number: user.user_metadata?.mobile_number || "",
-                        address: user.user_metadata?.address || "",
-                        dob: user.user_metadata?.dob || "",
-                      });
+                      setFormData(savedFormData);
                       setIsEditing(false);
                     }}
                     disabled={isSaving}
@@ -510,8 +512,8 @@ export default function ProfileClient({ user, profile }: ProfileClientProps) {
                   </Button>
                   <Button
                     onClick={handleSaveProfile}
-                    disabled={isSaving}
-                    className="w-full sm:w-auto rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 cursor-pointer shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all"
+                    disabled={isSaving || !isDirty}
+                    className={`w-full sm:w-auto rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all ${isSaving || !isDirty ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                   >
                     {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />}
                     Save Changes

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui";
 import { ImageUploadModal } from "@/components/ui";
 import { ConfirmDeleteModal } from "@/components/ui";
 import { Loader } from "@/components/ui";
+import { isEqual } from "@/lib/utils";
 
 import { DynamicListInput } from "./DynamicListInput";
 import { ItineraryInput, ItineraryDay } from "./ItineraryInput";
@@ -61,10 +62,14 @@ export function PackageForm({
   const [error, setError] = useState<string | null>(null);
 
   // Form State
-  const [formData, setFormData] = useState<PackageFormData>({
+  const initialFormState = {
     ...defaultFormData,
     ...initialData,
-  });
+  };
+  const [savedData, setSavedData] = useState<PackageFormData>(initialFormState);
+  const [formData, setFormData] = useState<PackageFormData>(initialFormState);
+
+  const isDirty = !isEqual(formData, savedData);
 
   const [uploadModalState, setUploadModalState] = useState<{
     isOpen: boolean;
@@ -92,6 +97,7 @@ export function PackageForm({
       };
 
       await onSubmit(data);
+      setSavedData(data); // update clean state after saving
     } catch (err: unknown) {
       console.error(err);
       const message = err instanceof Error ? err.message : "An unexpected error occurred while saving.";
@@ -249,12 +255,11 @@ export function PackageForm({
           onChange={(newItinerary) => setFormData({ ...formData, itinerary: newItinerary })}
         />
 
-        {/* Bottom Actions */}
         <div className="flex justify-end pt-8 mt-8 border-t border-white/5">
           <Button
             type="submit"
-            disabled={loading}
-            className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-6 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-3 font-bold text-lg w-full sm:w-auto transform hover:-translate-y-1 cursor-pointer"
+            disabled={loading || !isDirty}
+            className={`bg-blue-600 hover:bg-blue-500 text-white px-10 py-6 rounded-2xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-3 font-bold text-lg w-full sm:w-auto transform ${loading || !isDirty ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-1 cursor-pointer'}`}
           >
             <Save className="w-6 h-6" />
             {loading ? "Saving Changes..." : (initialData?.id ? "Update Package" : "Add Package")}

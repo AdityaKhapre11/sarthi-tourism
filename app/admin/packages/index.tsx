@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { Plus, Edit, Map } from "lucide-react";
-import Image from "next/image";
-import { DeletePackageButton, PaginationControls } from "@/components/ui";
+import { Plus, Map } from "lucide-react";
 import { AdminSearch } from "@/components/admin/AdminSearch";
 import { createClient } from "@/lib/supabase/server";
-import { formatPrice } from "@/lib/utils";
+import { PackageListClient } from "./PackageListClient";
 
 export default async function AdminPackagesIndex({
   searchParams,
@@ -63,109 +61,13 @@ export default async function AdminPackagesIndex({
           </Link>
       </div>
 
-      {/* Packages List */}
-      <div className="grid gap-6">
-        {packageList.map((pkg: {
-          highlights?: string[]; id: string | number; name: string; image?: string; duration?: string; price?: string 
-        }) => (
-          <div key={pkg.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] rounded-2xl p-4 transition-all duration-300 relative">
-            <Link href={`/admin/packages/edit/${pkg.id}`} className="absolute inset-0 z-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50" aria-label={`Edit details of ${pkg.name}`} />
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              
-              {/* Image */}
-              <div className="relative w-full md:w-48 h-32 md:h-28 rounded-xl overflow-hidden shrink-0">
-                {pkg.image ? (
-                  <Image src={pkg.image} alt={pkg.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                ) : (
-                  <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                    <Map className="w-8 h-8 text-gray-500" />
-                  </div>
-                )}
-                {/* Duration Badge overlaid on image */}
-                <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-medium text-white border border-white/10 shadow-lg">
-                  {pkg.duration}
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 space-y-2 pointer-events-none">
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-xl font-bold text-white line-clamp-2 leading-tight group-hover:text-blue-400 transition-colors">
-                    {pkg.name}
-                  </h3>
-                  <div className="hidden md:block text-right shrink-0">
-                    <div className="text-sm text-gray-400 mb-0.5">Starting from</div>
-                    <div className="text-2xl font-bold text-green-400">{formatPrice(pkg.price)}</div>
-                  </div>
-                </div>
-
-                {/* Mobile Price */}
-                <div className="md:hidden flex items-center gap-2 mb-3">
-                  <span className="text-sm text-gray-400">Starting from:</span>
-                  <span className="font-bold text-green-400">{formatPrice(pkg.price)}</span>
-                </div>
-
-                {/* Highlights */}
-                {pkg.highlights && pkg.highlights.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {pkg.highlights.slice(0, 3).map((highlight: string, idx: number) => (
-                      <span key={idx} className="px-2.5 py-1 bg-white/5 border border-white/5 rounded-full text-xs text-gray-300">
-                        {highlight}
-                      </span>
-                    ))}
-                    {pkg.highlights.length > 3 && (
-                      <span className="px-2.5 py-1 bg-white/5 border border-white/5 rounded-full text-xs text-gray-500">
-                        +{pkg.highlights.length - 3} more
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="w-full md:w-auto flex md:flex-col justify-end gap-3 shrink-0 border-t border-white/5 md:border-t-0 pt-4 md:pt-0 relative z-10">
-                <Link 
-                  href={`/admin/packages/edit/${pkg.id}`} 
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-colors border border-blue-500/20"
-                >
-                  <Edit className="w-4 h-4" />
-                  <span className="text-sm font-medium">Edit</span>
-                </Link>
-                <div className="flex-1 md:flex-none">
-                  <DeletePackageButton id={pkg.id} packageName={pkg.name} />
-                </div>
-              </div>
-
-            </div>
-          </div>
-        ))}
-
-        {packageList.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/5 rounded-2xl">
-            <Map className="w-16 h-16 text-gray-600 mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No Packages Found</h3>
-            <p className="text-gray-400 mb-6 max-w-sm text-center">You haven&apos;t added any tour packages yet. Create your first package to get started.</p>
-            <Link
-              href="/admin/packages/new"
-              className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition-all"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create Package</span>
-            </Link>
-          </div>
-        )}
-      </div>
-
-      {/* Pagination Controls */}
-      {packageList.length > 0 && (
-        <PaginationControls
-          currentPage={page}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          limit={limit}
-        />
-      )}
-
+      <PackageListClient 
+        packages={packageList} 
+        page={page} 
+        totalPages={totalPages} 
+        totalItems={totalItems} 
+        limit={limit} 
+      />
     </div>
   );
 }

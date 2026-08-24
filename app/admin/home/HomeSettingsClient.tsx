@@ -94,7 +94,7 @@ export function HomeSettingsClient({
           <Button
             onClick={handleSave}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-2 font-bold"
+            className={`bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl transition-all shadow-[0_10px_30px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] flex items-center gap-2 font-bold ${loading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
           >
             <Save className="w-5 h-5" />
             Save Changes
@@ -135,7 +135,7 @@ export function HomeSettingsClient({
                   <div className="absolute inset-0 bg-black/60 transition-opacity flex flex-col items-center justify-center gap-4 z-10 opacity-0 group-hover:opacity-100">
                     <button
                       onClick={() => setImageToDelete(img)}
-                      className="px-4 py-2 bg-red-500/80 hover:bg-red-500 text-white font-medium rounded-xl transition-colors flex items-center gap-2 transform hover:scale-105"
+                      className="px-4 py-2 bg-red-500/80 hover:bg-red-500 text-white font-medium rounded-xl transition-colors flex items-center gap-2 transform hover:scale-105 cursor-pointer"
                     >
                       <X className="w-4 h-4" /> Delete Completely
                     </button>
@@ -147,7 +147,7 @@ export function HomeSettingsClient({
             {images.length < 6 && (
               <button
                 onClick={() => setUploadModalOpen(true)}
-                className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-white/10 hover:border-blue-500/50 hover:bg-blue-500/5 rounded-2xl aspect-video transition-all text-gray-500 hover:text-blue-400"
+                className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-white/10 hover:border-blue-500/50 hover:bg-blue-500/5 rounded-2xl aspect-video transition-all text-gray-500 hover:text-blue-400 cursor-pointer"
               >
                 <Plus className="w-8 h-8" />
                 <span className="font-medium">Add Image</span>

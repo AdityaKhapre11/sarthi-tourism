@@ -1,6 +1,7 @@
 import PrivacyPolicyIndex from "./index";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/seo";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = generatePageMetadata({
   title: "Privacy Policy",
@@ -13,6 +14,9 @@ export const metadata: Metadata = generatePageMetadata({
   ],
 });
 
-export default function PrivacyPolicyPage() {
-  return <PrivacyPolicyIndex />;
+export default async function PrivacyPolicyPage() {
+  const supabase = await createClient();
+  const { data } = await supabase.from("settings").select("value").eq("key", "privacy_policy").maybeSingle();
+  const content = data?.value?.content || "";
+  return <PrivacyPolicyIndex content={content} />;
 }

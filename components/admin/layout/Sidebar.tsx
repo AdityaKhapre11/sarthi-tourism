@@ -8,7 +8,8 @@ import {
   MessageSquare,
   Settings,
   LogOut,
-  Home
+  Home,
+  FileText
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui";
@@ -27,6 +28,7 @@ export function Sidebar() {
     { name: "Packages", href: "/admin/packages", icon: Map },
     { name: "Inquiries", href: "/admin/inquiries", icon: MessageSquare },
     { name: "Home Page", href: "/admin/home", icon: Home },
+    { name: "Legal Pages", href: "/admin/legal-pages", icon: FileText },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
@@ -51,7 +53,7 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
+              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group cursor-pointer ${isActive
                 ? "bg-blue-600/10 text-blue-400 font-medium"
                 : "text-gray-400 hover:bg-white/4 hover:text-gray-200"
                 }`}
@@ -67,7 +69,7 @@ export function Sidebar() {
         <Button
           variant="ghost"
           onClick={handleLogout}
-          className="flex items-center justify-start space-x-3 px-4 py-6 w-full rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300"
+          className="flex items-center justify-start space-x-3 px-4 py-6 w-full rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 cursor-pointer"
         >
           <LogOut className="w-5 h-5" />
           <span className="text-lg">Sign Out</span>

@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { deleteInquiry } from "../actions";
-import { ConfirmDeleteModal, Button } from "@/components/ui";
+import { ConfirmDeleteModal } from "@/components/ui";
 import { toast } from "sonner";
 
-export function DeleteInquiryButton({ id, name }: { id: string; name: string }) {
+export function DeleteInquiryButton({ id, name, disabled }: { id: string; name: string; disabled?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -30,15 +30,19 @@ export function DeleteInquiryButton({ id, name }: { id: string; name: string }) 
 
   return (
     <>
-      <Button
-        variant="ghost"
-        onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 transition-colors border border-red-500/20 rounded-xl px-4 py-2 font-medium"
+      <button 
+        onClick={() => !disabled && setIsOpen(true)}
+        disabled={disabled}
+        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-colors font-medium border ${
+          disabled 
+            ? "bg-gray-500/10 text-gray-500 border-gray-500/20 cursor-not-allowed" 
+            : "bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/20 cursor-pointer"
+        } w-full md:w-auto h-full min-h-[40px]`}
         title="Delete Inquiry"
       >
-        <Trash2 className="w-4 h-4" />
-        <span className="hidden sm:inline">Delete</span>
-      </Button>
+        <Trash2 className="w-4 h-4 shrink-0" />
+        <span className="text-sm font-medium">Delete</span>
+      </button>
 
       <ConfirmDeleteModal
         isOpen={isOpen}

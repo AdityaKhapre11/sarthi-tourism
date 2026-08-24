@@ -61,7 +61,7 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
           <div className="w-full md:w-auto flex md:flex-col justify-end gap-3 shrink-0 border-t border-white/5 md:border-t-0 pt-4 md:pt-0">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-colors border border-blue-500/20 font-medium"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-xl transition-colors border border-blue-500/20 font-medium cursor-pointer"
             >
               <Eye className="w-4 h-4" />
               <span className="text-sm">View</span>

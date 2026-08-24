@@ -37,7 +37,7 @@ export function InquiryDetailsModal({ inquiry, isOpen, onClose }: InquiryDetails
           <h2 className="text-xl font-bold text-white">Inquiry Details</h2>
           <button 
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors"
+            className="p-2 text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -111,7 +111,7 @@ export function InquiryDetailsModal({ inquiry, isOpen, onClose }: InquiryDetails
         <div className="px-6 py-4 border-t border-white/10 bg-slate-900/50 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors font-medium"
+            className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-colors font-medium cursor-pointer"
           >
             Close
           </button>

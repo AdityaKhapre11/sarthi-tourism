@@ -1,6 +1,7 @@
 import TermsOfServiceIndex from "./index";
 import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/seo";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = generatePageMetadata({
   title: "Terms of Service",
@@ -13,6 +14,9 @@ export const metadata: Metadata = generatePageMetadata({
   ],
 });
 
-export default function TermsOfServicePage() {
-  return <TermsOfServiceIndex />;
+export default async function TermsOfServicePage() {
+  const supabase = await createClient();
+  const { data } = await supabase.from("settings").select("value").eq("key", "terms_conditions").maybeSingle();
+  const content = data?.value?.content || "";
+  return <TermsOfServiceIndex content={content} />;
 }

@@ -7,3 +7,4 @@ export * from "./Loader";
 export * from "./SearchModal";
 export * from "./button";
 export * from "./PaginationControls";
+export * from "./RichTextEditor";

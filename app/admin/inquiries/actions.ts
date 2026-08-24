@@ -36,3 +36,35 @@ export async function deleteInquiry(id: string) {
     return { success: false, error: "Failed to delete inquiry" };
   }
 }
+
+export async function updateInquiryStatus(id: string, status: string) {
+  try {
+    const supabase = await createClient();
+    
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, error: "Unauthorized" };
+
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (!profile || profile.role !== "admin") {
+      return { success: false, error: "Forbidden: Admins only" };
+    }
+
+    const { error } = await supabase
+      .from('inquiries')
+      .update({ status })
+      .eq('id', id);
+
+    if (error) throw error;
+      
+    revalidatePath("/admin/inquiries");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating inquiry status:", error);
+    return { success: false, error: "Failed to update inquiry status" };
+  }
+}

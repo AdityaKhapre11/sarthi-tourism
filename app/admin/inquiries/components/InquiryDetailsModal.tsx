@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Calendar, Mail, Phone, User, MessageSquare } from "lucide-react";
+import { X, Calendar, Mail, Phone, User, MessageSquare, Reply } from "lucide-react";
 
 interface Inquiry {
   id: string;
@@ -10,6 +10,7 @@ interface Inquiry {
   subject: string;
   message: string;
   created_at: string;
+  status?: string;
 }
 
 interface InquiryDetailsModalProps {
@@ -45,6 +46,26 @@ export function InquiryDetailsModal({ inquiry, isOpen, onClose }: InquiryDetails
 
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[70vh] space-y-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase text-gray-500 font-semibold tracking-wider">Status:</span>
+              <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                inquiry.status === 'Resolved' ? 'bg-green-400/20 text-green-400 border border-green-400/30' :
+                inquiry.status === 'In Progress' ? 'bg-yellow-400/20 text-yellow-400 border border-yellow-400/30' :
+                'bg-blue-400/20 text-blue-400 border border-blue-400/30'
+              }`}>
+                {inquiry.status || 'New'}
+              </span>
+            </div>
+            <a 
+              href={`mailto:${inquiry.email}?subject=Re: ${inquiry.subject}`}
+              className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg border border-blue-500/20"
+            >
+              <Reply className="w-4 h-4" />
+              Reply
+            </a>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
             {/* Field: Date */}

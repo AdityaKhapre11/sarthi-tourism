@@ -54,20 +54,33 @@ export default async function AdminInquiriesIndex({
       </div>
 
       {/* Inquiries List */}
-      <div className="grid gap-4">
-        {inquiryList.map((inquiry: Inquiry) => (
-          <InquiryRow key={inquiry.id} inquiry={inquiry} />
-        ))}
-
-        {inquiryList.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/5 rounded-2xl">
-            <MessageSquare className="w-16 h-16 text-gray-600 mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No Inquiries Found</h3>
-            <p className="text-gray-400 mb-6 max-w-sm text-center">
-              {searchQuery ? "No inquiries match your search." : "You haven't received any contact inquiries yet."}
-            </p>
+      <div className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden">
+        {/* Table Header (Desktop Only) */}
+        {inquiryList.length > 0 && (
+          <div className="hidden lg:grid grid-cols-12 gap-4 p-4 border-b border-white/10 text-sm font-semibold text-gray-400 bg-white/[0.02] items-center">
+            <div className="col-span-3">Customer</div>
+            <div className="col-span-3">Contact</div>
+            <div className="col-span-2">Subject</div>
+            <div className="col-span-2">Status</div>
+            <div className="col-span-2 text-right">Actions</div>
           </div>
         )}
+
+        <div className="divide-y divide-white/5">
+          {inquiryList.map((inquiry: Inquiry) => (
+            <InquiryRow key={inquiry.id} inquiry={inquiry} />
+          ))}
+
+          {inquiryList.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-24">
+              <MessageSquare className="w-16 h-16 text-gray-600 mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">No Inquiries Found</h3>
+              <p className="text-gray-400 mb-6 max-w-sm text-center">
+                {searchQuery ? "No inquiries match your search." : "You haven't received any contact inquiries yet."}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Pagination Controls */}

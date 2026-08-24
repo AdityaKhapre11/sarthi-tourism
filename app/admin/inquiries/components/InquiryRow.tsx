@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Eye, Clock, CheckCircle2, CircleDashed } from "lucide-react";
 import { DeleteInquiryButton } from "./DeleteInquiryButton";
 import { InquiryDetailsModal } from "./InquiryDetailsModal";
-import { updateInquiryStatus } from "../actions";
+import { updateInquiryStatus, markInquiryAsRead } from "../actions";
 import { toast } from "sonner";
 
 export interface Inquiry {
@@ -16,12 +16,22 @@ export interface Inquiry {
   message: string;
   created_at: string;
   status?: string;
+  is_read?: boolean;
 }
 
 export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [status, setStatus] = useState(inquiry.status || 'New');
+  const [isRead, setIsRead] = useState(inquiry.is_read || false);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    if (!isRead) {
+      setIsRead(true);
+      markInquiryAsRead(inquiry.id).catch(err => console.error(err));
+    }
+  };
 
   const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
@@ -62,14 +72,23 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
         {/* Mobile View (Card) */}
         <div className="flex flex-col gap-4 lg:hidden">
           <div className="flex justify-between items-start">
-            <div className="flex items-center gap-3 cursor-pointer" onClick={() => setIsModalOpen(true)}>
-              <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg uppercase shrink-0 border border-blue-500/20">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={handleOpenModal}>
+              <div className="relative w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg uppercase shrink-0 border border-blue-500/20">
                 {inquiry.full_name.charAt(0)}
+                {!isRead && (
+                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500 border-2 border-[#0a0a0a]"></span>
+                  </span>
+                )}
               </div>
               <div>
-                <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors">
-                  {inquiry.full_name}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors">
+                    {inquiry.full_name}
+                  </h3>
+                  {!isRead && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider">New</span>}
+                </div>
                 <span className="text-xs text-gray-500">
                   {new Date(inquiry.created_at).toLocaleDateString()}
                 </span>
@@ -93,7 +112,7 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
           
           <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
             <button 
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleOpenModal}
               className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-colors font-medium text-sm flex items-center gap-2 cursor-pointer"
             >
               <Eye className="w-4 h-4" /> View
@@ -105,14 +124,23 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
         {/* Desktop View (Table Row) */}
         <div className="hidden lg:grid grid-cols-12 gap-4 items-center">
           {/* Customer */}
-          <div className="col-span-3 flex items-center gap-3 cursor-pointer overflow-hidden pr-2" onClick={() => setIsModalOpen(true)}>
-            <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg uppercase shrink-0 border border-blue-500/20">
+          <div className="col-span-3 flex items-center gap-3 cursor-pointer overflow-hidden pr-2" onClick={handleOpenModal}>
+            <div className="relative w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg uppercase shrink-0 border border-blue-500/20">
               {inquiry.full_name.charAt(0)}
+              {!isRead && (
+                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500 border-2 border-[#0a0a0a]"></span>
+                </span>
+              )}
             </div>
-            <div className="min-w-0">
-              <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors truncate">
-                {inquiry.full_name}
-              </h3>
+            <div className="min-w-0 flex flex-col items-start">
+              <div className="flex items-center gap-2 max-w-full">
+                <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                  {inquiry.full_name}
+                </h3>
+                {!isRead && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider shrink-0">New</span>}
+              </div>
               <span className="text-xs text-gray-500 truncate block">
                 {new Date(inquiry.created_at).toLocaleDateString()}
               </span>
@@ -126,8 +154,8 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
           </div>
 
           {/* Subject */}
-          <div className="col-span-2 overflow-hidden pr-2 cursor-pointer" onClick={() => setIsModalOpen(true)}>
-            <span className="text-sm font-semibold text-gray-300 truncate block">{inquiry.subject}</span>
+          <div className="col-span-2 overflow-hidden pr-2 cursor-pointer" onClick={handleOpenModal}>
+            <span className={`text-sm font-semibold truncate block ${!isRead ? 'text-white' : 'text-gray-300'}`}>{inquiry.subject}</span>
             <p className="text-xs text-gray-500 truncate mt-0.5">{inquiry.message}</p>
           </div>
 
@@ -153,7 +181,7 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
           {/* Actions */}
           <div className="col-span-2 flex justify-end gap-2">
             <button 
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleOpenModal}
               className="p-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-xl transition-colors cursor-pointer"
               title="View Details"
             >

@@ -1,6 +1,6 @@
-import { Map, Users, TrendingUp, CalendarCheck } from "lucide-react";
+import { Map, TrendingUp, CalendarCheck } from "lucide-react";
 
-import { StatCard, RecentInquiriesList, QuickActionsPanel } from "@/components/admin/dashboard";
+import { StatCard, RecentInquiriesList, QuickActionsPanel, RealtimeInquiriesCard } from "@/components/admin/dashboard";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminDashboardIndex() {
@@ -14,18 +14,23 @@ export default async function AdminDashboardIndex() {
   const packagesCount = count || 0;
 
   // Fetch real inquiries from Supabase
-  const { data: recentInquiriesData, count: totalInquiries } = await supabase
+  const { data: recentInquiriesData } = await supabase
     .from('inquiries')
-    .select('*', { count: 'exact' })
+    .select('*')
     .order('created_at', { ascending: false })
     .limit(3);
 
-  const inquiriesCount = totalInquiries || 0;
+  // Fetch unread inquiries count
+  const { count: unreadCount } = await supabase
+    .from('inquiries')
+    .select('*', { count: 'exact', head: true })
+    .or('is_read.is.null,is_read.eq.false');
+
+  const inquiriesCount = unreadCount || 0;
   const recentInquiries = recentInquiriesData || [];
 
   const stats = [
     { name: "Total Packages", value: packagesCount.toString(), icon: Map, color: "text-blue-400", bg: "bg-blue-400/10" },
-    { name: "Active Inquiries", value: inquiriesCount.toString(), icon: Users, color: "text-emerald-400", bg: "bg-emerald-400/10" },
     { name: "Bookings This Month", value: "15", icon: CalendarCheck, color: "text-purple-400", bg: "bg-purple-400/10" },
     { name: "Revenue (Est)", value: "₹4.2L", icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-400/10" },
   ];
@@ -40,6 +45,7 @@ export default async function AdminDashboardIndex() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+        <RealtimeInquiriesCard initialUnreadCount={inquiriesCount} />
         {stats.map((stat) => (
           <StatCard key={stat.name} {...stat} />
         ))}

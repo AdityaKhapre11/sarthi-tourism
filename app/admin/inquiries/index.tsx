@@ -1,4 +1,5 @@
 import { MessageSquare } from "lucide-react";
+import Link from "next/link";
 import { PaginationControls } from "@/components/ui";
 import { AdminSearch } from "@/components/admin/AdminSearch";
 import { createClient } from "@/lib/supabase/server";
@@ -12,6 +13,7 @@ export default async function AdminInquiriesIndex({
   const page = typeof resolvedParams.page === "string" ? parseInt(resolvedParams.page, 10) : 1;
   const limit = typeof resolvedParams.limit === "string" ? parseInt(resolvedParams.limit, 10) : 10;
   const searchQuery = typeof resolvedParams.q === "string" ? resolvedParams.q : "";
+  const filter = typeof resolvedParams.filter === "string" ? resolvedParams.filter : "all";
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
@@ -21,6 +23,12 @@ export default async function AdminInquiriesIndex({
     .select('*', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(from, to);
+
+  if (filter === "unread") {
+    query = query.or('is_read.is.null,is_read.eq.false');
+  } else if (filter === "read") {
+    query = query.eq('is_read', true);
+  }
 
   if (searchQuery) {
     query = query.or(`full_name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%,subject.ilike.%${searchQuery}%,phone.ilike.%${searchQuery}%`);
@@ -50,7 +58,31 @@ export default async function AdminInquiriesIndex({
             <p className="text-gray-400 mt-1">View and manage customer contact messages.</p>
           </div>
         </div>
-        <AdminSearch placeholder="Search inquiries..." />
+        
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+          {/* Filter Pills */}
+          <div className="flex p-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
+            <Link 
+              href={`?filter=all${searchQuery ? `&q=${searchQuery}` : ''}`} 
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${filter === 'all' ? 'bg-blue-500 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+            >
+              All
+            </Link>
+            <Link 
+              href={`?filter=unread${searchQuery ? `&q=${searchQuery}` : ''}`} 
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${filter === 'unread' ? 'bg-blue-500 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+            >
+              Unread
+            </Link>
+            <Link 
+              href={`?filter=read${searchQuery ? `&q=${searchQuery}` : ''}`} 
+              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${filter === 'read' ? 'bg-blue-500 text-white shadow' : 'text-gray-400 hover:text-white'}`}
+            >
+              Read
+            </Link>
+          </div>
+          <AdminSearch placeholder="Search inquiries..." />
+        </div>
       </div>
 
       {/* Inquiries List */}

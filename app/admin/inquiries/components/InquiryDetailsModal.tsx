@@ -11,6 +11,7 @@ interface Inquiry {
   message: string;
   created_at: string;
   status?: string;
+  is_read?: boolean;
 }
 
 interface InquiryDetailsModalProps {

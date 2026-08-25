@@ -12,7 +12,7 @@ export default function TermsOfServiceIndex({ content }: { content: string }) {
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
           </Link>
           <h1 className="text-4xl md:text-5xl font-bold font-heading text-white mb-4 tracking-tight">Terms of Service</h1>
-          <p className="text-gray-400">Last updated: {new Date().toLocaleDateString()}</p>
+          <p className="text-gray-400">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
         </div>
 
         <div 

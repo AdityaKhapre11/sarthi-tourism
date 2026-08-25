@@ -90,7 +90,7 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
                   {!isRead && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider">New</span>}
                 </div>
                 <span className="text-xs text-gray-500">
-                  {new Date(inquiry.created_at).toLocaleDateString()}
+                  {new Date(inquiry.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </span>
               </div>
             </div>
@@ -142,7 +142,7 @@ export function InquiryRow({ inquiry }: { inquiry: Inquiry }) {
                 {!isRead && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider shrink-0">New</span>}
               </div>
               <span className="text-xs text-gray-500 truncate block">
-                {new Date(inquiry.created_at).toLocaleDateString()}
+                {new Date(inquiry.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
               </span>
             </div>
           </div>

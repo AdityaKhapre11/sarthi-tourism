@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendContactEmail } from "@/lib/email/nodemailer";
+import { sendContactEmail, sendContactConfirmationEmail } from "@/lib/email/nodemailer";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
@@ -61,19 +61,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Call Nodemailer logic (non-blocking for the user if it fails)
-    const success = await sendContactEmail({
-      name,
-      email,
-      phone,
-      subject,
-      message,
-    });
+    // Send both emails in parallel to reduce API response time
+    const emailPromises = [
+      sendContactEmail({ name, email, phone, subject, message }),
+      sendContactConfirmationEmail({ name, email, phone, subject, message }).catch(e => {
+        console.error("[Contact API Error - Nodemailer]: Failed to send user confirmation email.", e);
+        return false;
+      })
+    ];
 
-    if (!success) {
-      console.error("[Contact API Error - Nodemailer]: Failed to send notification email. Database insertion was successful.");
+    const [adminResult] = await Promise.allSettled(emailPromises);
+
+    if (adminResult.status === 'rejected' || !adminResult.value) {
+      console.error("[Contact API Error - Nodemailer]: Failed to send admin notification email. Database insertion was successful.");
       // We still return 200 because the inquiry was successfully stored in the database.
-      // This prevents the user from clicking Submit again and creating duplicate database records.
     }
 
     return NextResponse.json(

@@ -134,6 +134,93 @@ export async function sendContactEmail({ name, email, phone, subject, message }:
   }
 }
 
+export async function sendContactConfirmationEmail({ name, email, subject, message }: SendContactEmailOptions): Promise<boolean> {
+  const fromEmail = process.env.SMTP_FROM || `"Sarthi Tourism" <noreply@sarthitourism.com>`;
+  const dateStr = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' });
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank you for contacting Sarthi Tourism</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b1120; color: #f3f4f6; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
+    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 20px; text-align: center; }
+    .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .header p { color: #93c5fd; margin-top: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+    .content { padding: 40px 30px; text-align: left; }
+    .greeting { font-size: 20px; font-weight: 600; color: #ffffff; margin-bottom: 16px; }
+    .text { font-size: 15px; line-height: 1.6; color: #cbd5e1; margin-bottom: 30px; }
+    .details-box { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-top: 20px; }
+    .field { margin-bottom: 15px; }
+    .field:last-child { margin-bottom: 0; }
+    .label { font-size: 12px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 4px; display: block; }
+    .value { font-size: 15px; color: #f8fafc; font-weight: 500; }
+    .footer { padding: 20px 30px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #334155; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Sarthi Tourism</h1>
+      <p>Inquiry Received</p>
+    </div>
+    <div class="content">
+      <div class="greeting">Hello ${name},</div>
+      <div class="text">
+        Thank you for contacting Sarthi Tourism. We have successfully received your inquiry and our team will get back to you soon.
+      </div>
+      
+      <div class="details-box">
+        <h3 style="color: #60a5fa; margin-top: 0; margin-bottom: 20px; font-size: 16px;">Your Inquiry Details</h3>
+        <div class="field">
+          <span class="label">Date & Time</span>
+          <div class="value">${dateStr}</div>
+        </div>
+        <div class="field">
+          <span class="label">Subject</span>
+          <div class="value">${subject}</div>
+        </div>
+        <div class="field">
+          <span class="label">Message</span>
+          <div class="value" style="font-style: italic; color: #94a3b8; white-space: pre-wrap;">${message}</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      &copy; ${new Date().getFullYear()} Sarthi Tourism. All rights reserved.<br>
+      Please do not reply directly to this email.
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  try {
+    const transporter = getTransporter();
+    
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      await transporter.sendMail({
+        from: fromEmail,
+        to: email,
+        subject: "We received your inquiry - Sarthi Tourism",
+        html,
+      });
+      console.log(`[Nodemailer] Confirmation email sent to user: ${email}`);
+    } else {
+      console.log(`[Nodemailer Mock] Confirmation sent to ${email}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("[Nodemailer Error] Failed to send user confirmation email:", error);
+    return false;
+  }
+}
+
 export async function sendPasswordResetEmail({ to, name, resetUrl }: SendPasswordResetEmailOptions): Promise<boolean> {
   const fromEmail = process.env.SMTP_FROM || `"Sarthi Tourism" <noreply@sarthitourism.com>`;
 

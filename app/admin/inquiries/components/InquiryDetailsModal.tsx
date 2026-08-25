@@ -46,7 +46,7 @@ export function InquiryDetailsModal({ inquiry, isOpen, onClose }: InquiryDetails
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[70vh] space-y-6">
+        <div className="p-6 overflow-y-auto max-h-[70vh] space-y-6 scrollbar-hide">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase text-gray-500 font-semibold tracking-wider">Status:</span>

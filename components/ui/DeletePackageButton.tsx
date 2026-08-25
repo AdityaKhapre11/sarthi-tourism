@@ -34,15 +34,15 @@ export function DeletePackageButton({ id, packageName, onSuccess, disabled }: { 
       <button 
         onClick={() => !disabled && setIsOpen(true)}
         disabled={disabled}
-        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-colors font-medium border ${
+        className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl transition-colors font-bold border ${
           disabled 
             ? "bg-gray-500/10 text-gray-500 border-gray-500/20 cursor-not-allowed" 
             : "bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/20 cursor-pointer"
-        } w-full md:w-auto h-full min-h-[40px]`}
+        } w-full h-full min-h-[44px]`}
         title="Delete Package"
       >
         <Trash2 className="w-4 h-4 shrink-0" />
-        <span className="text-sm font-medium">Delete</span>
+        <span className="text-medium">Delete</span>
       </button>
 
       <ConfirmDeleteModal

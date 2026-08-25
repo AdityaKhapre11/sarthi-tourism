@@ -58,6 +58,15 @@ export function PackageForm({
   onSubmit,
   onDelete
 }: PackageFormProps) {
+  // Helper to parse stored price strings like "USD 999" into currency and amount
+  const parsePrice = (priceStr: string) => {
+    if (!priceStr) return { currency: "INR", amount: "" };
+    const match = priceStr.match(/^(INR|USD|EUR|GBP|AED|THB)\s*(.*)/i);
+    if (match) {
+      return { currency: match[1].toUpperCase(), amount: match[2].trim() };
+    }
+    return { currency: 'INR', amount: priceStr.replace(/^(₹|rs\.?)\s*/i, "").trim() };
+  };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -178,14 +187,28 @@ export function PackageForm({
 
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2">Price</label>
-              <input
-                type="text"
-                required
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="w-full px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white placeholder-gray-600"
-                placeholder="e.g. Rs. 25,000 or Contact Us"
-              />
+              <div className="flex gap-2">
+                <select
+                  value={parsePrice(formData.price).currency}
+                  onChange={(e) => setFormData({ ...formData, price: `${e.target.value} ${parsePrice(formData.price).amount}`.trim() })}
+                  className="w-1/3 px-2 py-3 bg-[#0a0a0a] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white text-sm"
+                >
+                  <option value="INR">INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="AED">AED (د.إ)</option>
+                  <option value="THB">THB (฿)</option>
+                </select>
+                <input
+                  type="text"
+                  required
+                  value={parsePrice(formData.price).amount}
+                  onChange={(e) => setFormData({ ...formData, price: `${parsePrice(formData.price).currency} ${e.target.value}`.trim() })}
+                  className="w-2/3 px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all text-white placeholder-gray-600"
+                  placeholder="e.g. 25000 or Contact Us"
+                />
+              </div>
             </div>
 
             <div className="md:col-span-2">

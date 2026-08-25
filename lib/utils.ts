@@ -9,10 +9,36 @@ export function formatPrice(price: string | null | undefined) {
   if (!price) return "";
   const lowerPrice = price.toLowerCase();
   if (lowerPrice === "contact us" || lowerPrice.includes("contact")) return price;
-  
-  // Remove existing currency symbols and whitespace
-  const cleanPrice = price.replace(/^(₹|rs\.?|inr)\s*/i, "").trim();
-  return `₹ ${cleanPrice}`;
+
+  // Clean up old INR symbols
+  let cleanPrice = price.replace(/^(₹|rs\.?)\s*/i, "").trim();
+
+  // Map of currency codes to symbols
+  const currencySymbols: Record<string, string> = {
+    INR: "₹",
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    AED: "د.إ",
+    THB: "฿"
+  };
+
+  // Check if it starts with a known currency code
+  const match = cleanPrice.match(/^(INR|USD|EUR|GBP|AED|THB)\s*(.*)/i);
+  if (match) {
+    const code = match[1].toUpperCase();
+    const amount = match[2].trim();
+    const symbol = currencySymbols[code];
+    return `${symbol} ${amount}`;
+  }
+
+  // Default to INR if it starts with a digit (legacy data support)
+  if (/^\d/.test(cleanPrice)) {
+    return `₹ ${cleanPrice}`;
+  }
+
+  // Otherwise, return as is
+  return cleanPrice;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

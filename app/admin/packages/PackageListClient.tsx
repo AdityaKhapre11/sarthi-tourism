@@ -48,6 +48,11 @@ export function PackageListClient({ packages, page, totalPages, totalItems, limi
                       <Map className="w-10 h-10 text-slate-600" />
                     </div>
                   )}
+                  {pkg.category && (
+                    <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wider uppercase border backdrop-blur-md shadow-lg z-10 ${pkg.category.toLowerCase() === 'domestic' ? 'bg-green-500/80 text-green-100 border-green-400/50' : 'bg-blue-500/80 text-blue-100 border-blue-400/50'}`}>
+                      {pkg.category}
+                    </div>
+                  )}
                   <div className="absolute bottom-3 left-3 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide text-white border border-white/10 shadow-lg flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
                     {pkg.duration}

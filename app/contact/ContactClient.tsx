@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MapPin, Phone, Mail, Send, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Send, Loader2, CheckCircle2 } from "lucide-react";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import { WordLimitTextarea } from "@/components/ui/WordLimitTextarea";
 import { motion } from "framer-motion";
@@ -12,8 +12,40 @@ import Image from "next/image";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { createClient } from "@/lib/supabase/client";
 
+const triggerFireworks = () => {
+  const duration = 3 * 1000;
+  const animationEnd = Date.now() + duration;
+  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2147483647, disableForReducedMotion: true };
+
+  const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+  const interval: any = setInterval(function () {
+    const timeLeft = animationEnd - Date.now();
+
+    if (timeLeft <= 0) {
+      return clearInterval(interval);
+    }
+
+    const particleCount = 50 * (timeLeft / duration);
+    import("canvas-confetti").then((confettiModule) => {
+      const confetti = confettiModule.default || confettiModule;
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      });
+    });
+  }, 250);
+};
+
 export default function ContactClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -146,6 +178,8 @@ export default function ContactClient() {
         toast.success("Message sent successfully! We will get back to you soon.");
         setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
         setErrors({}); // Clear errors on success
+        setIsSuccess(true);
+        triggerFireworks();
       } else {
         toast.error(data.error || "Failed to send message. Please try again.");
       }
@@ -198,9 +232,37 @@ export default function ContactClient() {
             {/* Subtle Glow Background */}
             {/* <div className="absolute -top-32 -left-32 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]" /> */}
 
-            <h2 className="text-2xl font-bold text-foreground mb-8 relative z-10">Send us a Message</h2>
-            
-            <form ref={formRef} onSubmit={handleSubmit} className="relative z-10 space-y-6">
+            {isSuccess ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col items-center justify-center py-12 text-center h-full min-h-[400px] relative z-10"
+              >
+                <div className="w-24 h-24 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center mb-6">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+                  >
+                    <CheckCircle2 className="w-12 h-12 text-green-500" />
+                  </motion.div>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Your message has been sent successfully!</h3>
+                <p className="text-muted-foreground text-lg max-w-md mx-auto mb-8">
+                  Thank you for reaching out to us. Our team will review your inquiry and get back to you as soon as possible.
+                </p>
+                <button
+                  onClick={() => setIsSuccess(false)}
+                  className="px-8 py-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-600 dark:text-blue-400 font-semibold rounded-xl transition-all border border-blue-500/20 hover:border-blue-500/40 flex items-center gap-2 mx-auto"
+                >
+                  Send another message
+                </button>
+              </motion.div>
+            ) : (
+              <>
+                <h2 className="text-2xl font-bold text-foreground mb-8 relative z-10">Send us a Message</h2>
+                
+                <form ref={formRef} onSubmit={handleSubmit} className="relative z-10 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Full Name *</label>
@@ -308,6 +370,8 @@ export default function ContactClient() {
                 )}
               </button>
             </form>
+              </>
+            )}
           </motion.div>
 
           {/* Map and Info Section */}

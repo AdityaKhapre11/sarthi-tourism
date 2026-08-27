@@ -97,7 +97,7 @@ export default function PackagesClient({
                 <button
                   key={tab}
                   onClick={() => onCategoryChange(tab)}
-                  className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 text-sm tracking-wide ${
+                  className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 text-sm tracking-wide cursor-pointer ${
                     isActive 
                       ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] scale-105" 
                       : "bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10 hover:text-white"

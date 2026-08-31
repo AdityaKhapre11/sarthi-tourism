@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
+import { Button } from "@/components/ui/button";
+
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -76,10 +78,17 @@ export function GalleryPreview() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-heading text-white mt-3 mb-6 tracking-tight">
             Follow Us On Instagram
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto flex items-center justify-center gap-2 font-light md:text-lg">
-            <InstagramIcon className="text-pink-500 w-8 h-8" />
-            <a href="https://www.instagram.com/sarthitourism/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">@sarthitourism</a>
-          </p>
+          <div className="flex flex-col items-center justify-center gap-6 mt-8">
+            <a href="https://www.instagram.com/sarthitourism/" target="_blank" rel="noopener noreferrer">
+              <Button className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white border-0 rounded-full px-8 py-6 text-lg shadow-[0_0_20px_rgba(236,72,153,0.3)] hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all duration-300 gap-3 font-medium cursor-pointer">
+                <InstagramIcon className="w-6 h-6" />
+                Follow on Instagram
+              </Button>
+            </a>
+            <p className="text-gray-400 max-w-2xl mx-auto flex items-center justify-center gap-2 font-light md:text-lg">
+              <a href="https://www.instagram.com/sarthitourism/" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400 transition-colors">@sarthitourism</a>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -108,8 +117,9 @@ export function GalleryPreview() {
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100 backdrop-blur-sm">
-                    <InstagramIcon style={{ width: 50, height: 50 }} className="text-white" />
+                  <div className="absolute inset-0 flex flex-col gap-3 items-center justify-center bg-black/60 opacity-0 transition-opacity duration-500 group-hover:opacity-100 backdrop-blur-sm">
+                    <InstagramIcon style={{ width: 40, height: 40 }} className="text-white" />
+                    <span className="text-white font-medium tracking-wide">View Post</span>
                   </div>
                 </a>
               </div>

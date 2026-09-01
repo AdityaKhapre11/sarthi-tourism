@@ -51,9 +51,16 @@ export async function sendContactEmail({ name, email, phone, subject, message }:
   <style>
     /* Premium Modern Dark Email Template */
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b1120; color: #f3f4f6; margin: 0; padding: 40px 20px; -webkit-font-smoothing: antialiased; }
-    .container { max-width: 600px; margin: 0 auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
+    .container { max-width: 600px; margin: 0 auto; width: 100%; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
     
-    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 30px; text-align: center; position: relative; }
+    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 30px; text-align: left; position: relative; }
+    @media only screen and (max-width: 480px) {
+      body { padding: 20px 15px; }
+      .header { padding: 30px 20px !important; }
+      .header img { height: 70px !important; }
+      .header h1 { font-size: 22px !important; }
+      .header p { font-size: 11px !important; }
+    }
     .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.025em; }
     .header p { color: #93c5fd; font-size: 13px; margin: 8px 0 0 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
     
@@ -74,8 +81,17 @@ export async function sendContactEmail({ name, email, phone, subject, message }:
 <body>
   <div class="container">
     <div class="header">
-      <h1>New Inquiry</h1>
-      <p>Sarthi Tourism Platform</p>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="left" valign="middle" style="padding-right: 24px;">
+            <img src="${process.env.NEXT_PUBLIC_SITE_URL || 'https://sarthi-tourism.vercel.app'}/images/logo1.png" alt="Sarthi Tourism Logo" style="height: 100px; width: auto; display: block;">
+          </td>
+          <td align="left" valign="middle">
+            <h1>New Inquiry</h1>
+            <p>Sarthi Tourism Platform</p>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="content">
       <div class="field-group">
@@ -147,8 +163,15 @@ export async function sendContactConfirmationEmail({ name, email, subject, messa
   <title>Thank you for contacting Sarthi Tourism</title>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b1120; color: #f3f4f6; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
-    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 20px; text-align: center; }
+    .container { max-width: 600px; width: 92%; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
+    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 30px; text-align: left; }
+    @media only screen and (max-width: 480px) {
+      .container { margin: 20px auto; width: 94%; }
+      .header { padding: 30px 20px !important; }
+      .header img { height: 70px !important; }
+      .header h1 { font-size: 22px !important; }
+      .header p { font-size: 11px !important; }
+    }
     .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
     .header p { color: #93c5fd; margin-top: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
     .content { padding: 40px 30px; text-align: left; }
@@ -165,8 +188,17 @@ export async function sendContactConfirmationEmail({ name, email, subject, messa
 <body>
   <div class="container">
     <div class="header">
-      <h1>Sarthi Tourism</h1>
-      <p>Inquiry Received</p>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="left" valign="middle" style="padding-right: 24px;">
+            <img src="${process.env.NEXT_PUBLIC_SITE_URL || 'https://sarthi-tourism.vercel.app'}/images/logo1.png" alt="Sarthi Tourism Logo" style="height: 100px; width: auto; display: block;">
+          </td>
+          <td align="left" valign="middle">
+            <h1>Sarthi Tourism</h1>
+            <p>Inquiry Received</p>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="content">
       <div class="greeting">Hello ${name},</div>
@@ -233,8 +265,15 @@ export async function sendPasswordResetEmail({ to, name, resetUrl }: SendPasswor
   <title>Reset Your Password - Sarthi Tourism</title>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b1120; color: #f3f4f6; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
-    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 20px; text-align: center; }
+    .container { max-width: 600px; width: 92%; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
+    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 30px; text-align: left; }
+    @media only screen and (max-width: 480px) {
+      .container { margin: 20px auto; width: 94%; }
+      .header { padding: 30px 20px !important; }
+      .header img { height: 70px !important; }
+      .header h1 { font-size: 22px !important; }
+      .header p { font-size: 11px !important; }
+    }
     .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
     .header p { color: #93c5fd; margin-top: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
     .content { padding: 40px 30px; text-align: center; }
@@ -248,8 +287,17 @@ export async function sendPasswordResetEmail({ to, name, resetUrl }: SendPasswor
 <body>
   <div class="container">
     <div class="header">
-      <h1>Sarthi Tourism</h1>
-      <p>Password Recovery</p>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="left" valign="middle" style="padding-right: 24px;">
+            <img src="${process.env.NEXT_PUBLIC_SITE_URL || 'https://sarthi-tourism.vercel.app'}/images/logo1.png" alt="Sarthi Tourism Logo" style="height: 100px; width: auto; display: block;">
+          </td>
+          <td align="left" valign="middle">
+            <h1>Sarthi Tourism</h1>
+            <p>Password Recovery</p>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="content">
       <div class="greeting">Hello ${name || 'Traveler'},</div>
@@ -310,8 +358,15 @@ export async function sendOtpEmail({ to, name, otp }: SendOtpEmailOptions): Prom
   <title>Verify Your Email - Sarthi Tourism</title>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b1120; color: #f3f4f6; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
-    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 20px; text-align: center; }
+    .container { max-width: 600px; width: 92%; margin: 40px auto; background-color: #1e293b; border-radius: 16px; overflow: hidden; border: 1px solid #334155; }
+    .header { background: linear-gradient(135deg, #1e3a8a, #0284c7); padding: 40px 30px; text-align: left; }
+    @media only screen and (max-width: 480px) {
+      .container { margin: 20px auto; width: 94%; }
+      .header { padding: 30px 20px !important; }
+      .header img { height: 70px !important; }
+      .header h1 { font-size: 22px !important; }
+      .header p { font-size: 11px !important; }
+    }
     .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
     .header p { color: #93c5fd; margin-top: 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
     .content { padding: 40px 30px; text-align: center; }
@@ -324,8 +379,17 @@ export async function sendOtpEmail({ to, name, otp }: SendOtpEmailOptions): Prom
 <body>
   <div class="container">
     <div class="header">
-      <h1>Sarthi Tourism</h1>
-      <p>Email Verification</p>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="left" valign="middle" style="padding-right: 24px;">
+            <img src="${process.env.NEXT_PUBLIC_SITE_URL || 'https://sarthi-tourism.vercel.app'}/images/logo1.png" alt="Sarthi Tourism Logo" style="height: 100px; width: auto; display: block;">
+          </td>
+          <td align="left" valign="middle">
+            <h1>Sarthi Tourism</h1>
+            <p>Email Verification</p>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="content">
       <div class="greeting">Hello ${name || 'Traveler'},</div>

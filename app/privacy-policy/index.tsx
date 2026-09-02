@@ -3,10 +3,10 @@ import Link from "next/link";
 
 export default function PrivacyPolicyIndex({ content }: { content: string }) {
   return (
-    <main className="min-h-screen bg-transparent pt-40 pb-20 relative text-gray-300">
+    <main className="min-h-screen bg-transparent pt-20 pb-20 relative text-gray-300">
       <div className="absolute top-0 left-0 w-full h-[750px] bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none" />
 
-      <div className="container relative z-10 mx-auto px-4 max-w-4xl">
+      <div className="container relative z-10 mx-auto px-4 max-w-5xl">
         <div className="mb-12">
           <Link href="/" className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-6 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home

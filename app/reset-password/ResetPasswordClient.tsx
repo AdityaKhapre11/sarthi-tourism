@@ -8,6 +8,7 @@ import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { PasswordRequirements, validatePassword } from "@/components/auth/PasswordValidator";
 
 export default function ResetPasswordIndex() {
   const router = useRouter();
@@ -24,9 +25,10 @@ export default function ResetPasswordIndex() {
   // Initialize Supabase client
   const supabase = createClient();
 
+  const isPasswordValid = validatePassword(password).isValid;
   const passwordMismatch = confirmPassword.length > 0 && password !== confirmPassword;
   const displayError = passwordMismatch ? "Passwords do not match." : error;
-  const isSubmitDisabled = loading || passwordMismatch;
+  const isSubmitDisabled = loading || passwordMismatch || !isPasswordValid;
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,8 +41,8 @@ export default function ResetPasswordIndex() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
+    if (!isPasswordValid) {
+      setError("Please ensure your password meets all requirements.");
       setLoading(false);
       return;
     }
@@ -166,6 +168,7 @@ export default function ResetPasswordIndex() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              <PasswordRequirements password={password} />
             </div>
 
             <div>

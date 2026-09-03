@@ -8,6 +8,7 @@ import { Loader2, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { PasswordRequirements, validatePassword } from "@/components/auth/PasswordValidator";
 
 export default function RegisterIndex() {
   const [fullName, setFullName] = useState("");
@@ -59,6 +60,10 @@ export default function RegisterIndex() {
     };
   }, []);
 
+  const isPasswordValid = validatePassword(password).isValid;
+  const passwordMismatch = confirmPassword.length > 0 && password !== confirmPassword;
+  const isSubmitDisabled = loading || !isPasswordValid || passwordMismatch;
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -71,8 +76,8 @@ export default function RegisterIndex() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+    if (!isPasswordValid) {
+      setError("Please ensure your password meets all requirements.");
       setLoading(false);
       return;
     }
@@ -223,6 +228,7 @@ export default function RegisterIndex() {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              <PasswordRequirements password={password} />
             </div>
 
             <div>
@@ -244,11 +250,14 @@ export default function RegisterIndex() {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {passwordMismatch && (
+                <p className="mt-2 text-sm text-red-400 animate-in fade-in duration-300">Passwords do not match.</p>
+              )}
             </div>
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitDisabled}
               className="w-full mt-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold text-lg py-5 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_10px_40px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_20px_40px_-10px_rgba(37,99,235,0.8)] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none h-auto"
             >
               {loading ? (

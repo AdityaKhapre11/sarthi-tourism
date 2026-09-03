@@ -94,7 +94,7 @@ export default function AdminLoginIndex() {
         if (error.message.toLowerCase().includes("email not confirmed")) {
           setError("Please verify your email address before logging in.");
         } else {
-          setError(error.message);
+          setError("Invalid email or password.");
         }
         setLoading(false);
         return;

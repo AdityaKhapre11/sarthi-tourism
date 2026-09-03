@@ -19,6 +19,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+    if (!passRegex.test(password)) {
+      return NextResponse.json(
+        { success: false, error: "Password does not meet the security requirements." },
+        { status: 400 }
+      );
+    }
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
     const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

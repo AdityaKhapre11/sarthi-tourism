@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | Sarthi Tourism",
   },
   description:
-    "Explore the world with Sarthi Tourism. Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
+    "Discover premium tour packages, breathtaking destinations, and unforgettable experiences with Sarthi Tourism.",
   keywords: ["travel", "tourism", "tour packages", "vacation", "holiday", "Sarthi Tourism", "travel agency", "premium travel"],
   authors: [{ name: "Sarthi Tourism" }],
   creator: "Sarthi Tourism",
@@ -45,31 +45,31 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: {
-      default: "Sarthi Tourism | Premium Travel",
+      default: "Sarthi Tourism | Premium Travel & Tour Packages",
       template: "%s | Sarthi Tourism",
     },
-    description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
+    description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences with Sarthi Tourism.",
     url: SITE_URL,
     siteName: "Sarthi Tourism",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: `${SITE_URL}/images/hero.png`,
+        url: `${SITE_URL}/images/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Sarthi Tourism | Premium Travel",
+        alt: "Sarthi Tourism | Discover Your Next Dream Vacation",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: {
-      default: "Sarthi Tourism | Premium Travel",
+      default: "Sarthi Tourism | Premium Travel & Tour Packages",
       template: "%s | Sarthi Tourism",
     },
-    description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences.",
-    images: [`${SITE_URL}/images/hero.png`],
+    description: "Discover premium tour packages, breathtaking destinations, and unforgettable experiences with Sarthi Tourism.",
+    images: [`${SITE_URL}/images/og-image.png`],
   },
   alternates: {
     canonical: "/",

@@ -4,8 +4,8 @@ import AboutUsClient from "./AboutUsClient";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "About Us | Sarthi Tourism",
-  description: "Learn about Sarthi Tourism, your trusted partner for unforgettable journeys. We offer personalized, comfortable, and memorable travel experiences.",
+  title: "About Sarthi Tourism | Premier Travel Agency in Gujarat",
+  description: "Learn about Sarthi Tourism, Gujarat's premier travel agency crafting unforgettable domestic & international journeys.",
   path: "/about-us",
   keywords: [
     "about Sarthi Tourism",

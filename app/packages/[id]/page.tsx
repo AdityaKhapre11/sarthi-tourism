@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 
   return {
-    title: "Tour Package Details | Sarthi Tourism",
+    title: "Tour Package Itinerary & Details | Sarthi Tourism",
   };
 }
 

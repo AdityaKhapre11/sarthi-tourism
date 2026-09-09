@@ -4,8 +4,8 @@ import { generatePageMetadata } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Terms of Service",
-  description: "Terms of Service for Sarthi Tourism. Understand the rules and guidelines for using our website and travel booking services.",
+  title: "Terms of Service & Booking Conditions | Sarthi Tourism",
+  description: "Terms of Service for Sarthi Tourism. Understand the booking guidelines and policies for our tour packages and services.",
   path: "/terms-of-service",
   keywords: [
     "terms of service",

@@ -17,7 +17,7 @@ export interface SeoPageProps {
  */
 function resolveOgImageUrl(ogImage?: string): string {
   if (!ogImage) {
-    return `${SITE_URL}/images/hero.png`;
+    return `${SITE_URL}/images/og-image.png`;
   }
   // Already an absolute URL
   if (ogImage.startsWith('http://') || ogImage.startsWith('https://')) {
@@ -35,30 +35,27 @@ export function generatePageMetadata({
   ogImage,
   keywords = [],
 }: SeoPageProps = {}): Metadata {
-  const defaultTitle = "Sarthi Tourism | Premium Travel & Tour Packages from  & Gujarat";
-  const defaultDescription = "Sarthi Tourism is 's leading travel agency offering premium international and domestic tour packages, customized family vacations, and honeymoon trips from Gujarat.";
+  const defaultTitle = "Sarthi Tourism | Premium Travel & Tour Packages from Gujarat";
+  const defaultDescription = "Discover curated international & domestic tour packages, family vacations, and honeymoon trips with Sarthi Tourism.";
   const defaultKeywords = [
     "Sarthi Tourism",
-    "travel agency in ",
-    "tour operator ",
-    "international tour packages from ",
+    "travel agency in Gujarat",
+    "tour operator Gujarat",
+    "international tour packages from Gujarat",
     "domestic tours Gujarat",
-    "holiday packages ",
+    "holiday packages Gujarat",
     "customized travel agency Gujarat",
   ];
 
-  const metaTitle = title ? title : defaultTitle;
+  const fullMetaTitle = title ? (title.includes("Sarthi") ? title : `${title} | Sarthi Tourism`) : defaultTitle;
   const metaDescription = description || defaultDescription;
   const canonicalUrl = `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
   const metaKeywords = Array.from(new Set([...defaultKeywords, ...keywords]));
 
   const image = resolveOgImageUrl(ogImage);
   
-  // If no title is passed (like on the homepage), we want to use the defaultTitle absolutely
-  // so that Next.js doesn't append " | Sarthi Tourism" to it.
-  const titleConfig = { absolute: metaTitle };
-  // The OG and Twitter titles should always be the full string because they don't use the layout template automatically in all platforms
-  const fullMetaTitle = title ? (title.includes("Sarthi") ? title : `${title} | Sarthi Tourism`) : defaultTitle;
+  // Ensure the page title in SERP is always full and rich (e.g. 50-60 chars)
+  const titleConfig = { absolute: fullMetaTitle };
 
   const openGraph: Metadata['openGraph'] = {
     title: fullMetaTitle,
@@ -123,10 +120,9 @@ export function generatePackageMetadata(pkg: {
   const cleanName = pkg.name.trim();
   const title = `${cleanName} Tour Package`;
 
-  const formattedPrice = pkg.price ? ` starting at ${pkg.price}` : '';
+  const formattedPrice = pkg.price ? ` from ${pkg.price}` : '';
   const formattedDuration = pkg.duration ? ` (${pkg.duration})` : '';
-  const baseDesc = pkg.description ? pkg.description.substring(0, 140) : `Explore ${cleanName} with Sarthi Tourism.`;
-  const description = `Book ${cleanName}${formattedDuration}${formattedPrice} from , Gujarat with Sarthi Tourism. ${baseDesc}`;
+  const description = `Book ${cleanName}${formattedDuration}${formattedPrice} with Sarthi Tourism. Custom itineraries & 24/7 travel support.`.substring(0, 124);
 
   const destinationKeyword = cleanName.replace(/tour|package|2026|2025|grand|autumn|spring|summer|winter/gi, '').trim();
 

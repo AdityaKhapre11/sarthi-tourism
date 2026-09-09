@@ -4,8 +4,8 @@ import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Reset Password",
-  description: "Set a new password for your Sarthi Tourism account.",
+  title: "Reset Password | Secure Your Sarthi Tourism Account",
+  description: "Set a strong, secure new password for your Sarthi Tourism account to manage bookings and trips safely.",
   path: "/reset-password",
 });
 

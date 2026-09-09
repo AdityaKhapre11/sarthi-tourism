@@ -4,8 +4,8 @@ import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Create Account",
-  description: "Create your Sarthi Tourism account to book premium tour packages and manage your travel plans.",
+  title: "Create Your Account | Sarthi Tourism Travel Agency Portal",
+  description: "Create your Sarthi Tourism account to book premium tour packages and manage customized travel plans effortlessly.",
   path: "/register",
 });
 

@@ -3,8 +3,8 @@ import { generatePageMetadata, getBreadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "All Tour Packages from  & Gujarat | International & Domestic Deals",
-  description: "Explore all international and domestic tour packages from , Gujarat with Sarthi Tourism. Best deals on Japan, Dubai, Europe, Kashmir, Uttarakhand & Bali packages.",
+  title: "All Tour Packages from Gujarat | Sarthi Tourism Deals",
+  description: "Explore top domestic & international tour packages with Sarthi Tourism. Best deals, handpicked stays, and guided trips.",
   path: "/packages",
   keywords: [
     "tour packages from ",

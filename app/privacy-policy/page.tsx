@@ -4,8 +4,8 @@ import { generatePageMetadata } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Privacy Policy",
-  description: "Read the Privacy Policy of Sarthi Tourism. Learn how we collect, use, and protect your personal data when you use our travel booking services.",
+  title: "Privacy Policy | Sarthi Tourism Travel Agency Gujarat",
+  description: "Read the Privacy Policy of Sarthi Tourism. Learn how we protect your personal data when booking tour packages with us.",
   path: "/privacy-policy",
   keywords: [
     "privacy policy",

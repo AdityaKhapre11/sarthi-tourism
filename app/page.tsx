@@ -4,9 +4,10 @@ import { generatePageMetadata, getWebSiteSchema, getFAQPageSchema } from "@/lib/
 import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Sarthi Tourism | Premium Travel & Tour Packages",
-  description: "Sarthi Tourism is a premier travel agency offering customized international & domestic tour packages, family vacations, and honeymoon trips.",
+  title: "Sarthi Tourism | Premium Travel & Tour Packages in Gujarat",
+  description: "Book premium domestic & international tour packages with Sarthi Tourism. Custom itineraries & unforgettable journeys.",
   path: "/",
+  ogImage: "/images/og-image.png",
   keywords: [
     "best travel agency",
     "tour operator",

@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import { generatePageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generatePageMetadata({
-  title: "Contact Us",
-  description: "Get in touch with Sarthi Tourism for customized holiday packages, flight bookings, and travel inquiries. Reach us via WhatsApp, phone, or email.",
+  title: "Contact Sarthi Tourism | Plan Your Tour Package Today",
+  description: "Get in touch with Sarthi Tourism for custom holiday packages and bookings. Reach us via WhatsApp, phone, or email.",
   path: "/contact",
   keywords: [
     "contact Sarthi Tourism",

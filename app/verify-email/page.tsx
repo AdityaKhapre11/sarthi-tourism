@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import VerifyEmailClient from "./VerifyEmailClient";
 
 export const metadata = {
-  title: "Verify Email",
-  description: "Verify your Sarthi Tourism account",
+  title: "Verify Your Email Address | Sarthi Tourism Travel Portal",
+  description: "Verify your email address to activate your Sarthi Tourism account and confirm your tour bookings.",
 };
 
 export default function VerifyEmailPage() {

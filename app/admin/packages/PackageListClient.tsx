@@ -6,8 +6,17 @@ import { Edit, Map, Plus } from "lucide-react";
 import { DeletePackageButton, PaginationControls } from "@/components/ui";
 import { formatPrice } from "@/lib/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function PackageListClient({ packages, page, totalPages, totalItems, limit }: any) {
+import { Package } from "@/data/packages";
+
+interface PackageListClientProps {
+  packages: Package[];
+  page: number;
+  totalPages: number;
+  totalItems: number;
+  limit: number;
+}
+
+export function PackageListClient({ packages, page, totalPages, totalItems, limit }: PackageListClientProps) {
   if (packages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 bg-white/[0.02] border border-white/5 rounded-2xl">
@@ -28,7 +37,7 @@ export function PackageListClient({ packages, page, totalPages, totalItems, limi
   return (
     <>
       <div className="grid gap-6">
-        {packages.map((pkg: any) => {
+        {packages.map((pkg: Package) => {
           return (
             <div 
               key={pkg.id} 

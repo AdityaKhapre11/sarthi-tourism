@@ -51,7 +51,7 @@ export default function EditPackageIndex() {
   };
 
   const handleDelete = async () => {
-    const result = await deletePackage(Number(id));
+    const result = await deletePackage(id);
     if (!result?.success) {
       toast.error(result?.error || "Failed to delete package.");
       return;

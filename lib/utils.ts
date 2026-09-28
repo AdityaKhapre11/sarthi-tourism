@@ -11,7 +11,7 @@ export function formatPrice(price: string | null | undefined) {
   if (lowerPrice === "contact us" || lowerPrice.includes("contact")) return price;
 
   // Clean up old INR symbols
-  let cleanPrice = price.replace(/^(₹|rs\.?)\s*/i, "").trim();
+  const cleanPrice = price.replace(/^(₹|rs\.?)\s*/i, "").trim();
 
   // Map of currency codes to symbols
   const currencySymbols: Record<string, string> = {

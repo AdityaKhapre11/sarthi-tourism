@@ -24,11 +24,8 @@ export function validatePassword(password: string): PasswordValidationRules {
   };
 }
 
-export function PasswordRequirements({ password }: { password: string }) {
-  const rules = validatePassword(password);
-  const isPristine = password.length === 0;
-
-  const Requirement = ({ met, text }: { met: boolean; text: string }) => (
+function Requirement({ met, text, isPristine }: { met: boolean; text: string; isPristine: boolean }) {
+  return (
     <div
       className={`flex items-center gap-2 text-sm transition-colors duration-300 ${
         isPristine ? "text-gray-400" : met ? "text-green-400" : "text-red-400"
@@ -44,16 +41,21 @@ export function PasswordRequirements({ password }: { password: string }) {
       <span>{text}</span>
     </div>
   );
+}
+
+export function PasswordRequirements({ password }: { password: string }) {
+  const rules = validatePassword(password);
+  const isPristine = password.length === 0;
 
   return (
     <div className="mt-3 space-y-2 bg-black/20 p-4 rounded-xl border border-white/5 backdrop-blur-sm animate-in fade-in duration-300">
       <p className="text-sm font-semibold text-gray-300 mb-3">Password requirements:</p>
       <div className="grid grid-cols-1 gap-2">
-        <Requirement met={rules.minLength} text="At least 8 characters" />
-        <Requirement met={rules.hasUpper} text="Uppercase letter (A-Z)" />
-        <Requirement met={rules.hasLower} text="Lowercase letter (a-z)" />
-        <Requirement met={rules.hasNumber} text="Number (0-9)" />
-        <Requirement met={rules.hasSpecial} text="Special character (!@#$%^&* etc.)" />
+        <Requirement isPristine={isPristine} met={rules.minLength} text="At least 8 characters" />
+        <Requirement isPristine={isPristine} met={rules.hasUpper} text="Uppercase letter (A-Z)" />
+        <Requirement isPristine={isPristine} met={rules.hasLower} text="Lowercase letter (a-z)" />
+        <Requirement isPristine={isPristine} met={rules.hasNumber} text="Number (0-9)" />
+        <Requirement isPristine={isPristine} met={rules.hasSpecial} text="Special character (!@#$%^&* etc.)" />
       </div>
     </div>
   );
